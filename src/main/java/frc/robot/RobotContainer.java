@@ -8,7 +8,6 @@ import frc.robot.autonmodes.AutonTesting;
 import frc.robot.autonmodes.OneCube;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.LimelightStrafeCommand;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem2;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -37,7 +36,6 @@ public class RobotContainer {
     public final static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     public final static ArmSubsystem2 armSubsystem2 = new ArmSubsystem2();
     public final static LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
-    public final static ArmSubsystem armSubsystem = new ArmSubsystem();
     public final static VisionSubsystem visionSubsystem = new VisionSubsystem();
   }
 
@@ -63,7 +61,7 @@ public class RobotContainer {
     
 
     m_chooser.setDefaultOption("AutonTesting", "AutonTesting");
-    m_chooser.addOption("TwoCubePark", "TwoCubePark");
+    m_chooser.addOption("OneCone", "OneCone");
     Shuffleboard.getTab("Autonomous").add(m_chooser);
 
   }
@@ -96,7 +94,7 @@ public class RobotContainer {
     // An example command will be run in autonomous
     path = m_chooser.getSelected();
 
-    if(path.equals("TwoCubePark")){
+    if(path.equals("OneCone")){
       return OneCube.getCommand();
     }
     else if(path.equals("AutonTesting")){

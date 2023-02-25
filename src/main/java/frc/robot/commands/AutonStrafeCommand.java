@@ -9,12 +9,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer.Subsystems;
 
 public class AutonStrafeCommand extends CommandBase {
-
+  // Aligns robot to 0 degrees
   double angleSetpoint = 0;
+  // Proportion constant
   double kP = 0.014;
   double strafeP = 0.01;
   double turningValue;
+  // X-position
   double tx;
+  // Y-position
   double ty;
   double strafeLimelight;
   double strafe;
@@ -55,7 +58,7 @@ public class AutonStrafeCommand extends CommandBase {
     else if(Subsystems.limelightSubsystem.getTV()){
       SmartDashboard.putString("target", "can see the target");
 
-      Subsystems.driveSubsystem.drive(0, -strafeLimelight, -turningValue, true);
+      Subsystems.driveSubsystem.drive(0, strafeLimelight, -turningValue, true);
     }
 
   }

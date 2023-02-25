@@ -4,17 +4,16 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTable.SubTableListener;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.Subsystems;
 
-public class ArmCommand extends CommandBase {
-  /** Creates a new ArmCommand. */
-  public ArmCommand() {
+public class SetPipelineCommand extends CommandBase {
+  /** Creates a new SetPipelineCommand. */
+  public SetPipelineCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Subsystems.armSubsystem);
+    addRequirements(Subsystems.limelightSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -25,18 +24,17 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
 
-    if(Math.abs(RobotContainer.operator.getLeftX()) < 0.05 || Math.abs(RobotContainer.operator.getRightX()) < 0.05){
-      Subsystems.armSubsystem.moveShoulder(0);
-      Subsystems.armSubsystem.moveElbow(0);
-    }
-    if(Math.abs(RobotContainer.operator.getLeftX()) >= 0.05){
-      Subsystems.armSubsystem.moveShoulder(RobotContainer.operator.getLeftX());
+    if(RobotContainer.operator2.getRawButton(1)){
+      Subsystems.limelightSubsystem.setPipeline(0);
+      SmartDashboard.putNumber("pipeline number", 0);
+    }else if(RobotContainer.operator2.getRawButton(11)){
+      Subsystems.limelightSubsystem.setPipeline(1);
+      SmartDashboard.putNumber("pipeline number", 1);
+    }else if(RobotContainer.operator2.getRawButton(9)){
+      Subsystems.limelightSubsystem.setPipeline(2);
+      SmartDashboard.putNumber("pipeline number", 2);
     }
 
-    if(Math.abs(RobotContainer.operator.getRightX()) >= 0.05){
-      Subsystems.armSubsystem.moveElbow(RobotContainer.operator.getRightX());
-    }
-    
   }
 
   // Called once the command ends or is interrupted.

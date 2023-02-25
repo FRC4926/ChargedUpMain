@@ -11,14 +11,19 @@ import frc.robot.RobotContainer.Subsystems;
 
 public class LimelightStrafeCommand extends CommandBase {
 
+  // variables to align yaw to zero
   double angleSetpoint = 0;
   double kP = 0.01;
-  double strafeP = 0.015;
   double turningValue;
+
+  // variables to strafe to center of target
+  double strafeP = 0.015;
   double strafingValue;
   double minEffort = 0.05;
   double tx;
   double ty;
+
+  boolean isAprilTag = false;
 
   /** Creates a new LimelightStrafeCommand. */
   public LimelightStrafeCommand() {
@@ -44,18 +49,26 @@ public class LimelightStrafeCommand extends CommandBase {
     SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
     SmartDashboard.putNumber("limelight ty", ty);
 
-    if(RobotContainer.operator.getXButton()){
-      Subsystems.limelightSubsystem.setPipeline(0);
-      SmartDashboard.putNumber("pipeline number", 0);
-    }else if(RobotContainer.operator.getBButton()){
-      Subsystems.limelightSubsystem.setPipeline(1);
-      SmartDashboard.putNumber("pipeline number", 1);    
+    // toggle limelight pipeline with pressing the 'X Button'. 
+    // true = april tag |||| false = reflective tape
+    if(RobotContainer.operator.getXButtonReleased()){
+      isAprilTag = !isAprilTag;
+      if(isAprilTag){
+        Subsystems.limelightSubsystem.setPipeline(0);
+      }
+      else{
+        Subsystems.limelightSubsystem.setPipeline(1);
+      }
     }
-    
-    if(RobotContainer.operator.getAButton() && Subsystems.limelightSubsystem.getTV()){
+
+    // strafe to center of target
+    // only moves robot when target is in view (tv = 1)    
+    if(RobotContainer.driver.getAButton() && Subsystems.limelightSubsystem.getTV()){
       Subsystems.driveSubsystem.drive(0, -strafingValue, -turningValue, true);
     }
-    if(RobotContainer.operator.getAButton() && Math.abs(Subsystems.limelightSubsystem.getTX()) < 2 && Subsystems.limelightSubsystem.getTY() > -8){
+    // if target is centered enough, move forward until ty reaches a certain value
+    // AKA a good place to stop
+    if(RobotContainer.driver.getAButton() && Math.abs(Subsystems.limelightSubsystem.getTX()) < 2 && Subsystems.limelightSubsystem.getTY() > -8){
       Subsystems.driveSubsystem.drive(0.2, 0, -turningValue, true);
     }
 

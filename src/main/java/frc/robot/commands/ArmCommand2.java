@@ -4,71 +4,125 @@
 
 package frc.robot.commands;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.Subsystems;
 
 public class ArmCommand2 extends CommandBase {
   /** Creates a new ArmCommand. */
   boolean isAutomated;
+  int pipelineNum;
   public ArmCommand2() {
     // Use addRequirements() here to declare subsystem dependencies.
-
-    addRequirements(Subsystems.armSubsystem2);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     Subsystems.armSubsystem2.moveShoulder(0);
-    Subsystems.armSubsystem2.moveElbow(0);
+    Subsystems.armSubsystem2.moveForearm(0);
     Subsystems.armSubsystem2.resetEncoders();
+    isAutomated = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(RobotContainer.operator.getYButtonPressed())
+
+    pipelineNum = Subsystems.limelightSubsystem.getPipelineNum();
+
+    if(RobotContainer.operator.getLeftStickButtonReleased()) 
       isAutomated = !isAutomated;
-    SmartDashboard.putNumber("Shoulder controller input", RobotContainer.operator.getLeftX());
-    SmartDashboard.putNumber("Elbow controller input", RobotContainer.operator.getRightX());
-    SmartDashboard.putNumber("Shoulder Angle", Subsystems.armSubsystem2.shoulderEncoder.getPosition());
-    SmartDashboard.putNumber("Elbow Angle", Subsystems.armSubsystem2.elbowEncoder.getPosition());
-    
-    // if(isAutomated)
-    // {
+
+    SmartDashboard.putBoolean("isAutomated", isAutomated);
+    SmartDashboard.putNumber("Shoulder Angle", Subsystems.armSubsystem2.getDegreesShoulder());
+    SmartDashboard.putNumber("Forearm Angle", Subsystems.armSubsystem2.getDegreesForearm());
+    SmartDashboard.putNumber("forearm pid effort", Subsystems.armSubsystem2.pidControllerForearm.getEffort());
+    SmartDashboard.putNumber("Shoulder Effort", Subsystems.armSubsystem2.pidControllerShoulder.getEffort());
+    SmartDashboard.putNumber("Think Pipeline", pipelineNum);
+    SmartDashboard.putNumber("shoulder pid effort", Subsystems.armSubsystem2.pidControllerShoulder.getEffort());
+
+
+// move arm to upper, middle, or lower based on button click
+
+    if(isAutomated)
+    {
+      if(RobotContainer.operator.getYButton()){
+          if(pipelineNum == 0){
+            Subsystems.armSubsystem2.moveToUpperBox();
+          }
+          else if(pipelineNum == 1){
+            SmartDashboard.putBoolean("in if statement", true);
+            Subsystems.armSubsystem2.moveToUpperCone();
+        }
+      }
+
+      else if(RobotContainer.operator.getBButton()){
+        if(pipelineNum == 0){
+          Subsystems.armSubsystem2.moveToLowerBox();
+        }
+        else if(pipelineNum == 1){
+          Subsystems.armSubsystem2.moveToLowerCone();
+        }
+      }
+
+      else if(RobotContainer.operator.getAButton()){
+        if(pipelineNum == 0){
+          Subsystems.armSubsystem2.moveToGround();
+        }
+        else if(pipelineNum == 1){
+          Subsystems.armSubsystem2.moveToGround();
+        }
+      }
+
+      else if(RobotContainer.operator.getLeftBumper()){
+        Subsystems.armSubsystem2.moveToReset();
+      }
+
+      else if(Math.abs(RobotContainer.operator.getPOV()) > 7.543)
+      {
+        SmartDashboard.putNumber("shoulder setpoint", Subsystems.armSubsystem2.pidControllerShoulder.getSetpoint());
+        SmartDashboard.putNumber("forearm setpoint", Subsystems.armSubsystem2.pidControllerForearm.getSetpoint());
+        Subsystems.armSubsystem2.holdSteady();
+      }
+
+      // make if statement that uses pid to keep arm in center
         
-    // }
-    // else
-    // {
-      if(Math.abs(RobotContainer.operator.getLeftX()) < 0.05){
-        Subsystems.armSubsystem2.moveShoulder(0);
-      }
-      if(Math.abs(RobotContainer.operator.getRightX()) < 0.05){
-        Subsystems.armSubsystem2.moveElbow(0);
-      }
-      if(Math.abs(RobotContainer.operator.getLeftX()) >= 0.05){
-        Subsystems.armSubsystem2.moveShoulder(RobotContainer.operator.getLeftX());
-      }
-
-      if(Math.abs(RobotContainer.operator.getRightX()) >= 0.05){
-        Subsystems.armSubsystem2.moveElbow(RobotContainer.operator.getRightX());
-
-      // }
-
-      // speed value not tested
-      // not sure which way positive or negative
-      if (RobotContainer.operator.getRightBumper()) {
-        Subsystems.armSubsystem2.gripMotor.set(0.1);
-      }
-
-      if (RobotContainer.operator.getLeftBumper()) {
-        Subsystems.armSubsystem2.gripMotor.set(-0.1);
-      }
     }
-    
+    else // control arm manually
+    {
+        if(Math.abs(RobotContainer.operator.getLeftX()) > 0.1){
+          Subsystems.armSubsystem2.moveShoulder(RobotContainer.operator.getLeftX());
+        } else {
+          Subsystems.armSubsystem2.moveShoulder(0);
+        }
+
+        if(Math.abs(RobotContainer.operator.getRightX()) > 0.1){
+          Subsystems.armSubsystem2.moveForearm(RobotContainer.operator.getRightX());
+        } else {
+          Subsystems.armSubsystem2.moveForearm(0);
+        }
+
+        // if(Math.abs(RobotContainer.operator.getRightY()) > 0.1){
+        //   Subsystems.armSubsystem2.moveGrip(RobotContainer.operator.getRightX() - 0.1);
+        // } else {
+        //   Subsystems.armSubsystem2.moveGrip(0);
+        // }
+
+        // if(Math.abs(RobotContainer.operator.getLeftY()) > 0.1){
+        //   Subsystems.armSubsystem2.movePad(RobotContainer.operator.getLeftY() - 0.1);
+        // } else {
+        //   Subsystems.armSubsystem2.movePad(0);
+        // }
+        
+    }
   }
+    
+  
 
   // Called once the command ends or is interrupted.
   @Override

@@ -7,245 +7,463 @@ package frc.robot.subsystems;
 import java.util.function.Supplier;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.utils.GalacPIDController2;
 
 public class ArmSubsystem2 extends SubsystemBase {
 
-  public CANSparkMax shoulderMotor = new CANSparkMax(15, MotorType.kBrushless);
-  public CANSparkMax elbowMotor = new CANSparkMax(16, MotorType.kBrushless);
-  public CANSparkMax wristMotor = new CANSparkMax(13, MotorType.kBrushless);
-  public CANSparkMax gripMotor = new CANSparkMax(14, MotorType.kBrushless);
-  private double offsetShoulder = 0;
-  private double offsetElbow = 0;
-  private double offsetWrist = 0;
-  private double offsetGrip = 0;
-  private double highConeAngleShoulder = 53;
-  private double highConeAngleElbow = 137;
-  private double lowConeAngleShoulder = 92;
-  private double lowConeAngleElbow = 90;
-  private double highCubeAngleShoulder = 909;
-  private double highCubeAngleElbow = 909;
-  private double lowCubeAngleShoulder = 909;
-  private double lowCubeAngleElbow = 909;
-  private double groundAngleShoulder = 116;
-  private double groundAngleElbow = 75;
 
-  private double highConeAngleWrist = 135;
-  private double lowConeAngleWrist = 135;
-  private double highCubeAngleWrist = 909;
-  private double lowCubeAngleWrist = 909;
-  private double groundAngleWrist = 45;
-  private double cubeGripAngle = 909;
-  private double coneGripAngle = 909;
 
-  public RelativeEncoder shoulderEncoder;
-   public RelativeEncoder elbowEncoder;
-   public RelativeEncoder wristEncoder;
-   public RelativeEncoder gripEncoder;
-  
-  double p = 0.001;
-  double i = 0.001;
-  double d = 0.001;
-  double minEffort = 0.05;
-  double elbowGearRatio = 1;
-  double shoulderGearRatio = 1;
-  double wristGearRatio = 1;
-  double gripGearRatio = 1;
+  public  CANSparkMax shoulderMotor = new CANSparkMax(Constants.CAN_IDs.shoulderID, MotorType.kBrushless);
+  public CANSparkMax forearmMotor = new CANSparkMax(Constants.CAN_IDs.elbowID, MotorType.kBrushless);
+  public CANSparkMax gripMotor = new CANSparkMax(Constants.CAN_IDs.wristID, MotorType.kBrushless);
+  public CANSparkMax padMotor = new CANSparkMax(Constants.CAN_IDs.gripID, MotorType.kBrushless);
+
+  private double highConeAngleShoulder = 60;
+  public double highConeAngleForearm = 96;
+  private double lowConeAngleShoulder = 85;
+  private double lowConeAngleForearm = 31;
+  private double highCubeAngleShoulder = 61;
+  private double highCubeAngleForearm = 80;
+  private double lowCubeAngleShoulder = 87;
+  private double lowCubeAngleForearm = 12;
+  private double groundAngleShoulder = 80;
+  private double groundAngleForearm = -45;
+  private double collectAngleShoulder = 125;
+  private double collectAngleForearm = -180;
+  private double substationShoulderAngle = 909;
+  private double substationForearmAngle = 909;
+  private double moveBackShoulderAngle = 115;
+  // Check wirst range compatibility
+  private double highConeAnglePad = -32.5;
+  private double lowConeAnglePad = -97;
+
+  private double highCubeAnglePad = 45;
+  private double lowCubeAnglePad = 173;
+  private double groundAnglePad = 0;
+  private double collectAnglePad = 0;
+  private double cubeGripAngle = 0;
+  private double gripReleaseAngle = 90;
+  private double coneGripAngle = 0;
+  private double substationPadAngle = 909;
+  private double collectAngleShoulderCone = 125;
+  private double collectAngleForearmCone = -180;
+  private double collectAngleShoulderCube = 125;
+  private double collectAngleForearmCube = -180;
+
+
+  double p = 0.007;
+  double i = 0.00;
+  double d = 0.00;
+
+  double pShoulder = 0.0055;
+  double iShoulder = 0.000;
+  double dShoulder = 0;
+
+  double pReset = 0.0005;
+  double iReset = 0;
+  double dReset = 0;
+
+  double minEffort = 0.005;
+  double forearmGearRatio = 0.008; // 1/125
+  double shoulderGearRatio = 60;
+  double PadGearRatio = 1;
+  double gripConversionFactor = 1;
 
   // creates lambdas for all 4 arm motors (allows them to update continuously)
-   Supplier<Double> getShoulderAngle = () -> getDegreesShoulder();
-   Supplier<Double> getElbowAngle = () -> getDegreesElbow();
-   Supplier<Double> getWristAngle = () -> getDegreesWrist();
-   Supplier<Double> getGripAngle = () -> getDegreesGrip();
-  
-   //creates PID controllers for all 4 arm motors (default set point is highConeAngle)
-   GalacPIDController2 pidControllerShoulder = new GalacPIDController2(p, i, d, minEffort , getShoulderAngle, highConeAngleShoulder,
-   1);
-   GalacPIDController2 pidControllerElbow = new GalacPIDController2(p, i, d, minEffort,  getElbowAngle, highConeAngleElbow, 1);
-   GalacPIDController2 pidControllerWrist = new GalacPIDController2(p, i, d, minEffort , getWristAngle, highConeAngleWrist,
-   1);
-   GalacPIDController2 pidControllerGrip = new GalacPIDController2(p, i, d, minEffort,  getGripAngle, coneGripAngle, 1);
+  Supplier<Double> getShoulderAngle = () -> getDegreesShoulder();
+  public Supplier<Double> getForearmAngle = () -> getDegreesForearm();
+  Supplier<Double> getPadAngle = () -> getDegreesPad();
+  Supplier<Double> getGripAngle = () -> getDegreesGrip();
+
+  // creates PID controllers for all 4 arm motors (default set point is
+  // highConeAngle)
+  public GalacPIDController2 pidControllerShoulder = new GalacPIDController2(pShoulder, iShoulder, dShoulder, minEffort, () -> getDegreesShoulder(),
+      0,
+      0.1);
+  public GalacPIDController2 pidControllerForearm = new GalacPIDController2(p, i, d, minEffort, () -> getDegreesForearm(),
+      0, 0.1);
+  public GalacPIDController2 pidControllerPad = new GalacPIDController2(p, i, d, minEffort, getPadAngle, highConeAnglePad,
+      1);
+  public GalacPIDController2 pidControllerGrip = new GalacPIDController2(p, i, d, minEffort, getGripAngle, 0, 1);
 
   /** Creates a new ArmSubsytem. */
   public ArmSubsystem2() {
     shoulderMotor.setIdleMode(IdleMode.kBrake);
-    elbowMotor.setIdleMode(IdleMode.kBrake);
-    wristMotor.setIdleMode(IdleMode.kBrake);
+    forearmMotor.setIdleMode(IdleMode.kBrake);
+    padMotor.setIdleMode(IdleMode.kBrake);
     gripMotor.setIdleMode(IdleMode.kBrake);
-
-    shoulderEncoder = shoulderMotor.getEncoder();
-    elbowEncoder = elbowMotor.getEncoder();
-    wristEncoder = wristMotor.getEncoder();
-    gripEncoder = gripMotor.getEncoder();
-
-    resetEncoders();
+    shoulderMotor.setSmartCurrentLimit(60);
+    forearmMotor.setSmartCurrentLimit(60);
+    gripMotor.setSmartCurrentLimit(60);
+    padMotor.setSmartCurrentLimit(60);
   }
-
 
   // sets each arm motor to a given effort
-  public void moveShoulder(double shoulderSpeed){
+  public void moveShoulder(double shoulderSpeed) {
     shoulderMotor.set(shoulderSpeed);
   }
-  public void moveElbow(double elbowSpeed){
-    elbowMotor.set(elbowSpeed);
+
+  public void moveForearm(double forearmSpeed) {
+    forearmMotor.set(forearmSpeed);
   }
-  public void moveWrist(double wristSpeed){
-    wristMotor.set(wristSpeed);
+
+  public void movePad(double PadSpeed) {
+    padMotor.set(PadSpeed);
   }
-  public void moveGrip(double gripSpeed){
+
+  public void moveGrip(double gripSpeed) {
     gripMotor.set(gripSpeed);
   }
 
-  // gets the angle of each arm motor in degrees (need to factor in gear ratio), grip uses position, need conversion factor
-  public double getDegreesElbow(){
-    return elbowMotor.getEncoder().getPosition()/360 + offsetElbow;
-  }
-  public double getDegreesShoulder(){
-    return shoulderMotor.getEncoder().getPosition()/360 + offsetShoulder;
-  }
-  public double getDegreesWrist(){
-    return wristMotor.getEncoder().getPosition()/360 + offsetWrist;
-  }
-  public double getDegreesGrip(){
-    return gripMotor.getEncoder().getPosition()/360 + offsetGrip;
+  public double getShoulderOutputVoltage(){
+    return shoulderMotor.getBusVoltage();
   }
 
-  
+  public double getForearmOutputVoltage(){
+    return forearmMotor.getBusVoltage();
+  }
+
+  // gets the angle of each arm motor in degrees (need to factor in gear ratio),
+  // grip uses position, need conversion factor
+  public double getDegreesForearm() {
+    return (-forearmMotor.getEncoder().getPosition() * 360 * forearmGearRatio) - 90 ;
+  }
+
+  public double getDegreesShoulder() {
+    return -shoulderMotor.getEncoder().getPosition()+90;
+  }
+
+  public double getDegreesPad() {
+    return padMotor.getEncoder().getPosition() * 360;
+  }
+
+  public double getDegreesGrip() {
+    return gripMotor.getEncoder().getPosition() * 360+90;
+  }
+
   // changes set points based off target and object
   // sets the proper effort for each motor using PID
-  public void moveToUpperCone(){
-  pidControllerShoulder.setSetpoint(highConeAngleShoulder);
-  pidControllerElbow.setSetpoint(highConeAngleElbow);
-  elbowMotor.set(pidControllerElbow.getEffort());
-  shoulderMotor.set(pidControllerShoulder.getEffort());
+  public void moveToUpperCone() {
+    pidControllerForearm.innerController.setP(p);
+    pidControllerForearm.innerController.setI(i);
+    pidControllerForearm.innerController.setD(d);
+    pidControllerShoulder.innerController.setP(pShoulder);
+    pidControllerShoulder.innerController.setI(iShoulder);
+    pidControllerShoulder.innerController.setD(dShoulder);
+    pidControllerForearm.innerController.setTolerance(0.1);
+    pidControllerForearm.setMinEffort(minEffort);
 
-  pidControllerWrist.setSetpoint(highConeAngleWrist);
-  pidControllerGrip.setSetpoint(coneGripAngle);
-  wristMotor.set(pidControllerWrist.getEffort());
-  gripMotor.set(pidControllerGrip.getEffort());
-  }
-  public void moveToLowerCone(){
-  pidControllerShoulder.setSetpoint(lowConeAngleShoulder);
-  pidControllerElbow.setSetpoint(lowConeAngleElbow);
-  elbowMotor.set(pidControllerElbow.getEffort());
-  shoulderMotor.set(pidControllerShoulder.getEffort());
+  //   if (pidControllerShoulder.getSetpoint() != highConeAngleShoulder) {
+  //     pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
 
-  pidControllerWrist.setSetpoint(lowConeAngleWrist);
-  pidControllerGrip.setSetpoint(coneGripAngle);
-  wristMotor.set(pidControllerWrist.getEffort());
-  gripMotor.set(pidControllerGrip.getEffort());
-  }
-  public void moveToUpperBox(){
-    pidControllerShoulder.setSetpoint(highCubeAngleShoulder);
-    pidControllerElbow.setSetpoint(highCubeAngleElbow);
-    elbowMotor.set(pidControllerElbow.getEffort());
-    shoulderMotor.set(pidControllerShoulder.getEffort());
-    
-    pidControllerWrist.setSetpoint(highCubeAngleWrist);
-    pidControllerGrip.setSetpoint(cubeGripAngle);
-    wristMotor.set(pidControllerWrist.getEffort());
-    gripMotor.set(pidControllerGrip.getEffort());
-  }
-  public void moveToLowerBox(){
-    pidControllerShoulder.setSetpoint(lowCubeAngleShoulder);
-    pidControllerElbow.setSetpoint(lowCubeAngleElbow);
-    elbowMotor.set(pidControllerElbow.getEffort());
-    shoulderMotor.set(pidControllerShoulder.getEffort());
-    
-    pidControllerWrist.setSetpoint(lowCubeAngleWrist);
-    pidControllerGrip.setSetpoint(cubeGripAngle);
-    wristMotor.set(pidControllerWrist.getEffort());
-    gripMotor.set(pidControllerGrip.getEffort());
+  //     if(getDegreesShoulder() <110){
+  //       shoulderMotor.set(-0.3);
+  // }
+  // else{
+  //   shoulderMotor.set(0);
+  // }
+  //   }
+  //   else{
+      // pidControllerShoulder.setSetpoint(highConeAngleShoulder);
+      // shoulderMotor.set(-pidControllerShoulder.getEffort());
+    // }
+   
+    // SmartDashboard.putBoolean("is shoulder finished",pidControllerShoulder.isFinished() );
+    // if (getDegreesShoulder() > 110) {
+      // SmartDashboard.putBoolean("running Second Part", true);
+      // if(pidControllerShoulder.getSetpoint()!= highConeAngleShoulder){
+
+      // }
+      pidControllerShoulder.setSetpoint(highConeAngleShoulder);
+      pidControllerForearm.setSetpoint(highConeAngleForearm);
+      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+
+      if (Math.abs(getDegreesForearm() - highConeAngleForearm) < 40) {
+        shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+      }
+    // } 
   }
 
-  public void moveToGround(boolean object){
-    pidControllerShoulder.setSetpoint(groundAngleShoulder);
-    pidControllerElbow.setSetpoint(groundAngleElbow);
-    elbowMotor.set(pidControllerElbow.getEffort());
-    shoulderMotor.set(pidControllerShoulder.getEffort());
+  public void moveToLowerCone() {
+    pidControllerForearm.innerController.setP(p);
+    pidControllerForearm.innerController.setI(i);
+    pidControllerForearm.innerController.setD(d);
+    pidControllerShoulder.innerController.setP(pShoulder);
+    pidControllerShoulder.innerController.setI(iShoulder);
+    pidControllerShoulder.innerController.setD(dShoulder);
+    pidControllerForearm.innerController.setTolerance(0.1);
+    pidControllerForearm.setMinEffort(minEffort);
 
-    pidControllerWrist.setSetpoint(groundAngleWrist);
-    
-    // true = cone, false = cube
-    if (object) {
-      pidControllerGrip.setSetpoint(coneGripAngle);
+    if (pidControllerShoulder.getSetpoint() != lowConeAngleShoulder) {
+      pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
+    }
+
+    if (pidControllerShoulder.isFinished()) {
+      pidControllerForearm.setSetpoint(lowConeAngleForearm);
+      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+      if (pidControllerForearm.isFinished()) {
+        pidControllerShoulder.setSetpoint(lowConeAngleShoulder);
+      }
     } else {
-      pidControllerGrip.setSetpoint(cubeGripAngle);
+      shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
     }
-    wristMotor.set(pidControllerWrist.getEffort());
-    gripMotor.set(pidControllerGrip.getEffort());
-  }
 
-  public boolean hasReachedTarget(boolean object, int level)
-  {
-    double shoulderTarget = 0;
-    double elbowTarget = 0;
-    double wristTarget = 0;
-    double gripTarget = 0;
-    switch (level) {
-      case 0:
-        shoulderTarget = groundAngleShoulder;
-        elbowTarget = groundAngleElbow;
-        wristTarget = groundAngleWrist;
-        if(object)
-          gripTarget = coneGripAngle;
-        else
-          gripTarget = cubeGripAngle;
-        break;
-      case 1:
-        if(object)
-        {
-          shoulderTarget = lowConeAngleShoulder;
-          elbowTarget = lowConeAngleElbow;
-          wristTarget = lowConeAngleWrist;
-          gripTarget = coneGripAngle;
-        }
-        else
-        {
-          shoulderTarget = lowCubeAngleShoulder;
-          elbowTarget = lowCubeAngleElbow;
-          wristTarget = lowCubeAngleWrist;
-          gripTarget = cubeGripAngle;
-        }
-        break;
-      case 2:
-      if(object)
-      {
-        shoulderTarget = highConeAngleShoulder;
-        elbowTarget = highConeAngleElbow;
-        wristTarget = highConeAngleWrist;
-        gripTarget = coneGripAngle;
-      }
-      else
-      {
-        shoulderTarget = highCubeAngleShoulder;
-        elbowTarget = highCubeAngleElbow;
-        wristTarget = highCubeAngleWrist;
-        gripTarget = cubeGripAngle;
-      }
-        break;
-      default:
-        break;
-    }
-    //tolerances not tested
-    return (Math.abs(getDegreesShoulder()-shoulderTarget)<1) && (Math.abs(getDegreesElbow()-elbowTarget)<1) && (Math.abs(getDegreesWrist()-wristTarget)<1 && (Math.abs(getDegreesGrip()-gripTarget)<.2));
-  }
-
-  public void resetEncoders() {
+    pidControllerPad.setSetpoint(lowConeAnglePad);
+    // padMotor.set(pidControllerPad.getEffort());
     
-    shoulderEncoder.setPosition(0);
-    elbowEncoder.setPosition(0);
-    wristEncoder.setPosition(0);
-    gripEncoder.setPosition(0);
+  }
+
+
+  public void moveToUpperBox() {
+    SmartDashboard.putNumber("forearm angle setpoint", pidControllerForearm.getSetpoint());
+
+    pidControllerShoulder.innerController.setP(pShoulder);
+    pidControllerShoulder.innerController.setI(iShoulder);
+    pidControllerShoulder.innerController.setD(dShoulder);
+    pidControllerForearm.innerController.setTolerance(0.1);
+    pidControllerForearm.setMinEffort(minEffort);
+
+    pidControllerShoulder.setSetpoint(highCubeAngleShoulder);
+      pidControllerForearm.setSetpoint(highCubeAngleForearm);
+      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+
+      if (Math.abs(getDegreesForearm() - highCubeAngleForearm) < 40) {
+        shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+      }
+    // if(pidControllerForearm.getSetpoint() != highCubeAngleForearm){
+    //   moveBackwards();
+    // }
+
+    
+    // SmartDashboard.putBoolean("is finished", pidControllerShoulder.getEffort() < 0.005);
+
+    // if (getDegreesShoulder() > 110) {
+    //   pidControllerForearm.innerController.setP(p);
+    //   pidControllerForearm.innerController.setI(i);
+    //   pidControllerForearm.innerController.setD(d);
+    //   pidControllerForearm.setSetpoint(highCubeAngleForearm);
+    //   forearmMotor.set(pidControllerForearm.getEffort() * -1);
+    //   if (Math.abs(getDegreesForearm() - highCubeAngleForearm) < 20)
+    //    {
+    //     pidControllerShoulder.setSetpoint(highCubeAngleShoulder);
+    //   }
+    // }
+    //   shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+    
+
+    // pidControllerPad.setSetpoint(highCubeAnglePad);
+
+    // padMotor.set(pidControllerPad.getEffort());
+  }
+
+  public void moveToLowerBox() {
+    pidControllerForearm.innerController.setP(p);
+    pidControllerForearm.innerController.setI(i);
+    pidControllerForearm.innerController.setD(d);
+    pidControllerShoulder.innerController.setP(pShoulder);
+    pidControllerShoulder.innerController.setI(iShoulder);
+    pidControllerShoulder.innerController.setD(dShoulder);
+    pidControllerForearm.innerController.setTolerance(0.1);
+    pidControllerForearm.setMinEffort(minEffort);
+
+    if (pidControllerShoulder.getSetpoint() != lowCubeAngleShoulder) {
+      pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
+    }
+
+    if (pidControllerShoulder.isFinished()) {
+      pidControllerForearm.setSetpoint(lowCubeAngleForearm);
+      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+      if (pidControllerForearm.isFinished()) {
+        pidControllerShoulder.setSetpoint(lowCubeAngleShoulder);
+      }
+    } else {
+      shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+    }
+
+    pidControllerPad.setSetpoint(lowCubeAnglePad);
+    // padMotor.set(pidControllerPad.getEffort());
+    
+  }
+
+  public void moveToGround() {
+    // pidControllerForearm.innerController.setP(p);
+    // pidControllerForearm.innerController.setI(i);
+    // pidControllerForearm.innerController.setD(d);
+    pidControllerShoulder.innerController.setP(pShoulder);
+    pidControllerShoulder.innerController.setI(iShoulder);
+    pidControllerShoulder.innerController.setD(dShoulder);
+    pidControllerForearm.innerController.setTolerance(0.1);
+    pidControllerForearm.setMinEffort(minEffort);
+
+    if (pidControllerShoulder.getSetpoint() != groundAngleShoulder) {
+      pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
+    }
+
+    if (pidControllerShoulder.isFinished()) {
+      pidControllerForearm.setSetpoint(groundAngleForearm);
+      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+      if (pidControllerForearm.isFinished()) {
+        pidControllerShoulder.setSetpoint(groundAngleShoulder);
+      }
+    } else {
+      shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+    }
+
+    pidControllerPad.setSetpoint(groundAnglePad);
+    // true = cone, false = cube
+   
+    // padMotor.set(pidControllerPad.getEffort());
+  }
+
+  public void moveToReset(){
+    pidControllerForearm.innerController.setP(0.003);
+    pidControllerForearm.innerController.setI(0);
+    pidControllerForearm.innerController.setD(0);
+    pidControllerForearm.innerController.setTolerance(1);
+
+    pidControllerShoulder.innerController.setP(0.01);
+    pidControllerShoulder.innerController.setI(0);
+    pidControllerShoulder.innerController.setD(0);
+
+    // if (pidControllerShoulder.getSetpoint() != collectAngleShoulderCone) {
+    //   pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
+    // }
+
+    // if (Math.abs(getDegreesShoulder()-pidControllerShoulder.getSetpoint())<10) {
+    //   pidControllerForearm.setSetpoint(collectAngleForearmCone);
+    //   forearmMotor.set(pidControllerForearm.getEffort() * -1);
+    //   if (Math.abs(getDegreesForearm()-pidControllerForearm.getSetpoint())<10) {
+    //     pidControllerShoulder.setSetpoint(collectAngleShoulderCone);
+    //   }
+    // } else {
+    //   shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+    // }
+
+    pidControllerForearm.setSetpoint(-90);
+    pidControllerShoulder.setSetpoint(90);
+    shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+
+    if(Math.abs(getDegreesShoulder() - 90) < 5){
+      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+    }
+
+  }
+
+  public void holdSteady()
+  {
+    pidControllerForearm.setSetpoint(-90);
+    pidControllerShoulder.setSetpoint(90);
+    shoulderMotor.set(pidControllerShoulder.getEffort()*-1);
+    forearmMotor.set(pidControllerShoulder.getEffort()*-1);
+  }
+
+
+  public void moveToSubstation(){
+    if (pidControllerShoulder.getSetpoint() != substationShoulderAngle) {
+      pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
+    }
+
+    if (pidControllerShoulder.isFinished()) {
+      pidControllerForearm.setSetpoint(substationForearmAngle);
+      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+      if (pidControllerForearm.isFinished()) {
+        pidControllerShoulder.setSetpoint(substationShoulderAngle);
+      }
+    } else {
+      shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+    }
+
+    pidControllerPad.setSetpoint(substationPadAngle);
+
+    // padMotor.set(pidControllerPad.getEffort());
+
+  }
+  
+
+  public void moveToCollectCone() {
+    if (pidControllerShoulder.getSetpoint() != collectAngleShoulderCone) {
+      pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
+    }
+
+    if (pidControllerShoulder.isFinished()) {
+      pidControllerForearm.setSetpoint(collectAngleForearmCone);
+      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+      if (pidControllerForearm.isFinished()) {
+        pidControllerShoulder.setSetpoint(collectAngleShoulderCone);
+      }
+    } else {
+      shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+    }
+ 
+  }
+  public void moveToCollectCube(){
+    if (pidControllerShoulder.getSetpoint() != collectAngleShoulderCube) {
+      pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
+    }
+
+    if (pidControllerShoulder.isFinished()) {
+      pidControllerForearm.setSetpoint(collectAngleForearmCube);
+      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+      if (pidControllerForearm.isFinished()) {
+        pidControllerShoulder.setSetpoint(collectAngleShoulderCube);
+      }
+    } else {
+      shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+    }
+  }
+  public void moveBackwards(){
+    pidControllerShoulder.innerController.setP(0.009);
+    pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
+    shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
+
+    
+    
+  }
+
+  public void grabCone() {
+    pidControllerGrip.setSetpoint(coneGripAngle);
+    gripMotor.set(pidControllerGrip.getEffort()*-1);
+  }
+
+  public void grabCube() {
+    pidControllerGrip.setSetpoint(cubeGripAngle);
+    gripMotor.set(pidControllerGrip.getEffort()*-1);
+  }
+
+  public void release() {
+    pidControllerGrip.setSetpoint(gripReleaseAngle);
+    gripMotor.set(pidControllerGrip.getEffort()*-1);
+  }
+
+  public void displayAngles(){
+    SmartDashboard.putNumber("forearm finished", Math.abs(getDegreesForearm() - pidControllerForearm.getSetpoint()));
+    SmartDashboard.putNumber("shoulder finished", Math.abs(getDegreesShoulder() - pidControllerShoulder.getSetpoint()));
+  }
+
+  public boolean hasReachedTarget() {
+    return (Math.abs(getDegreesForearm() - pidControllerForearm.getSetpoint()) < 9.5 && Math.abs(getDegreesShoulder() - pidControllerShoulder.getSetpoint()) < 5);
+  }
+  
+  // stops the arm at a set position
+  public void stopAtPosition(int position) {
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void resetEncoders() {
+    shoulderMotor.getEncoder().setPosition(0);
+    forearmMotor.getEncoder().setPosition(0);
+    gripMotor.getEncoder().setPosition(0);
+    padMotor.getEncoder().setPosition(0);
   }
 }

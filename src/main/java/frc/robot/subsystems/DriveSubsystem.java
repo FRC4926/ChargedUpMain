@@ -72,7 +72,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getGyroPitch(){
-    return gyro.getPitch() + 2.39;
+    return gyro.getPitch() + 7.86;
   }
 
   public double getGyroRoll(){

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -12,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer.Subsystems;
 import frc.robot.autonmodes.AutonTesting;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.commands.ArmCommand;
+import frc.robot.commands.ArmCommand2;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.LimelightStrafeCommand;
@@ -98,7 +100,7 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().schedule(new DriveCommand());
     CommandScheduler.getInstance().schedule(new BalanceCommand());
-    CommandScheduler.getInstance().schedule(new ArmCommand());
+    CommandScheduler.getInstance().schedule(new ArmCommand2());
     CommandScheduler.getInstance().schedule(new LimelightStrafeCommand());
     
 
@@ -119,6 +121,9 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
 
     Subsystems.driveSubsystem.setCoast();
+    Subsystems.armSubsystem2.forearmMotor.setIdleMode(IdleMode.kCoast);
+    Subsystems.armSubsystem2.shoulderMotor.setIdleMode(IdleMode.kCoast);
+
   }
 
   /** This function is called periodically during test mode. */

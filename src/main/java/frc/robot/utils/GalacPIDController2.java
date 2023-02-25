@@ -6,7 +6,7 @@ import edu.wpi.first.math.controller.PIDController;
 
 public class GalacPIDController2 {
 
-    private PIDController innerController;
+    public PIDController innerController;
     private double setpoint;
     private Supplier<Double> measurementSupplier;
     private double minEffort;
@@ -23,6 +23,8 @@ public class GalacPIDController2 {
     public void setSetpoint(double setpoint) {
         this.setpoint = setpoint;
     }
+
+   
 
     public Supplier<Double> getMeasurementSupplier() {
         return this.measurementSupplier;
@@ -55,6 +57,7 @@ public class GalacPIDController2 {
         this.minEffort = minEffort;
         innerController.setTolerance(positionTolerance);
     }
+
 
     public double getEffort() {
 

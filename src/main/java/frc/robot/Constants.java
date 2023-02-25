@@ -35,9 +35,8 @@ public final class Constants {
     public static final double WHEEL_DIAMETER = 8;
     public static final double GEAR_RATIO = 8.4; /* gear ratio for competition chassis: 8.4* & practice 
                                                   chassis: 9/ */
-
-
   }
+
   public static final class GAME_ARENA_INFO {
     //measurements in inches
     public static final double TOP_NODE_GOAL_HEIGHT = 41.875; 
@@ -71,6 +70,8 @@ public final class Constants {
     //arm IDs
     public static final int shoulderID = 11;
     public static final int elbowID = 12;
+    public static final int gripID = 13;
+    public static final int wristID = 14;
   }
 
 }

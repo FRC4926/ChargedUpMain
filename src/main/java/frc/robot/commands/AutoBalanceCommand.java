@@ -37,10 +37,10 @@ public class AutoBalanceCommand extends CommandBase {
   public void execute() {
     SmartDashboard.putNumber("gyro auton roll", Subsystems.driveSubsystem.getGyroRoll());
     SmartDashboard.putNumber("turning value", balanceEffort);
-
+    
     turningEffort = (angleSetpoint - (Subsystems.driveSubsystem.getGyroAngle()%360)) * kTurn;
-
     balanceEffort = (balanceSetpoint - Subsystems.driveSubsystem.getGyroPitch()) * kP;
+
     Subsystems.driveSubsystem.drive(balanceEffort, 0, -turningEffort, true);
     
 
