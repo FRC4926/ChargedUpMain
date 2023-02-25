@@ -55,7 +55,7 @@ public class VisionSubsystem extends SubsystemBase {
     return horizontalDistance;
   }
   static Thread m_visionThread;
-  boolean cone = true;
+  boolean cone = false;
 //   public void senseCone(){
 // cone = true;
 //   }
@@ -66,7 +66,7 @@ public class VisionSubsystem extends SubsystemBase {
     m_visionThread =
     new Thread(
         () -> {
-
+          Boolean see = false;
           Scalar upperY;
           Scalar lowerY;
 
@@ -121,18 +121,18 @@ public class VisionSubsystem extends SubsystemBase {
 
             Imgproc.findContours(dst, points, hier, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
             SmartDashboard.putNumber("test", points.size());
-            // if(!cone){
-            // for(int i =0; i< points.size(); i++){  
-            //     if((((double)Imgproc.boundingRect(points.get(i)).height/(double)Imgproc.boundingRect(points.get(i)).width)< 1.2 && ((double)Imgproc.boundingRect(points.get(i)).height/(double)Imgproc.boundingRect(points.get(i)).width )> 0.8) && Imgproc.boundingRect(points.get(i)).height>50 && Imgproc.boundingRect(points.get(i)).width>50){
-            //       cubeIndex = i;
-            //     }  
+            if(!cone){
+            for(int i =0; i< points.size(); i++){  
+                if((((double)Imgproc.boundingRect(points.get(i)).height/(double)Imgproc.boundingRect(points.get(i)).width)< 1.2 && ((double)Imgproc.boundingRect(points.get(i)).height/(double)Imgproc.boundingRect(points.get(i)).width )> 0.8) && Imgproc.boundingRect(points.get(i)).height>50 && Imgproc.boundingRect(points.get(i)).width>50){
+                  cubeIndex = i;
+                }  
               
-            //  }
-            // }
+             }
+            }
           
             double maxVal = 0;
-            int maxValIdx=0;
-            if(cone){
+            int maxValIdx=-1;
+            
             for(int countourIdx = 0; countourIdx<points.size(); countourIdx++){
               double contourArea = Imgproc.contourArea(points.get(countourIdx));
               if(maxVal<contourArea){
@@ -140,21 +140,24 @@ public class VisionSubsystem extends SubsystemBase {
                 maxValIdx = countourIdx;
               }
             }
-          }
-          int centre =  (Imgproc.boundingRect(points.get(maxValIdx)).x+(Imgproc.boundingRect(points.get(maxValIdx)).width/2) -320);
-          // horizontalDistance = centre/10;
-          if(cone){
+          
+
+          int centre = 0;
+          if(points.size()>0){
+            if(cone)
+            centre = (Imgproc.boundingRect(points.get(maxValIdx)).x+(Imgproc.boundingRect(points.get(maxValIdx)).width/2) -320);
+            else
+            centre = (Imgproc.boundingRect(points.get(cubeIndex)).x+(Imgproc.boundingRect(points.get(cubeIndex)).width/2) -320);
+            // horizontalDistance = centre/10;
+          }  
             horizontalDistance = centre/5;
-            if(Imgproc.boundingRect(points.get(maxValIdx)).width>Imgproc.boundingRect(points.get(maxValIdx)).height){
-              distance= getDistance(getFocalLength(22, 8, 230), 8, Imgproc.boundingRect(points.get(maxValIdx)).height);
-            }else{
-              distance = getDistance(getFocalLength(30.3, 8.25, 187), 8.25, Imgproc.boundingRect(points.get(maxValIdx)).width);
-            }
-          }
-          else{
-            SmartDashboard.putNumber("Cube Height", Imgproc.boundingRect(points.get(cubeIndex)).height);
-          }
-          Imgproc.drawContours(mat, points, maxValIdx, new Scalar(0,255,0), 4);
+  
+          // if(cone)
+            Imgproc.drawContours(mat, points, cubeIndex, new Scalar(0,255,0), 4);
+        //  else{
+        //   Imgproc.drawContours(mat, points, cubeIndex, new Scalar(0,255,0), 4);
+        //  } 
+         SmartDashboard.putBoolean("Sees something", see);
             
 
           
