@@ -15,7 +15,7 @@ import frc.robot.RobotContainer.Subsystems;
 
 public class LimelightCommand extends CommandBase {
   public double XAngle;
-  double angleSetpoint = 0;
+  double angleSetpoint = -23;
   double kP = 0.007;
   double turningValue;
   double strafingValue;

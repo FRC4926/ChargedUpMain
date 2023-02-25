@@ -12,8 +12,8 @@ import frc.robot.RobotContainer.Subsystems;
 public class LimelightStrafeCommand extends CommandBase {
 
   // variables to align yaw to zero
-  double angleSetpoint = 0;
-  double kP = 0.01;
+  double angleSetpoint = 180;
+  double kP = 0.005;
   double turningValue;
 
   // variables to strafe to center of target
@@ -48,6 +48,7 @@ public class LimelightStrafeCommand extends CommandBase {
     SmartDashboard.putNumber("limelight tx", tx);
     SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
     SmartDashboard.putNumber("limelight ty", ty);
+    SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
 
     // toggle limelight pipeline with pressing the 'X Button'. 
     // true = april tag |||| false = reflective tape
@@ -60,17 +61,32 @@ public class LimelightStrafeCommand extends CommandBase {
         Subsystems.limelightSubsystem.setPipeline(1);
       }
     }
-
-    // strafe to center of target
-    // only moves robot when target is in view (tv = 1)    
-    if(RobotContainer.driver.getAButton() && Subsystems.limelightSubsystem.getTV()){
-      Subsystems.driveSubsystem.drive(0, -strafingValue, -turningValue, true);
-    }
     // if target is centered enough, move forward until ty reaches a certain value
     // AKA a good place to stop
-    if(RobotContainer.driver.getAButton() && Math.abs(Subsystems.limelightSubsystem.getTX()) < 2 && Subsystems.limelightSubsystem.getTY() > -8){
-      Subsystems.driveSubsystem.drive(0.2, 0, -turningValue, true);
+    // if(RobotContainer.driver.getAButton() && Math.abs(Subsystems.limelightSubsystem.getTX() + 23) < 2 && Subsystems.limelightSubsystem.getTY() > -8){
+    //   Subsystems.driveSubsystem.drive(0.2, 0, -turningValue, true);
+    // }
+    // strafe to center of target
+    // only moves robot when target is in view (tv = 1)    
+    if(RobotContainer.driver.getAButton()){
+      if(Math.abs(Subsystems.limelightSubsystem.getTX()+23)>2 && Math.abs(Math.abs(Subsystems.driveSubsystem.getGyroAngle()%360)-angleSetpoint)<5)
+        {
+          Subsystems.driveSubsystem.drive(0, strafingValue, 0, true);
+          SmartDashboard.putString("pathway", "strafe");
+        }
+      else if(Math.abs(Subsystems.limelightSubsystem.getTX()+23)<2 && Math.abs(Math.abs(Subsystems.driveSubsystem.getGyroAngle()%360)-angleSetpoint)<2)
+        {
+          Subsystems.driveSubsystem.drive(0.2, 0, 0, true);
+          SmartDashboard.putString("pathway", "forward");
+        }
+      else
+        {
+
+          Subsystems.driveSubsystem.drive(0, 0, -turningValue, true);
+          SmartDashboard.putString("pathway", "turn");
+        }
     }
+    
 
   }
 

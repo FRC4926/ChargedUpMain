@@ -15,15 +15,15 @@ public class BalanceCommand extends CommandBase {
   GalacPIDController2 turnController;
 
   double balanceSetpoint = 0;
-  double kP = 0.00665;
-  double kI = 0.00001;
-  double kD = 0.00001;
+  double kP = 0.0065;
+  double kI = 0.0003;
+  double kD = 0.0000;
   double balanceEffort;
 
   double modGyroYaw;
 
   double angleSetpoint = 0;
-  double pTurn = 0.007;
+  double pTurn = 0.004;
   double iTurn = 0;
   double dTurn = 0;
   double turningEffort;
@@ -67,7 +67,7 @@ public class BalanceCommand extends CommandBase {
     }
 
     if(RobotContainer.driver.getRightBumper())
-      Subsystems.driveSubsystem.drive(-balanceEffort, 0, turningEffort, true);
+      Subsystems.driveSubsystem.drive(balanceEffort, 0, turningEffort, true);
 
   }
 
