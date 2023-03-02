@@ -4,29 +4,37 @@
 
 package frc.robot.autonmodes;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer.Subsystems;
 import frc.robot.commands.AutoBalanceCommand;
 import frc.robot.commands.AutonArmCommand;
+import frc.robot.commands.AutonDriveCommand;
 import frc.robot.commands.ForwardDistance;
 import frc.robot.commands.AutonStrafeCommand;
+import frc.robot.commands.AutonTimedStrafeCommand;
 import frc.robot.commands.TimedStrafe;
+import frc.robot.commands.VisionCommand;
 import frc.robot.commands.MoveForwardCommand;
 
+
 /** Add your docs here. */
-public class OneCube {
+public class RightSide {
     public static int pipelineNum;
 
-    public OneCube() {
+    public RightSide() {
 
-        pipelineNum = 1;
+        pipelineNum = 0;
         Subsystems.driveSubsystem.resetEncoders();
     }
     public static Command getCommand(){
+        
 
-       Command m_autonomousCommand = (new MoveForwardCommand(0).andThen(new AutonArmCommand(false, 2, false)));
+       Command m_autonomousCommand = (new AutonDriveCommand(100, -0.2).andThen(new AutonDriveCommand(100, 0.2))
+       .andThen(new AutonStrafeCommand(0.2, pipelineNum)).andThen(new AutonArmCommand(false, 2, false))
+       .andThen(new MoveForwardCommand(pipelineNum))
+       .andThen(new AutonDriveCommand(15, -0.1)).andThen(new AutonTimedStrafeCommand(0.2, 1.7))
+       .andThen(new AutonDriveCommand(65, -0.5)).andThen(new AutoBalanceCommand()));
        return m_autonomousCommand;
     }
-   
-
 }

@@ -32,7 +32,6 @@ public class BalanceCommand extends CommandBase {
   /** Creates a new AutoBalanceCommand. */
   public BalanceCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Subsystems.driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -51,12 +50,13 @@ public class BalanceCommand extends CommandBase {
     
 
    
-    SmartDashboard.putNumber("gyro pitch", Subsystems.driveSubsystem.getGyroPitch());
     SmartDashboard.putNumber("modded gyro yaw", turnController.getMeasurementSupplier().get());
     SmartDashboard.putNumber("gyro yaw", Subsystems.driveSubsystem.getGyroAngle());
     SmartDashboard.putNumber("gyro roll", Subsystems.driveSubsystem.getGyroRoll());
     SmartDashboard.putNumber("turning value", turningEffort);
     SmartDashboard.putNumber("balance effort", balanceEffort);
+    SmartDashboard.putNumber("gyro pitch", Subsystems.driveSubsystem.getGyroPitch());
+
 
     // effort = (balanceSetpoint - Subsystems.driveSubsystem.getGyroRoll()) * kP;
     balanceEffort = balanceController.getEffort();

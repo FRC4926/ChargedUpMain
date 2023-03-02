@@ -18,6 +18,7 @@ import frc.robot.commands.ArmCommand2;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.LimelightStrafeCommand;
+import frc.robot.commands.VisionCommand;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -97,7 +98,7 @@ public class Robot extends TimedRobot {
     Subsystems.driveSubsystem.setCoast();
     Subsystems.driveSubsystem.resetGyro();
     // CommandScheduler.getInstance().schedule(new AlignToZeroCommand());
-
+    //CommandScheduler.getInstance().schedule(new VisionCommand());
     CommandScheduler.getInstance().schedule(new DriveCommand());
     CommandScheduler.getInstance().schedule(new BalanceCommand());
     CommandScheduler.getInstance().schedule(new ArmCommand2());

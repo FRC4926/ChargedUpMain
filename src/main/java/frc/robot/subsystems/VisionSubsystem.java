@@ -46,6 +46,7 @@ public class VisionSubsystem extends SubsystemBase {
   // public void align(){
   //   Subsystems.driveSubsystem.mechDrive(0, 0, PIDController.getEffort(), true);
   // }
+  Boolean see = false;
   double distance = 0;
   public double getDistance() {
     return distance;
@@ -54,8 +55,11 @@ public class VisionSubsystem extends SubsystemBase {
   public int getHorizontalDistance() {
     return horizontalDistance;
   }
+  public boolean isSee(){
+    return see;
+  }
   static Thread m_visionThread;
-  boolean cone = false;
+  boolean cone = true;
 //   public void senseCone(){
 // cone = true;
 //   }
@@ -66,7 +70,7 @@ public class VisionSubsystem extends SubsystemBase {
     m_visionThread =
     new Thread(
         () -> {
-          Boolean see = false;
+
           Scalar upperY;
           Scalar lowerY;
 
@@ -97,7 +101,7 @@ public class VisionSubsystem extends SubsystemBase {
           Mat dst = new Mat();
           Mat hier = new Mat();
           // Mat grayMat = new Mat();
-          
+         
         List<MatOfPoint> points = new ArrayList<>();
           // This cannot be 'true'. The program will never exit if it is. This
           // lets the robot stop this thread when restarting robot code or
@@ -113,10 +117,10 @@ public class VisionSubsystem extends SubsystemBase {
             }
             Imgproc.cvtColor(mat, keegan, Imgproc.COLOR_BGR2HSV);
             Imgproc.GaussianBlur(keegan, blur, new Size(11, 11), 0);
-            
+           
             Core.inRange(blur, lowerY, upperY, dst);
             // Imgproc.HoughCircles(blur, dst, 0, 0, 0);
-            
+           
             int cubeIndex = -1;
 
             Imgproc.findContours(dst, points, hier, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
@@ -126,13 +130,13 @@ public class VisionSubsystem extends SubsystemBase {
                 if((((double)Imgproc.boundingRect(points.get(i)).height/(double)Imgproc.boundingRect(points.get(i)).width)< 1.2 && ((double)Imgproc.boundingRect(points.get(i)).height/(double)Imgproc.boundingRect(points.get(i)).width )> 0.8) && Imgproc.boundingRect(points.get(i)).height>50 && Imgproc.boundingRect(points.get(i)).width>50){
                   cubeIndex = i;
                 }  
-              
+             
              }
             }
-          
+         
             double maxVal = 0;
             int maxValIdx=-1;
-            
+           
             for(int countourIdx = 0; countourIdx<points.size(); countourIdx++){
               double contourArea = Imgproc.contourArea(points.get(countourIdx));
               if(maxVal<contourArea){
@@ -140,27 +144,30 @@ public class VisionSubsystem extends SubsystemBase {
                 maxValIdx = countourIdx;
               }
             }
-          
+         
 
           int centre = 0;
           if(points.size()>0){
+            see = true;
             if(cone)
             centre = (Imgproc.boundingRect(points.get(maxValIdx)).x+(Imgproc.boundingRect(points.get(maxValIdx)).width/2) -320);
             else
             centre = (Imgproc.boundingRect(points.get(cubeIndex)).x+(Imgproc.boundingRect(points.get(cubeIndex)).width/2) -320);
             // horizontalDistance = centre/10;
-          }  
+          } else{
+            see=false;
+          }
             horizontalDistance = centre/5;
-  
+ 
           // if(cone)
             Imgproc.drawContours(mat, points, cubeIndex, new Scalar(0,255,0), 4);
         //  else{
         //   Imgproc.drawContours(mat, points, cubeIndex, new Scalar(0,255,0), 4);
-        //  } 
+        //  }
          SmartDashboard.putBoolean("Sees something", see);
-            
+           
 
-          
+         
            
             outputStream.putFrame(mat);
             points.clear();
@@ -185,36 +192,8 @@ cone = !cone;
   }
   @Override
   public void periodic() {
-    
+   
   }
 
-
-
-// class FindContours {
-//   private static Mat srcGray = new Mat();
-//   private static int threshold = 100;
-//   private static Random rng = new Random(12345);
-
-//   public FindContours(Mat src) {
-//       if (src.empty()) {
-//           System.exit(0);
-//       }
-//       Imgproc.cvtColor(src, srcGray, Imgproc.COLOR_BGR2GRAY);
-//       Imgproc.blur(srcGray, srcGray, new Size(3, 3));
-//       updateImage();
-//   }
-
-//   public static Mat updateImage() {
-//       Mat cannyOutput = new Mat();
-//       Imgproc.Canny(srcGray, cannyOutput, threshold, threshold * 2);
-//       List<MatOfPoint> contours = new ArrayList<>();
-//       Mat hierarchy = new Mat();
-//       Imgproc.findContours(cannyOutput, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-//       Mat drawing = Mat.zeros(cannyOutput.size(), CvType.CV_8UC3);
-//       for (int i = 0; i < contours.size(); i++) {
-//           Scalar color = new Scalar(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256));
-//           Imgproc.drawContours(drawing, contours, i, color, 2, Imgproc.LINE_8, hierarchy, 0, new Point());
-//       }
-//       return(drawing);
-//   }
 }
+

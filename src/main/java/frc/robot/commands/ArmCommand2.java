@@ -50,24 +50,26 @@ public class ArmCommand2 extends CommandBase {
 // move arm to upper, middle, or lower based on button click
 
     if(isAutomated)
-    {
+    { 
       if(RobotContainer.operator.getYButton()){
+        
           if(pipelineNum == 0){
             Subsystems.armSubsystem2.moveToUpperBox();
           }
           else if(pipelineNum == 1){
             SmartDashboard.putBoolean("in if statement", true);
-            Subsystems.armSubsystem2.moveToUpperCone();
-        }
+            Subsystems.armSubsystem2.moveToUpperBox();
+          }
+        
       }
 
       else if(RobotContainer.operator.getBButton()){
-        if(pipelineNum == 0){
+        // if(pipelineNum == 0){
+        //   Subsystems.armSubsystem2.moveToLowerBox();
+        // }
+        // else if(pipelineNum == 1){
           Subsystems.armSubsystem2.moveToLowerBox();
-        }
-        else if(pipelineNum == 1){
-          Subsystems.armSubsystem2.moveToLowerCone();
-        }
+        // }
       }
 
       else if(RobotContainer.operator.getAButton()){

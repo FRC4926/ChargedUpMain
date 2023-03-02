@@ -69,12 +69,12 @@ public class LimelightStrafeCommand extends CommandBase {
     // strafe to center of target
     // only moves robot when target is in view (tv = 1)    
     if(RobotContainer.driver.getAButton()){
-      if(Math.abs(Subsystems.limelightSubsystem.getTX()+23)>2 && Math.abs(Math.abs(Subsystems.driveSubsystem.getGyroAngle()%360)-angleSetpoint)<5)
+      if(Math.abs(Subsystems.limelightSubsystem.getTX()+20)>2 && Math.abs(Math.abs(Subsystems.driveSubsystem.getGyroAngle()%360)-angleSetpoint)<5)
         {
           Subsystems.driveSubsystem.drive(0, strafingValue, 0, true);
           SmartDashboard.putString("pathway", "strafe");
         }
-      else if(Math.abs(Subsystems.limelightSubsystem.getTX()+23)<2 && Math.abs(Math.abs(Subsystems.driveSubsystem.getGyroAngle()%360)-angleSetpoint)<2)
+      else if(Math.abs(Subsystems.limelightSubsystem.getTX()+20)<2 && Math.abs(Math.abs(Subsystems.driveSubsystem.getGyroAngle()%360)-angleSetpoint)<2)
         {
           Subsystems.driveSubsystem.drive(0.2, 0, 0, true);
           SmartDashboard.putString("pathway", "forward");

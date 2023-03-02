@@ -35,7 +35,7 @@ public class AutonTesting {
 
        Command m_autonomousCommand = (new AutonDriveCommand(100, -0.2).andThen(new AutonDriveCommand(100, 0.2))
        .andThen(new AutonStrafeCommand(-0.2, pipelineNum)).andThen(new AutonDriveCommand(15, 0.2))
-       .andThen(new AutonDriveCommand(15, -0.1)).andThen(new AutonTimedStrafeCommand(0.2, 2.3))
+       .andThen(new AutonDriveCommand(15, -0.1)).andThen(new AutonTimedStrafeCommand(0.2, 1.7))
        .andThen(new AutonDriveCommand(65, -0.5)).andThen(new AutoBalanceCommand()));
        return m_autonomousCommand;
     }

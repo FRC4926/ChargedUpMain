@@ -24,14 +24,14 @@ public class ArmSubsystem2 extends SubsystemBase {
   public CANSparkMax gripMotor = new CANSparkMax(Constants.CAN_IDs.wristID, MotorType.kBrushless);
   public CANSparkMax padMotor = new CANSparkMax(Constants.CAN_IDs.gripID, MotorType.kBrushless);
 
-  private double highConeAngleShoulder = 60;
-  public double highConeAngleForearm = 96;
-  private double lowConeAngleShoulder = 85;
-  private double lowConeAngleForearm = 31;
-  private double highCubeAngleShoulder = 61;
-  private double highCubeAngleForearm = 80;
-  private double lowCubeAngleShoulder = 87;
-  private double lowCubeAngleForearm = 12;
+  private double highConeAngleShoulder = 23;
+  public double highConeAngleForearm = -290;
+  private double lowConeAngleShoulder = 76;
+  private double lowConeAngleForearm = -225;
+  private double highCubeAngleShoulder = 45;
+  private double highCubeAngleForearm = -300;
+  private double lowCubeAngleShoulder = 75;
+  private double lowCubeAngleForearm = -210;
   private double groundAngleShoulder = 80;
   private double groundAngleForearm = -45;
   private double collectAngleShoulder = 125;
@@ -184,7 +184,7 @@ public class ArmSubsystem2 extends SubsystemBase {
       pidControllerForearm.setSetpoint(highConeAngleForearm);
       forearmMotor.set(pidControllerForearm.getEffort() * -1);
 
-      if (Math.abs(getDegreesForearm() - highConeAngleForearm) < 40) {
+      if (Math.abs(getDegreesForearm() - highConeAngleForearm) < 15) {
         shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
       }
     // } 
@@ -200,21 +200,15 @@ public class ArmSubsystem2 extends SubsystemBase {
     pidControllerForearm.innerController.setTolerance(0.1);
     pidControllerForearm.setMinEffort(minEffort);
 
-    if (pidControllerShoulder.getSetpoint() != lowConeAngleShoulder) {
-      pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
-    }
 
-    if (pidControllerShoulder.isFinished()) {
-      pidControllerForearm.setSetpoint(lowConeAngleForearm);
-      forearmMotor.set(pidControllerForearm.getEffort() * -1);
-      if (pidControllerForearm.isFinished()) {
-        pidControllerShoulder.setSetpoint(lowConeAngleShoulder);
-      }
-    } else {
+  
+    pidControllerShoulder.setSetpoint(lowConeAngleShoulder);
+    pidControllerForearm.setSetpoint(lowConeAngleForearm);
+    forearmMotor.set(pidControllerForearm.getEffort() * -1);
+
+    if (Math.abs(getDegreesForearm() - lowConeAngleForearm) < 20) {
       shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
     }
-
-    pidControllerPad.setSetpoint(lowConeAnglePad);
     // padMotor.set(pidControllerPad.getEffort());
     
   }
@@ -233,9 +227,11 @@ public class ArmSubsystem2 extends SubsystemBase {
       pidControllerForearm.setSetpoint(highCubeAngleForearm);
       forearmMotor.set(pidControllerForearm.getEffort() * -1);
 
-      if (Math.abs(getDegreesForearm() - highCubeAngleForearm) < 40) {
+      if (Math.abs(getDegreesForearm() - highCubeAngleForearm) < 25) {
         shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
       }
+
+      
     // if(pidControllerForearm.getSetpoint() != highCubeAngleForearm){
     //   moveBackwards();
     // }
@@ -272,20 +268,13 @@ public class ArmSubsystem2 extends SubsystemBase {
     pidControllerForearm.innerController.setTolerance(0.1);
     pidControllerForearm.setMinEffort(minEffort);
 
-    if (pidControllerShoulder.getSetpoint() != lowCubeAngleShoulder) {
-      pidControllerShoulder.setSetpoint(moveBackShoulderAngle);
-    }
+    pidControllerShoulder.setSetpoint(lowCubeAngleShoulder);
+    pidControllerForearm.setSetpoint(lowCubeAngleForearm);
+    forearmMotor.set(pidControllerForearm.getEffort() * -1);
 
-    if (pidControllerShoulder.isFinished()) {
-      pidControllerForearm.setSetpoint(lowCubeAngleForearm);
-      forearmMotor.set(pidControllerForearm.getEffort() * -1);
-      if (pidControllerForearm.isFinished()) {
-        pidControllerShoulder.setSetpoint(lowCubeAngleShoulder);
-      }
-    } else {
+    if (Math.abs(getDegreesForearm() - lowCubeAngleForearm) < 10) {
       shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
     }
-
     pidControllerPad.setSetpoint(lowCubeAnglePad);
     // padMotor.set(pidControllerPad.getEffort());
     
