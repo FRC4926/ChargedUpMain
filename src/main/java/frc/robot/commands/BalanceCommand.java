@@ -15,15 +15,15 @@ public class BalanceCommand extends CommandBase {
   GalacPIDController2 turnController;
 
   double balanceSetpoint = 0;
-  double kP = 0.00665;
-  double kI = 0.00001;
-  double kD = 0.00001;
+  double kP = 0.0065;
+  double kI = 0.0003;
+  double kD = 0.0000;
   double balanceEffort;
 
   double modGyroYaw;
 
   double angleSetpoint = 0;
-  double pTurn = 0.007;
+  double pTurn = 0.004;
   double iTurn = 0;
   double dTurn = 0;
   double turningEffort;
@@ -32,7 +32,6 @@ public class BalanceCommand extends CommandBase {
   /** Creates a new AutoBalanceCommand. */
   public BalanceCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Subsystems.driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -51,12 +50,13 @@ public class BalanceCommand extends CommandBase {
     
 
    
-    SmartDashboard.putNumber("gyro pitch", Subsystems.driveSubsystem.getGyroPitch());
     SmartDashboard.putNumber("modded gyro yaw", turnController.getMeasurementSupplier().get());
     SmartDashboard.putNumber("gyro yaw", Subsystems.driveSubsystem.getGyroAngle());
     SmartDashboard.putNumber("gyro roll", Subsystems.driveSubsystem.getGyroRoll());
     SmartDashboard.putNumber("turning value", turningEffort);
     SmartDashboard.putNumber("balance effort", balanceEffort);
+    SmartDashboard.putNumber("gyro pitch", Subsystems.driveSubsystem.getGyroPitch());
+
 
     // effort = (balanceSetpoint - Subsystems.driveSubsystem.getGyroRoll()) * kP;
     balanceEffort = balanceController.getEffort();
@@ -67,7 +67,7 @@ public class BalanceCommand extends CommandBase {
     }
 
     if(RobotContainer.driver.getRightBumper())
-      Subsystems.driveSubsystem.drive(-balanceEffort, 0, turningEffort, true);
+      Subsystems.driveSubsystem.drive(balanceEffort, 0, turningEffort, true);
 
   }
 

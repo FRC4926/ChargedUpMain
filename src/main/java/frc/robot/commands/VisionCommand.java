@@ -46,7 +46,7 @@ double positionTolerance = 2;
   @Override
   public void execute() {
 
-       Subsystems.driveSubsystem.drive(-.152,0,-pid.getEffort(),true);
+       Subsystems.driveSubsystem.drive(.152,0,pid.getEffort(),true);
     
   }
 
@@ -59,6 +59,6 @@ double positionTolerance = 2;
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Subsystems.visionSubsystem.getDistance() < 35;
+    return false;
   }
 }

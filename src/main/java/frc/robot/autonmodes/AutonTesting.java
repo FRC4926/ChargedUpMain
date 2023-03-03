@@ -28,15 +28,15 @@ public class AutonTesting {
     }
     public static Command getCommand(){
         
-        Command m_autonomousCommand = (new AutonStrafeCommand(-0.1, pipelineNum).andThen(new AutonArmCommand(false, 2, false))
-        .andThen(new MoveForwardCommand(pipelineNum)).andThen(new AutonDriveCommand(25, -0.1)));
+        // Command m_autonomousCommand = (new AutonStrafeCommand(-0.1, pipelineNum).andThen(new AutonArmCommand(false, 2, false))
+        // .andThen(new MoveForwardCommand(pipelineNum)).andThen(new AutonDriveCommand(25, -0.1)));
         // Command m_autonomousCommand = (new AutonArmCommand(false, 2, false).andThen(new AutonArmCommand(false, 3, false))
         // .andThen(new AutonDriveCommand(35.45, -0.1)));
 
-    //    Command m_autonomousCommand = (new AutonDriveCommand(100, -0.2).andThen(new AutonDriveCommand(100, 0.2))
-    //    .andThen(new AutonStrafeCommand(-0.2, pipelineNum)).andThen(new AutonArmCommand(false, 2, false))
-    //    .andThen(new MoveForwardCommand(pipelineNum)).andThen(new AutonDriveCommand(15, -0.1)).deadlineWith(null)
-    //    .andThen(new AutonTimedStrafeCommand(-0.2, 1.5)).andThen(new AutonDriveCommand(65, -0.5)).andThen(new AutoBalanceCommand()));
+       Command m_autonomousCommand = (new AutonDriveCommand(100, -0.2).andThen(new AutonDriveCommand(100, 0.2))
+       .andThen(new AutonStrafeCommand(-0.2, pipelineNum)).andThen(new AutonDriveCommand(15, 0.2))
+       .andThen(new AutonDriveCommand(15, -0.1)).andThen(new AutonTimedStrafeCommand(0.2, 1.7))
+       .andThen(new AutonDriveCommand(65, -0.5)).andThen(new AutoBalanceCommand()));
        return m_autonomousCommand;
     }
 }
