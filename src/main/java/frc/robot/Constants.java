@@ -70,8 +70,8 @@ public final class Constants {
     //arm IDs
     public static final int shoulderID = 11;
     public static final int elbowID = 12;
-    public static final int padID = 13;
-    public static final int gripID = 14;
+    public static final int gripID = 13;
+    public static final int wristID = 14;
   }
 
 }

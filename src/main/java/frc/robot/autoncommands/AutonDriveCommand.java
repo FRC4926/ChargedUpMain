@@ -2,14 +2,14 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.autoncommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer.Subsystems;
 import frc.robot.utils.GalacPIDController2;
 
-public class ForwardDistance extends CommandBase {
+public class AutonDriveCommand extends CommandBase {
 
   double angleSetpoint = 0;
   double kP = 0.008;
@@ -21,7 +21,7 @@ public class ForwardDistance extends CommandBase {
   
  GalacPIDController2  pidController;
   /** Creates a new AutonDriveCommand. */
-  public ForwardDistance(double distance, double speed) {
+  public AutonDriveCommand(double distance, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Subsystems.driveSubsystem);
   

@@ -4,8 +4,13 @@
 
 package frc.robot;
 
-import frc.robot.autonmodes.AutonTesting;
+import frc.robot.autoncommands.MidBalance;
+import frc.robot.autonmodes.LeftTwo;
+import frc.robot.autonmodes.LeftTwoBalance;
+import frc.robot.autonmodes.OneCone;
 import frc.robot.autonmodes.OneCube;
+import frc.robot.autonmodes.RightTwo;
+import frc.robot.autonmodes.RightTwoBalance;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.LimelightStrafeCommand;
 import frc.robot.subsystems.ArmSubsystem2;
@@ -46,13 +51,8 @@ public class RobotContainer {
   SendableChooser<String> m_chooser = new SendableChooser<>();
   String path;
 
-  // public static Joystick driver = new Joystick(Constants.Joystick.kJoystickPort);
   public static XboxController driver = new XboxController(0);
   public static XboxController operator = new XboxController(Constants.Joystick.kXboxPort);
-  public static Joystick operator2 = new Joystick(2);
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -60,8 +60,15 @@ public class RobotContainer {
     configureBindings();
     
 
-    m_chooser.setDefaultOption("AutonTesting", "AutonTesting");
+    m_chooser.setDefaultOption("LeftTwo", "LeftTwo");
+    m_chooser.addOption("LeftTwoBalance", "LeftTwoBalance");
+    m_chooser.addOption("MidBalance", "MidBalance");
     m_chooser.addOption("OneCone", "OneCone");
+    m_chooser.addOption("OneCube", "OneCube");
+    m_chooser.addOption("RightTwo", "RightTwo");
+    m_chooser.addOption("RightTwoBalance", "RightTwoBalance");
+
+
     Shuffleboard.getTab("Autonomous").add(m_chooser);
 
   }
@@ -94,11 +101,26 @@ public class RobotContainer {
     // An example command will be run in autonomous
     path = m_chooser.getSelected();
 
-    if(path.equals("OneCone")){
+    if(path.equals("LeftTwo")){
+      return LeftTwo.getCommand();
+    }
+    else if(path.equals("LeftTwoBalance")){
+      return LeftTwoBalance.getCommand();
+    }
+    else if(path.equals("MidBalance")){
+      return MidBalance.getCommand();
+    }
+    else if(path.equals("OneCone")){
+      return OneCone.getCommand();
+    }
+    else if(path.equals("OneCube")){
       return OneCube.getCommand();
     }
-    else if(path.equals("AutonTesting")){
-      return AutonTesting.getCommand();
+    else if(path.equals("RightTwo")){
+      return RightTwo.getCommand();
+    }
+    else if(path.equals("RightTwoBalance")){
+      return RightTwoBalance.getCommand();
     }
     return null;
   }

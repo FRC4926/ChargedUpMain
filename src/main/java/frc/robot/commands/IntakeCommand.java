@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
@@ -13,7 +14,6 @@ public class IntakeCommand extends CommandBase {
   /** Creates a new IntakeCommand. */
   public IntakeCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Subsystems.intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -23,14 +23,19 @@ public class IntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(RobotContainer.operator.getRightBumper())
-      Subsystems.intakeSubsystem.runIntake(0.4);
-    else if(RobotContainer.operator.getLeftBumper()){
-      Subsystems.intakeSubsystem.runIntake(-0.4);
-    }
+
+    SmartDashboard.putNumber("right trigger effort", RobotContainer.operator.getRightTriggerAxis());
+    SmartDashboard.putNumber("left trigger effort", RobotContainer.operator.getLeftTriggerAxis());
+
+    if(RobotContainer.driver.getRightTriggerAxis() > 0.02)
+      Subsystems.intakeSubsystem.runIntake(RobotContainer.operator.getRightTriggerAxis());
     
-    else
+    else if(RobotContainer.driver.getLeftTriggerAxis() > 0.02){
+      Subsystems.intakeSubsystem.runIntake(-RobotContainer.operator.getLeftTriggerAxis());
+    }
+    else{
       Subsystems.intakeSubsystem.stopIntake();
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -2,27 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.autoncommands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.Subsystems;
 
-public class AlignToZeroCommand extends CommandBase {
-
-  double angleSetpoint = 0;
-  double kP = 0.007;
-  double turningValue;
-
-  /** Creates a new AlignToZeroCommand. */
-  public AlignToZeroCommand() {
+public class AutonGripAndReleaseCommand extends CommandBase {
+  /** Creates a new AutonGripAndReleaseCommand. */
+  boolean grip;
+  boolean cone;
+  public AutonGripAndReleaseCommand(boolean grip, boolean cone) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Subsystems.driveSubsystem);
+    addRequirements(Subsystems.armSubsystem2);
+    grip = this.grip;
+    cone = this.cone;
   }
-
-
 
   // Called when the command is initially scheduled.
   @Override
@@ -31,13 +26,14 @@ public class AlignToZeroCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
-    SmartDashboard.putNumber("turning value", turningValue);
-
-    turningValue = (angleSetpoint - Subsystems.driveSubsystem.getGyroAngle()) * kP;
-
-    if(RobotContainer.operator.getLeftBumper()){
-      Subsystems.driveSubsystem.drive(0, 0, -turningValue, true);
+    if(grip){
+      if(cone)
+      Subsystems.armSubsystem2.grabCone();
+      else
+      Subsystems.armSubsystem2.grabCube();
+    }
+    else{
+      Subsystems.armSubsystem2.release();
     }
   }
 
@@ -48,6 +44,6 @@ public class AlignToZeroCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Subsystems.armSubsystem2.pidControllerGrip.isFinished();
   }
 }

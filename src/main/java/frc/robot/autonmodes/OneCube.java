@@ -6,12 +6,12 @@ package frc.robot.autonmodes;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer.Subsystems;
-import frc.robot.commands.AutoBalanceCommand;
-import frc.robot.commands.AutonArmCommand;
-import frc.robot.commands.ForwardDistance;
-import frc.robot.commands.AutonStrafeCommand;
-import frc.robot.commands.TimedStrafe;
-import frc.robot.commands.MoveForwardCommand;
+import frc.robot.autoncommands.AutoBalanceCommand;
+import frc.robot.autoncommands.AutonArmCommand;
+import frc.robot.autoncommands.AutonStrafeCommand;
+import frc.robot.autoncommands.ForwardDistance;
+import frc.robot.autoncommands.MoveForwardCommand;
+import frc.robot.autoncommands.TimedStrafe;
 
 /** Add your docs here. */
 public class OneCube {
@@ -24,7 +24,7 @@ public class OneCube {
     }
     public static Command getCommand(){
 
-       Command m_autonomousCommand = (new MoveForwardCommand(0).andThen(new AutonArmCommand(false, 2, false)));
+       Command m_autonomousCommand = (new MoveForwardCommand(0).andThen(new AutonArmCommand(false, 2, true)));
        return m_autonomousCommand;
     }
    
