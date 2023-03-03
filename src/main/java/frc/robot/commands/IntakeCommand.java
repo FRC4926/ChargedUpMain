@@ -23,8 +23,11 @@ public class IntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(RobotContainer.operator.getRightTriggerAxis() > 0.02)
-      Subsystems.intakeSubsystem.runIntake(RobotContainer.operator.getRightTriggerAxis());
+    if(RobotContainer.operator.getRightBumper())
+      Subsystems.intakeSubsystem.runIntake(0.4);
+    else if(RobotContainer.operator.getLeftBumper()){
+      Subsystems.intakeSubsystem.runIntake(-0.4);
+    }
     
     else
       Subsystems.intakeSubsystem.stopIntake();

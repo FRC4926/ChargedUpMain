@@ -55,10 +55,24 @@ public class DriveSubsystem extends SubsystemBase {
     frontRightEncoder = frontRightLead.getEncoder();
     backLeftEncoder = backLeftLead.getEncoder();
     backRightEncoder = backRightLead.getEncoder();
+
     frontRightLead.setInverted(true);
     backRightLead.setInverted(true);
     frontRightFollower.setInverted(true);
     backRightFollower.setInverted(true);
+
+    // frontRightLead.setInverted(false);
+    // backRightLead.setInverted(false);`
+    // frontLeftLead.setInverted(true);
+    // backLeftLead.setInverted(true);
+    // frontLeftFollower.setInverted(true);
+    // backLeftFollower.setInverted(true);
+
+    // frontLeftLead.setInverted(false);
+    // backLeftLead.setInverted(false);
+    // frontLeftFollower.setInverted(false);
+    // backLeftFollower.setInverted(false);
+
 
     mecanumDrive = new MecanumDrive(frontLeftLead, backLeftLead, frontRightLead, backRightLead);
     mecanumDrive2 = new MecanumDrive(frontLeftFollower, backLeftFollower, frontRightFollower, backRightFollower);
@@ -149,6 +163,11 @@ public class DriveSubsystem extends SubsystemBase {
       mecanumDrive.driveCartesian(forward, strafe, rotation, rotation2d);
       mecanumDrive2.driveCartesian(forward, strafe, rotation, rotation2d);
     }
+
+    SmartDashboard.putNumber("Front Left Lead", frontLeftLead.getOutputCurrent());
+    SmartDashboard.putNumber("Front Left Follower", frontLeftFollower.getOutputCurrent());
+    SmartDashboard.putNumber("Back Left Lead", backLeftLead.getOutputCurrent());
+    SmartDashboard.putNumber("Back Left Follower", backLeftFollower.getOutputCurrent());
   }
 
 

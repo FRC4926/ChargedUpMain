@@ -25,7 +25,7 @@ public class DriveCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Subsystems.driveSubsystem.setBrake();
+    // Subsystems.driveSubsystem.setBrake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,9 +44,16 @@ public class DriveCommand extends CommandBase {
     MathUtil.applyDeadband(strafe, 0.02);
     MathUtil.applyDeadband(rotate, 0.02);
 
+    // if(Math.abs(RobotContainer.driver.getLeftY()) > 0.02) {
+    //     Subsystems.driveSubsystem.frontLeftFollower.setInverted(true);
+
+    // } else {
+    //   Subsystems.driveSubsystem.frontLeftFollower.setInverted(false);
+
+    // }
+
     
-      Subsystems.driveSubsystem.drive(forward, -strafe, -rotate, true);
-    
+      Subsystems.driveSubsystem.drive(forward, -strafe, -rotate, false);
   }
 
   // Called once the command ends or is interrupted.

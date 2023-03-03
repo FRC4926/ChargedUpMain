@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,12 +18,14 @@ import frc.robot.utils.GalacPIDController2;
 
 public class ArmSubsystem extends SubsystemBase {
 
+  // public Talon padMotor = new Talon(Constants.CAN_IDs.padID);
+  // public Talon gripMotor = new Talon(Constants.CAN_IDs.gripID);
 
 
   public  CANSparkMax shoulderMotor = new CANSparkMax(Constants.CAN_IDs.shoulderID, MotorType.kBrushless);
   public CANSparkMax forearmMotor = new CANSparkMax(Constants.CAN_IDs.elbowID, MotorType.kBrushless);
-  public CANSparkMax gripMotor = new CANSparkMax(Constants.CAN_IDs.wristID, MotorType.kBrushless);
-  public CANSparkMax padMotor = new CANSparkMax(Constants.CAN_IDs.gripID, MotorType.kBrushless);
+  public CANSparkMax gripMotor = new CANSparkMax(Constants.CAN_IDs.gripID, MotorType.kBrushless);
+  public CANSparkMax padMotor = new CANSparkMax(Constants.CAN_IDs.padID, MotorType.kBrushless);
 
   private double highConeAngleShoulder = 127;
   public double highConeAngleForearm = 64;
@@ -95,12 +98,8 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() {
     shoulderMotor.setIdleMode(IdleMode.kBrake);
     forearmMotor.setIdleMode(IdleMode.kBrake);
-    padMotor.setIdleMode(IdleMode.kBrake);
-    gripMotor.setIdleMode(IdleMode.kBrake);
     shoulderMotor.setSmartCurrentLimit(60);
     forearmMotor.setSmartCurrentLimit(60);
-    gripMotor.setSmartCurrentLimit(60);
-    padMotor.setSmartCurrentLimit(60);
   }
 
   // sets each arm motor to a given effort
@@ -123,6 +122,7 @@ public class ArmSubsystem extends SubsystemBase {
   public double getShoulderOutputVoltage(){
     return shoulderMotor.getBusVoltage();
   }
+
 
   public double getForearmOutputVoltage(){
     return forearmMotor.getBusVoltage();

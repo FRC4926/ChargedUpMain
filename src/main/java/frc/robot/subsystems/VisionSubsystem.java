@@ -78,7 +78,7 @@ public class VisionSubsystem extends SubsystemBase {
             upperY = new Scalar(30,255, 255);
             lowerY = new Scalar(15,120,120);
           }
-          else{
+          else {
             lowerY = new Scalar(90,50,70);
             upperY = new Scalar(132,255,255);
           }
@@ -157,6 +157,11 @@ public class VisionSubsystem extends SubsystemBase {
           } else{
             see=false;
           }
+<<<<<<< Updated upstream
+=======
+          int centre =  (Imgproc.boundingRect(points.get(maxValIdx)).x+(Imgproc.boundingRect(points.get(maxValIdx)).width/2) -320);
+          if(cone){
+>>>>>>> Stashed changes
             horizontalDistance = centre/5;
  
           // if(cone)

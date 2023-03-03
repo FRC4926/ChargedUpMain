@@ -4,12 +4,18 @@
 
 package frc.robot.subsystems;
 
+import java.beans.Encoder;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,12 +24,13 @@ import frc.robot.utils.GalacPIDController2;
 public class ArmSubsystem2 extends SubsystemBase {
 
 
+  public DutyCycleEncoder gripEncoder = new DutyCycleEncoder(8);
+
 
   public  CANSparkMax shoulderMotor = new CANSparkMax(Constants.CAN_IDs.shoulderID, MotorType.kBrushless);
   public CANSparkMax forearmMotor = new CANSparkMax(Constants.CAN_IDs.elbowID, MotorType.kBrushless);
-  public CANSparkMax gripMotor = new CANSparkMax(Constants.CAN_IDs.wristID, MotorType.kBrushless);
-  public CANSparkMax padMotor = new CANSparkMax(Constants.CAN_IDs.gripID, MotorType.kBrushless);
 
+<<<<<<< Updated upstream
   private double highConeAngleShoulder = 23;
   public double highConeAngleForearm = -290;
   private double lowConeAngleShoulder = 76;
@@ -32,6 +39,22 @@ public class ArmSubsystem2 extends SubsystemBase {
   private double highCubeAngleForearm = -300;
   private double lowCubeAngleShoulder = 75;
   private double lowCubeAngleForearm = -210;
+=======
+  public WPI_TalonSRX padMotor = new WPI_TalonSRX(Constants.CAN_IDs.padID);
+  public WPI_TalonSRX gripMotor = new WPI_TalonSRX(Constants.CAN_IDs.gripID);
+  
+
+
+
+  private double highConeAngleShoulder = 23;
+  public double highConeAngleForearm = -290;
+  private double lowConeAngleShoulder = 85;
+  private double lowConeAngleForearm = 31;
+  private double highCubeAngleShoulder = 61;
+  private double highCubeAngleForearm = 80;
+  private double lowCubeAngleShoulder = 87;
+  private double lowCubeAngleForearm = 12;
+>>>>>>> Stashed changes
   private double groundAngleShoulder = 80;
   private double groundAngleForearm = -45;
   private double collectAngleShoulder = 125;
@@ -78,7 +101,7 @@ public class ArmSubsystem2 extends SubsystemBase {
   // creates lambdas for all 4 arm motors (allows them to update continuously)
   Supplier<Double> getShoulderAngle = () -> getDegreesShoulder();
   public Supplier<Double> getForearmAngle = () -> getDegreesForearm();
-  Supplier<Double> getPadAngle = () -> getDegreesPad();
+  // Supplier<Double> getPadAngle = () -> getDegreesPad();
   Supplier<Double> getGripAngle = () -> getDegreesGrip();
 
   // creates PID controllers for all 4 arm motors (default set point is
@@ -88,20 +111,16 @@ public class ArmSubsystem2 extends SubsystemBase {
       0.1);
   public GalacPIDController2 pidControllerForearm = new GalacPIDController2(p, i, d, minEffort, () -> getDegreesForearm(),
       0, 0.1);
-  public GalacPIDController2 pidControllerPad = new GalacPIDController2(p, i, d, minEffort, getPadAngle, highConeAnglePad,
-      1);
+  // public GalacPIDController2 pidControllerPad = new GalacPIDController2(p, i, d, minEffort, getPadAngle, highConeAnglePad,
+      // 1);
   public GalacPIDController2 pidControllerGrip = new GalacPIDController2(p, i, d, minEffort, getGripAngle, 0, 1);
 
   /** Creates a new ArmSubsytem. */
   public ArmSubsystem2() {
     shoulderMotor.setIdleMode(IdleMode.kBrake);
     forearmMotor.setIdleMode(IdleMode.kBrake);
-    padMotor.setIdleMode(IdleMode.kBrake);
-    gripMotor.setIdleMode(IdleMode.kBrake);
     shoulderMotor.setSmartCurrentLimit(60);
     forearmMotor.setSmartCurrentLimit(60);
-    gripMotor.setSmartCurrentLimit(60);
-    padMotor.setSmartCurrentLimit(60);
   }
 
   // sets each arm motor to a given effort
@@ -139,12 +158,12 @@ public class ArmSubsystem2 extends SubsystemBase {
     return -shoulderMotor.getEncoder().getPosition()+90;
   }
 
-  public double getDegreesPad() {
-    return padMotor.getEncoder().getPosition() * 360;
-  }
+  // public double getDegreesPad() {
+  //   return gripEncoder.getAbsolutePosition();
+  // }
 
   public double getDegreesGrip() {
-    return gripMotor.getEncoder().getPosition() * 360+90;
+    return gripEncoder.getAbsolutePosition();
   }
 
   // changes set points based off target and object
@@ -182,7 +201,7 @@ public class ArmSubsystem2 extends SubsystemBase {
       // }
       pidControllerShoulder.setSetpoint(highConeAngleShoulder);
       pidControllerForearm.setSetpoint(highConeAngleForearm);
-      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+      forearmMotor.set(pidControllerForearm.getEffort());
 
       if (Math.abs(getDegreesForearm() - highConeAngleForearm) < 15) {
         shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
@@ -209,6 +228,11 @@ public class ArmSubsystem2 extends SubsystemBase {
     if (Math.abs(getDegreesForearm() - lowConeAngleForearm) < 20) {
       shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
     }
+<<<<<<< Updated upstream
+=======
+
+    // pidControllerPad.setSetpoint(lowConeAnglePad);
+>>>>>>> Stashed changes
     // padMotor.set(pidControllerPad.getEffort());
     
   }
@@ -225,7 +249,7 @@ public class ArmSubsystem2 extends SubsystemBase {
 
     pidControllerShoulder.setSetpoint(highCubeAngleShoulder);
       pidControllerForearm.setSetpoint(highCubeAngleForearm);
-      forearmMotor.set(pidControllerForearm.getEffort() * -1);
+      forearmMotor.set(pidControllerForearm.getEffort());
 
       if (Math.abs(getDegreesForearm() - highCubeAngleForearm) < 25) {
         shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
@@ -275,7 +299,12 @@ public class ArmSubsystem2 extends SubsystemBase {
     if (Math.abs(getDegreesForearm() - lowCubeAngleForearm) < 10) {
       shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
     }
+<<<<<<< Updated upstream
     pidControllerPad.setSetpoint(lowCubeAnglePad);
+=======
+
+    // pidControllerPad.setSetpoint(lowCubeAnglePad);
+>>>>>>> Stashed changes
     // padMotor.set(pidControllerPad.getEffort());
     
   }
@@ -304,7 +333,7 @@ public class ArmSubsystem2 extends SubsystemBase {
       shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
     }
 
-    pidControllerPad.setSetpoint(groundAnglePad);
+    // pidControllerPad.setSetpoint(groundAnglePad);
     // true = cone, false = cube
    
     // padMotor.set(pidControllerPad.getEffort());
@@ -368,7 +397,7 @@ public class ArmSubsystem2 extends SubsystemBase {
       shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
     }
 
-    pidControllerPad.setSetpoint(substationPadAngle);
+    // pidControllerPad.setSetpoint(substationPadAngle);
 
     // padMotor.set(pidControllerPad.getEffort());
 
@@ -452,7 +481,5 @@ public class ArmSubsystem2 extends SubsystemBase {
   public void resetEncoders() {
     shoulderMotor.getEncoder().setPosition(0);
     forearmMotor.getEncoder().setPosition(0);
-    gripMotor.getEncoder().setPosition(0);
-    padMotor.getEncoder().setPosition(0);
   }
 }

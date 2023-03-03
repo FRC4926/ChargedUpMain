@@ -52,6 +52,7 @@ public class ArmCommand2 extends CommandBase {
     if(isAutomated)
     { 
       if(RobotContainer.operator.getYButton()){
+<<<<<<< Updated upstream
         
           if(pipelineNum == 0){
             Subsystems.armSubsystem2.moveToUpperBox();
@@ -61,6 +62,16 @@ public class ArmCommand2 extends CommandBase {
             Subsystems.armSubsystem2.moveToUpperBox();
           }
         
+=======
+        //   if(pipelineNum == 0){
+        //     Subsystems.armSubsystem2.moveToUpperBox();
+        //   }
+        //   else if(pipelineNum == 1){
+        //     SmartDashboard.putBoolean("in if statement", true);
+        //     Subsystems.armSubsystem2.moveToUpperCone();
+        // }
+        Subsystems.armSubsystem2.moveToUpperCone();
+>>>>>>> Stashed changes
       }
 
       else if(RobotContainer.operator.getBButton()){
@@ -97,29 +108,35 @@ public class ArmCommand2 extends CommandBase {
     }
     else // control arm manually
     {
-        if(Math.abs(RobotContainer.operator.getLeftX()) > 0.1){
-          Subsystems.armSubsystem2.moveShoulder(RobotContainer.operator.getLeftX());
+        if(Math.abs(RobotContainer.operator.getLeftY()) > 0.1){
+          Subsystems.armSubsystem2.moveShoulder(RobotContainer.operator.getLeftY());
         } else {
           Subsystems.armSubsystem2.moveShoulder(0);
         }
 
-        if(Math.abs(RobotContainer.operator.getRightX()) > 0.1){
-          Subsystems.armSubsystem2.moveForearm(RobotContainer.operator.getRightX());
+        if(Math.abs(RobotContainer.operator.getRightY()) > 0.1){
+          Subsystems.armSubsystem2.moveForearm(-RobotContainer.operator.getRightY());
         } else {
           Subsystems.armSubsystem2.moveForearm(0);
         }
 
-        // if(Math.abs(RobotContainer.operator.getRightY()) > 0.1){
-        //   Subsystems.armSubsystem2.moveGrip(RobotContainer.operator.getRightX() - 0.1);
-        // } else {
-        //   Subsystems.armSubsystem2.moveGrip(0);
-        // }
+        if((RobotContainer.operator.getRightTriggerAxis()) > 0.05){
+          Subsystems.armSubsystem2.movePad(RobotContainer.operator.getRightTriggerAxis());
+        } 
 
-        // if(Math.abs(RobotContainer.operator.getLeftY()) > 0.1){
-        //   Subsystems.armSubsystem2.movePad(RobotContainer.operator.getLeftY() - 0.1);
-        // } else {
-        //   Subsystems.armSubsystem2.movePad(0);
-        // }
+        else if((RobotContainer.operator.getLeftTriggerAxis()) > 0.05){
+          Subsystems.armSubsystem2.movePad(-RobotContainer.operator.getLeftTriggerAxis());
+
+        }
+        else {
+          Subsystems.armSubsystem2.movePad(0);
+        }
+
+        if(Math.abs(RobotContainer.operator.getRightX()) > 0.1){
+          Subsystems.armSubsystem2.moveGrip(RobotContainer.operator.getRightX() - 0.1);
+        } else {
+          Subsystems.armSubsystem2.moveGrip(0);
+        }
         
     }
   }
