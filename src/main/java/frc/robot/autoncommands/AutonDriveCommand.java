@@ -43,6 +43,7 @@ public class AutonDriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Subsystems.armSubsystem2.holdSteady();
     SmartDashboard.putNumber("PID Effort", pidController.getEffort());
     SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
     SmartDashboard.putNumber("encoder distance execute", Subsystems.driveSubsystem.getAverageEncoderDistance());

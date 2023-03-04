@@ -42,9 +42,12 @@ public class ArmCommand2 extends CommandBase {
     SmartDashboard.putNumber("Shoulder Angle", Subsystems.armSubsystem2.getDegreesShoulder());
     SmartDashboard.putNumber("Forearm Angle", Subsystems.armSubsystem2.getDegreesForearm());
     SmartDashboard.putNumber("forearm pid effort", Subsystems.armSubsystem2.pidControllerForearm.getEffort());
-    SmartDashboard.putNumber("Shoulder Effort", Subsystems.armSubsystem2.pidControllerShoulder.getEffort());
     SmartDashboard.putNumber("Think Pipeline", pipelineNum);
     SmartDashboard.putNumber("shoulder pid effort", Subsystems.armSubsystem2.pidControllerShoulder.getEffort());
+    SmartDashboard.putNumber("grip effort", Subsystems.armSubsystem2.gripMotor.get());
+    SmartDashboard.putNumber("wrist effort", Subsystems.armSubsystem2.wristMotor.get());
+
+
 
 
 // move arm to upper, middle, or lower based on button click
@@ -52,7 +55,6 @@ public class ArmCommand2 extends CommandBase {
     if(isAutomated)
     { 
       if(RobotContainer.operator.getYButton()){
-        
           if(pipelineNum == 0){
             Subsystems.armSubsystem2.moveToUpperBox();
           }
@@ -60,6 +62,8 @@ public class ArmCommand2 extends CommandBase {
             SmartDashboard.putBoolean("in if statement", true);
             Subsystems.armSubsystem2.moveToUpperBox();
           }
+
+          
         
       }
 
@@ -97,28 +101,36 @@ public class ArmCommand2 extends CommandBase {
     }
     else // control arm manually
     {
-        if(Math.abs(RobotContainer.operator.getLeftX()) > 0.1){
-          Subsystems.armSubsystem2.moveShoulder(RobotContainer.operator.getLeftX());
+        if(Math.abs(RobotContainer.operator.getLeftY()) > 0.1){
+          Subsystems.armSubsystem2.moveShoulder(RobotContainer.operator.getLeftY());
         } else {
           Subsystems.armSubsystem2.moveShoulder(0);
         }
 
-        if(Math.abs(RobotContainer.operator.getRightX()) > 0.1){
-          Subsystems.armSubsystem2.moveForearm(RobotContainer.operator.getRightX());
+        if(Math.abs(RobotContainer.operator.getRightY()) > 0.1){
+          Subsystems.armSubsystem2.moveForearm(RobotContainer.operator.getRightY());
         } else {
           Subsystems.armSubsystem2.moveForearm(0);
         }
 
-        if(Math.abs(RobotContainer.operator.getRightY()) > 0.1){
-          Subsystems.armSubsystem2.moveGrip(RobotContainer.operator.getRightX() - 0.1);
-        } else {
-          Subsystems.armSubsystem2.moveGrip(0);
+        if(RobotContainer.operator.getRightBumper()){
+          Subsystems.armSubsystem2.moveGrip(0.3);
         }
+        else if(RobotContainer.operator.getLeftBumper()){
+          Subsystems.armSubsystem2.moveGrip(-0.3);
+        }
+        else
+        Subsystems.armSubsystem2.moveGrip(0);
 
-        if(Math.abs(RobotContainer.operator.getLeftY()) > 0.1){
-          Subsystems.armSubsystem2.movePad(RobotContainer.operator.getLeftY() - 0.1);
+
+
+        if(Math.abs(RobotContainer.operator.getRightX()) > 0.1){
+          if(RobotContainer.operator.getRightX() > 0.5){
+            Subsystems.armSubsystem2.moveWrist(0.5);
+          }else
+            Subsystems.armSubsystem2.moveWrist(RobotContainer.operator.getRightX() - 0.1);
         } else {
-          Subsystems.armSubsystem2.movePad(0);
+          Subsystems.armSubsystem2.moveWrist(0);
         }
         
     }

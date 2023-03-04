@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.Subsystems;
 
@@ -48,7 +49,7 @@ public class LimelightStrafeCommand extends CommandBase {
     SmartDashboard.putNumber("limelight tx", tx);
     SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
     SmartDashboard.putNumber("limelight ty", ty);
-    SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
+    SmartDashboard.putNumber("pipelinenum", Subsystems.limelightSubsystem.getPipelineNum());
 
     // toggle limelight pipeline with pressing the 'X Button'. 
     // true = april tag |||| false = reflective tape

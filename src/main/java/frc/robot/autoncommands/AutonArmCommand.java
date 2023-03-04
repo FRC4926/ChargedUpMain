@@ -47,10 +47,10 @@ public class AutonArmCommand extends CommandBase {
     SmartDashboard.putNumber("auton shoulder angle", Subsystems.armSubsystem2.getDegreesShoulder());
     Subsystems.armSubsystem2.displayAngles();
 
-    if(released){
-      Subsystems.armSubsystem2.release();
-    }
-    else{
+    // if(released){
+    //   Subsystems.armSubsystem2.release();
+    // }
+    
     switch (level) {
       case 0:
         Subsystems.armSubsystem2.moveToGround();
@@ -80,7 +80,7 @@ public class AutonArmCommand extends CommandBase {
 
       default:
         break;
-    }
+    
   }
   }
 
@@ -90,7 +90,7 @@ public class AutonArmCommand extends CommandBase {
     Subsystems.armSubsystem2.moveShoulder(0);
     Subsystems.armSubsystem2.moveForearm(0);
     Subsystems.armSubsystem2.moveGrip(0);
-    Subsystems.armSubsystem2.movePad(0);
+    Subsystems.armSubsystem2.moveWrist(0);
     
   }
 

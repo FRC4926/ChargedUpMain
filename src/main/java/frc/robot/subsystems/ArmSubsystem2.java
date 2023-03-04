@@ -31,12 +31,12 @@ public class ArmSubsystem2 extends SubsystemBase {
 
   private double highConeAngleShoulder = 23;
   public double highConeAngleForearm = -290;
-  private double lowConeAngleShoulder = 76;
-  private double lowConeAngleForearm = -225;
+  public double lowConeAngleShoulder = 58;
+  public double lowConeAngleForearm = -210;
   private double highCubeAngleShoulder = 45;
   private double highCubeAngleForearm = -300;
-  private double lowCubeAngleShoulder = 75;
-  private double lowCubeAngleForearm = -210;
+  public double lowCubeAngleShoulder = 80;
+  public double lowCubeAngleForearm = -240;
   private double groundAngleShoulder = 80;
   private double groundAngleForearm = -45;
   private double collectAngleShoulder = 125;
@@ -62,7 +62,7 @@ public class ArmSubsystem2 extends SubsystemBase {
   private double collectAngleForearmCube = -180;
 
 
-  double p = 0.007;
+  double p = 0.01;
   double i = 0.00;
   double d = 0.00;
 
@@ -118,8 +118,8 @@ public class ArmSubsystem2 extends SubsystemBase {
     forearmMotor.set(forearmSpeed);
   }
 
-  public void movePad(double PadSpeed) {
-    padMotor.set(PadSpeed);
+  public void moveWrist(double PadSpeed) {
+    wristMotor.set(PadSpeed);
   }
 
   public void moveGrip(double gripSpeed) {
@@ -214,7 +214,10 @@ public class ArmSubsystem2 extends SubsystemBase {
     if (Math.abs(getDegreesForearm() - lowConeAngleForearm) < 20) {
       shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
     }
-    // padMotor.set(pidControllerPad.getEffort());
+
+    if(Math.abs(getDegreesShoulder() - lowConeAngleShoulder) < 5){
+      gripMotor.set(0.2);
+    }    
     
   }
 
@@ -280,9 +283,10 @@ public class ArmSubsystem2 extends SubsystemBase {
     if (Math.abs(getDegreesForearm() - lowCubeAngleForearm) < 10) {
       shoulderMotor.set(pidControllerShoulder.getEffort() * -1);
     }
-    pidControllerPad.setSetpoint(lowCubeAnglePad);
-    // padMotor.set(pidControllerPad.getEffort());
     
+    if(Math.abs(getDegreesShoulder() - lowCubeAngleShoulder) < 3){
+      gripMotor.set(-0.2);
+    }    
   }
 
   public void moveToGround() {
@@ -410,8 +414,7 @@ public class ArmSubsystem2 extends SubsystemBase {
   }
 
   public void release() {
-    pidControllerGrip.setSetpoint(gripReleaseAngle);
-    gripMotor.set(pidControllerGrip.getEffort()*-1);
+    gripMotor.set(-0.2);
   }
 
   public void displayAngles(){

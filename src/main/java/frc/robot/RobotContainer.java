@@ -4,7 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.autoncommands.MidBalance;
+import frc.robot.autonmodes.MidBalance;
+import frc.robot.autonmodes.MidBalanceTaxi;
 import frc.robot.autonmodes.LeftTwo;
 import frc.robot.autonmodes.LeftTwoBalance;
 import frc.robot.autonmodes.OneCone;
@@ -63,6 +64,7 @@ public class RobotContainer {
     m_chooser.setDefaultOption("LeftTwo", "LeftTwo");
     m_chooser.addOption("LeftTwoBalance", "LeftTwoBalance");
     m_chooser.addOption("MidBalance", "MidBalance");
+    m_chooser.addOption("MidBalanceTaxi", "MidBalanceTaxi");
     m_chooser.addOption("OneCone", "OneCone");
     m_chooser.addOption("OneCube", "OneCube");
     m_chooser.addOption("RightTwo", "RightTwo");
@@ -109,6 +111,9 @@ public class RobotContainer {
     }
     else if(path.equals("MidBalance")){
       return MidBalance.getCommand();
+    }
+    else if(path.equals("MidBalanceTaxi")){
+      return MidBalanceTaxi.getCommand();
     }
     else if(path.equals("OneCone")){
       return OneCone.getCommand();

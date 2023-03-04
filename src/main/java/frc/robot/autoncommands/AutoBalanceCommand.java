@@ -13,7 +13,7 @@ public class AutoBalanceCommand extends CommandBase {
   //Robot is balanced at 0 degrees at charge station
   double balanceSetpoint = 0;
   //Proportion value for PID
-  double kP = 0.007;
+  double kP = 0.01;
   //Effort to apply to the motor
   double balanceEffort;
   // Robot aligns to 0 degrees 
@@ -37,6 +37,8 @@ public class AutoBalanceCommand extends CommandBase {
   public void execute() {
     SmartDashboard.putNumber("gyro auton roll", Subsystems.driveSubsystem.getGyroRoll());
     SmartDashboard.putNumber("turning value", balanceEffort);
+
+    // Subsystems.armSubsystem2.holdSteady();
     
     turningEffort = (angleSetpoint - (Subsystems.driveSubsystem.getGyroAngle()%360)) * kTurn;
     balanceEffort = (balanceSetpoint - Subsystems.driveSubsystem.getGyroPitch()) * kP;
@@ -56,6 +58,7 @@ public class AutoBalanceCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(Subsystems.driveSubsystem.getGyroPitch()) < 2;
+    // return Math.abs(Subsystems.driveSubsystem.getGyroPitch()) < 2;
+    return false;
   }
 }

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -73,6 +74,16 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    Subsystems.driveSubsystem.frontRightLead.setSmartCurrentLimit(60);
+    Subsystems.driveSubsystem.frontLeftLead.setSmartCurrentLimit(60);
+    Subsystems.driveSubsystem.backRightLead.setSmartCurrentLimit(60);
+    Subsystems.driveSubsystem.backLeftLead.setSmartCurrentLimit(60);
+
+    Subsystems.driveSubsystem.frontRightFollower.setSmartCurrentLimit(60);
+    Subsystems.driveSubsystem.frontLeftFollower.setSmartCurrentLimit(60);
+    Subsystems.driveSubsystem.backRightFollower.setSmartCurrentLimit(60);
+    Subsystems.driveSubsystem.backLeftFollower.setSmartCurrentLimit(60);
     Subsystems.driveSubsystem.setBrake();
     Subsystems.driveSubsystem.resetGyro();
 
@@ -100,6 +111,24 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     Subsystems.driveSubsystem.setBrake();
+    Subsystems.armSubsystem2.shoulderMotor.setIdleMode(IdleMode.kBrake);
+    Subsystems.armSubsystem2.forearmMotor.setIdleMode(IdleMode.kBrake);
+    Subsystems.armSubsystem2.wristMotor.setNeutralMode(NeutralMode.Brake);
+    Subsystems.armSubsystem2.gripMotor.setNeutralMode(NeutralMode.Brake);
+
+    Subsystems.driveSubsystem.frontRightLead.setSmartCurrentLimit(30);
+    Subsystems.driveSubsystem.frontLeftLead.setSmartCurrentLimit(30);
+    Subsystems.driveSubsystem.backRightLead.setSmartCurrentLimit(30);
+    Subsystems.driveSubsystem.backLeftLead.setSmartCurrentLimit(30);
+
+    Subsystems.driveSubsystem.frontRightFollower.setSmartCurrentLimit(30);
+    Subsystems.driveSubsystem.frontLeftFollower.setSmartCurrentLimit(30);
+    Subsystems.driveSubsystem.backRightFollower.setSmartCurrentLimit(30);
+    Subsystems.driveSubsystem.backLeftFollower.setSmartCurrentLimit(30);
+
+
+
+
     CommandScheduler.getInstance().schedule(new DriveCommand());
     CommandScheduler.getInstance().schedule(new BalanceCommand());
     CommandScheduler.getInstance().schedule(new ArmCommand2());
