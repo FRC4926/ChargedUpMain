@@ -47,7 +47,6 @@ public class LimelightStrafeCommand extends CommandBase {
     turningValue = (angleSetpoint - Subsystems.driveSubsystem.getGyroAngle()) * kP;
     strafingValue = (-tx * strafeP);
     SmartDashboard.putNumber("limelight tx", tx);
-    SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
     SmartDashboard.putNumber("limelight ty", ty);
     SmartDashboard.putNumber("pipelinenum", Subsystems.limelightSubsystem.getPipelineNum());
 

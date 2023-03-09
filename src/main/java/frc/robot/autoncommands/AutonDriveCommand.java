@@ -35,8 +35,6 @@ public class AutonDriveCommand extends CommandBase {
   public void initialize() {
     Subsystems.driveSubsystem.resetEncoders();
     Subsystems.driveSubsystem.setCoast();
-    SmartDashboard.putNumber("encoder value initialize", Subsystems.driveSubsystem.getAverageEncoderDistance());
-    SmartDashboard.putNumber("set distance", m_distance);
    
   }
 
@@ -44,11 +42,7 @@ public class AutonDriveCommand extends CommandBase {
   @Override
   public void execute() {
     // Subsystems.armSubsystem2.holdSteady();
-    SmartDashboard.putNumber("PID Effort", pidController.getEffort());
-    SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
-    SmartDashboard.putNumber("encoder distance execute", Subsystems.driveSubsystem.getAverageEncoderDistance());
     turningValue = (angleSetpoint - Subsystems.driveSubsystem.getGyroAngle()) * kP;
-    SmartDashboard.putNumber("turning value", turningValue);
     Subsystems.driveSubsystem.drive(-m_speed, 0, -turningValue, isFieldOriented);
   }
 

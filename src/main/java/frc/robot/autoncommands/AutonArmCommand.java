@@ -7,25 +7,21 @@ package frc.robot.autoncommands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.RobotContainer.Subsystems;
 
 public class AutonArmCommand extends CommandBase {
   /** Creates a new AutonArmCommand. */
-
   boolean object;
   int level;
-  double targetElbowAngle;
-  double targetShoulderAngle;
-  double targetWristAngle;
-  double targetGripPosition;
-  boolean released =false;
+  boolean released = false;
 
   // boolean {object} - true = cone, false = cube
   // int {level} - 0 = ground, 1 = middle, 2 = top
   // boolean {relase} - true if want to release object otherwise false
   public AutonArmCommand(boolean object, int level, boolean release) {
     // Use addRequirements() here to declare subsystem dependencies.
-    // addRequirements(Subsystems.armSubsystem2);
+    // addRequirements(Subsystems.armSubsystem);
     this.object = object;
     this.level = level;
     this.released = release;
@@ -34,49 +30,50 @@ public class AutonArmCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Subsystems.armSubsystem2.moveShoulder(0);
-    Subsystems.armSubsystem2.moveForearm(0);
-    Subsystems.armSubsystem2.moveGrip(0);
+    Subsystems.armSubsystem.moveShoulder(0);
+    Subsystems.armSubsystem.moveForearm(0);
+    Subsystems.armSubsystem.moveGrip(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("hasReachedTarget", Subsystems.armSubsystem2.hasReachedTarget());
-    SmartDashboard.putNumber("auton forearm angle", Subsystems.armSubsystem2.getDegreesForearm());
-    SmartDashboard.putNumber("auton shoulder angle", Subsystems.armSubsystem2.getDegreesShoulder());
-    Subsystems.armSubsystem2.displayAngles();
+    SmartDashboard.putNumber("auton forearm angle", Subsystems.armSubsystem.getDegreesForearm());
+    SmartDashboard.putNumber("auton shoulder angle", Subsystems.armSubsystem.getDegreesShoulder());
 
     // if(released){
-    //   Subsystems.armSubsystem2.release();
+    //   Subsystems.armSubsystem.release();
     // }
     
     switch (level) {
       case 0:
-        Subsystems.armSubsystem2.moveToGround();
+      // set forearm and shoulder setpoints to ground level
         break;
 
       case 1:
         if (object) {
-          Subsystems.armSubsystem2.moveToLowerCone();
+          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowConeAngleForearm;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowConeAngleShoulder;
         } else {
-          Subsystems.armSubsystem2.moveToLowerBox();
-
+          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowCubeAngleForearm;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowCubeAngleShoulder;
         }
         break;
 
       case 2:
         if (object) {
-          Subsystems.armSubsystem2.moveToUpperCone();
+          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highConeAngleForearm;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highConeAngleShoulder;
         } else {
-          Subsystems.armSubsystem2.moveToUpperBox();
+          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highCubeAngleForearm;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highCubeAngleShoulder;
 
         }
         break;
       
       case 3:
-        Subsystems.armSubsystem2.moveToReset();
-        break;
+      // set forearm and shoulder setpoints to reset level
+      break;
 
       default:
         break;
@@ -87,16 +84,15 @@ public class AutonArmCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Subsystems.armSubsystem2.moveShoulder(0);
-    Subsystems.armSubsystem2.moveForearm(0);
-    Subsystems.armSubsystem2.moveGrip(0);
-    Subsystems.armSubsystem2.moveWrist(0);
-    
+    Subsystems.armSubsystem.moveShoulder(0);
+    Subsystems.armSubsystem.moveForearm(0);
+    Subsystems.armSubsystem.moveGrip(0);
+    Subsystems.armSubsystem.moveWrist(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Subsystems.armSubsystem2.hasReachedTarget();
+    return Subsystems.armSubsystem.hasReachedTarget();
   }
 }

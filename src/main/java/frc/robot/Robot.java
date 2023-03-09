@@ -16,6 +16,7 @@ import frc.robot.RobotContainer.Subsystems;
 import frc.robot.autoncommands.VisionCommand;
 import frc.robot.autonmodes.LeftTwoBalance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmCommand2;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.DriveCommand;
@@ -75,26 +76,14 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    Subsystems.driveSubsystem.frontRightLead.setSmartCurrentLimit(60);
-    Subsystems.driveSubsystem.frontLeftLead.setSmartCurrentLimit(60);
-    Subsystems.driveSubsystem.backRightLead.setSmartCurrentLimit(60);
-    Subsystems.driveSubsystem.backLeftLead.setSmartCurrentLimit(60);
-
-    Subsystems.driveSubsystem.frontRightFollower.setSmartCurrentLimit(60);
-    Subsystems.driveSubsystem.frontLeftFollower.setSmartCurrentLimit(60);
-    Subsystems.driveSubsystem.backRightFollower.setSmartCurrentLimit(60);
-    Subsystems.driveSubsystem.backLeftFollower.setSmartCurrentLimit(60);
+    Subsystems.driveSubsystem.setCurrentLimits(60);
     Subsystems.driveSubsystem.setBrake();
     Subsystems.driveSubsystem.resetGyro();
-
-
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-
-    
   }
 
   /** This function is called periodically during autonomous. */
@@ -111,27 +100,19 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     Subsystems.driveSubsystem.setBrake();
-    Subsystems.armSubsystem2.shoulderMotor.setIdleMode(IdleMode.kBrake);
-    Subsystems.armSubsystem2.forearmMotor.setIdleMode(IdleMode.kBrake);
-    Subsystems.armSubsystem2.wristMotor.setNeutralMode(NeutralMode.Brake);
-    Subsystems.armSubsystem2.gripMotor.setNeutralMode(NeutralMode.Brake);
-
-    Subsystems.driveSubsystem.frontRightLead.setSmartCurrentLimit(30);
-    Subsystems.driveSubsystem.frontLeftLead.setSmartCurrentLimit(30);
-    Subsystems.driveSubsystem.backRightLead.setSmartCurrentLimit(30);
-    Subsystems.driveSubsystem.backLeftLead.setSmartCurrentLimit(30);
-
-    Subsystems.driveSubsystem.frontRightFollower.setSmartCurrentLimit(30);
-    Subsystems.driveSubsystem.frontLeftFollower.setSmartCurrentLimit(30);
-    Subsystems.driveSubsystem.backRightFollower.setSmartCurrentLimit(30);
-    Subsystems.driveSubsystem.backLeftFollower.setSmartCurrentLimit(30);
+    Subsystems.armSubsystem.shoulderMotor.setIdleMode(IdleMode.kBrake);
+    Subsystems.armSubsystem.forearmMotor.setIdleMode(IdleMode.kBrake);
+    Subsystems.armSubsystem.wristMotor.setNeutralMode(NeutralMode.Brake);
+    Subsystems.armSubsystem.gripMotor.setNeutralMode(NeutralMode.Brake);
+    Subsystems.driveSubsystem.setCurrentLimits(35);
 
 
 
 
     CommandScheduler.getInstance().schedule(new DriveCommand());
     CommandScheduler.getInstance().schedule(new BalanceCommand());
-    CommandScheduler.getInstance().schedule(new ArmCommand2());
+    // CommandScheduler.getInstance().schedule(new ArmCommand2());
+    CommandScheduler.getInstance().schedule(new ArmCommand());
     CommandScheduler.getInstance().schedule(new LimelightStrafeCommand());
     CommandScheduler.getInstance().schedule(new IntakeCommand());
   }
@@ -147,8 +128,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
 
     Subsystems.driveSubsystem.setCoast();
-    Subsystems.armSubsystem2.forearmMotor.setIdleMode(IdleMode.kCoast);
-    Subsystems.armSubsystem2.shoulderMotor.setIdleMode(IdleMode.kCoast);
+    Subsystems.armSubsystem.forearmMotor.setIdleMode(IdleMode.kCoast);
+    Subsystems.armSubsystem.shoulderMotor.setIdleMode(IdleMode.kCoast);
 
   }
 

@@ -14,6 +14,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,17 +23,22 @@ import frc.robot.Constants;
 import frc.robot.commands.DriveCommand;
 
 public class DriveSubsystem extends SubsystemBase {
-  public CANSparkMax frontLeftLead;
-  public CANSparkMax backLeftLead;
-  public CANSparkMax frontRightLead;
-  public CANSparkMax backRightLead;
-  public CANSparkMax frontLeftFollower;
-  public CANSparkMax backLeftFollower;
-  public CANSparkMax frontRightFollower;
-  public CANSparkMax backRightFollower;
+  public CANSparkMax frontLeft1;
+  public CANSparkMax backLeft1;
+  public CANSparkMax frontRight1;
+  public CANSparkMax backRight1;
+  public CANSparkMax frontLeft2;
+  public CANSparkMax backLeft2;
+  public CANSparkMax frontRight2;
+  public CANSparkMax backRight2;
+
+  public MotorControllerGroup frontLeft;
+  public MotorControllerGroup backLeft;
+  public MotorControllerGroup frontRight;
+  public MotorControllerGroup backRight;
 
   MecanumDrive mecanumDrive;
-  MecanumDrive mecanumDrive2;
+  // MecanumDrive mecanumDrive2;
 
   public AHRS gyro;
   Rotation2d rotation2d;
@@ -42,33 +49,51 @@ public class DriveSubsystem extends SubsystemBase {
  
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    frontLeftLead = new CANSparkMax(Constants.CAN_IDs.frontLeftLeadID, MotorType.kBrushless);
-    backLeftLead = new CANSparkMax(Constants.CAN_IDs.backLeftLeadID, MotorType.kBrushless);
-    frontRightLead = new CANSparkMax(Constants.CAN_IDs.frontRightLeadID, MotorType.kBrushless);
-    backRightLead = new CANSparkMax(Constants.CAN_IDs.backRightLeadID, MotorType.kBrushless);
-    frontLeftFollower = new CANSparkMax(Constants.CAN_IDs.frontLeftFollowerID, MotorType.kBrushless);
-    backLeftFollower = new CANSparkMax(Constants.CAN_IDs.backLeftFollowerID, MotorType.kBrushless);
-    frontRightFollower = new CANSparkMax(Constants.CAN_IDs.frontRightFollowerID, MotorType.kBrushless);
-    backRightFollower = new CANSparkMax(Constants.CAN_IDs.backRightFollowerID, MotorType.kBrushless);
+    frontLeft1 = new CANSparkMax(Constants.CAN_IDs.frontLeftLeadID, MotorType.kBrushless);
+    backLeft1 = new CANSparkMax(Constants.CAN_IDs.backLeftLeadID, MotorType.kBrushless);
+    frontRight1 = new CANSparkMax(Constants.CAN_IDs.frontRightLeadID, MotorType.kBrushless);
+    backRight1 = new CANSparkMax(Constants.CAN_IDs.backRightLeadID, MotorType.kBrushless);
+    frontLeft2 = new CANSparkMax(Constants.CAN_IDs.frontLeftFollowerID, MotorType.kBrushless);
+    backLeft2 = new CANSparkMax(Constants.CAN_IDs.backLeftFollowerID, MotorType.kBrushless);
+    frontRight2 = new CANSparkMax(Constants.CAN_IDs.frontRightFollowerID, MotorType.kBrushless);
+    backRight2 = new CANSparkMax(Constants.CAN_IDs.backRightFollowerID, MotorType.kBrushless);
 
-    frontLeftEncoder = frontLeftLead.getEncoder();
-    frontRightEncoder = frontRightLead.getEncoder();
-    backLeftEncoder = backLeftLead.getEncoder();
-    backRightEncoder = backRightLead.getEncoder();
-    frontRightLead.setInverted(true);
-    backRightLead.setInverted(true);
-    frontRightFollower.setInverted(true);
-    backRightFollower.setInverted(true);
+    frontLeftEncoder = frontLeft1.getEncoder();
+    frontRightEncoder = frontRight1.getEncoder();
+    backLeftEncoder = backLeft1.getEncoder();
+    backRightEncoder = backRight1.getEncoder();
+    frontRight1.setInverted(true);
+    backRight1.setInverted(true);
+    frontRight2.setInverted(true);
+    backRight2.setInverted(true);
 
-    
+    frontLeft = new MotorControllerGroup(frontLeft1, frontLeft2);
+    backLeft = new MotorControllerGroup(backLeft1, backLeft2);
+    frontRight = new MotorControllerGroup(frontRight1, frontRight2);
+    backRight = new MotorControllerGroup(backRight1, backRight2);
 
-    mecanumDrive = new MecanumDrive(frontLeftLead, backLeftLead, frontRightLead, backRightLead);
-    mecanumDrive2 = new MecanumDrive(frontLeftFollower, backLeftFollower, frontRightFollower, backRightFollower);
+
+    mecanumDrive = new MecanumDrive(frontLeft, backLeft2, frontRight, backLeft);
+
+    // mecanumDrive = new MecanumDrive(frontLeftLead, backLeftLead, frontRightLead, backRightLead);
+    // mecanumDrive2 = new MecanumDrive(frontLeftFollower, backLeftFollower, frontRightFollower, backRightFollower);
 
 
     gyro = new AHRS(Port.kMXP);
   }
   
+  public void setCurrentLimits(int currentLimit){
+    frontRight1.setSmartCurrentLimit(currentLimit);
+    frontLeft1.setSmartCurrentLimit(currentLimit);
+    backRight1.setSmartCurrentLimit(currentLimit);
+    backLeft1.setSmartCurrentLimit(currentLimit);
+
+    frontRight2.setSmartCurrentLimit(currentLimit);
+    frontLeft2.setSmartCurrentLimit(currentLimit);
+    backRight2.setSmartCurrentLimit(currentLimit);
+    backLeft2.setSmartCurrentLimit(currentLimit);
+  }
+
   public double getGyroAngle(){
     return gyro.getAngle();
   }
@@ -77,9 +102,6 @@ public class DriveSubsystem extends SubsystemBase {
     return gyro.getPitch() + 7.86 + 1.53;
   }
 
-  public double getGyroRoll(){
-    return gyro.getRoll();
-  }
   /**
    * Drive command factory method.
    *
@@ -106,25 +128,25 @@ public class DriveSubsystem extends SubsystemBase {
 
 
   public void setBrake(){
-    frontLeftLead.setIdleMode(IdleMode.kBrake);
-    frontRightLead.setIdleMode(IdleMode.kBrake);
-    backLeftLead.setIdleMode(IdleMode.kBrake);
-    backRightLead.setIdleMode(IdleMode.kBrake);
-    frontLeftFollower.setIdleMode(IdleMode.kBrake);
-    frontRightFollower.setIdleMode(IdleMode.kBrake);
-    backLeftFollower.setIdleMode(IdleMode.kBrake);
-    backRightFollower.setIdleMode(IdleMode.kBrake);
+    frontLeft1.setIdleMode(IdleMode.kBrake);
+    frontRight1.setIdleMode(IdleMode.kBrake);
+    backLeft1.setIdleMode(IdleMode.kBrake);
+    backRight1.setIdleMode(IdleMode.kBrake);
+    frontLeft2.setIdleMode(IdleMode.kBrake);
+    frontRight2.setIdleMode(IdleMode.kBrake);
+    backLeft2.setIdleMode(IdleMode.kBrake);
+    backRight2.setIdleMode(IdleMode.kBrake);
   }
 
   public void setCoast() {
-    frontLeftLead.setIdleMode(IdleMode.kCoast);
-    frontRightLead.setIdleMode(IdleMode.kCoast);
-    backLeftLead.setIdleMode(IdleMode.kCoast);
-    backRightLead.setIdleMode(IdleMode.kCoast);
-    frontLeftFollower.setIdleMode(IdleMode.kCoast);
-    frontRightFollower.setIdleMode(IdleMode.kCoast);
-    backLeftFollower.setIdleMode(IdleMode.kCoast);
-    backRightFollower.setIdleMode(IdleMode.kCoast);
+    frontLeft1.setIdleMode(IdleMode.kCoast);
+    frontRight1.setIdleMode(IdleMode.kCoast);
+    backLeft1.setIdleMode(IdleMode.kCoast);
+    backRight1.setIdleMode(IdleMode.kCoast);
+    frontLeft2.setIdleMode(IdleMode.kCoast);
+    frontRight2.setIdleMode(IdleMode.kCoast);
+    backLeft2.setIdleMode(IdleMode.kCoast);
+    backRight2.setIdleMode(IdleMode.kCoast);
   }
 
   public void resetEncoders(){
@@ -145,11 +167,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     if(!isFieldOriented){
       mecanumDrive.driveCartesian(forward, strafe, rotation);
-      mecanumDrive2.driveCartesian(forward, strafe, rotation);
     }
     else{
       mecanumDrive.driveCartesian(forward, strafe, rotation, rotation2d);
-      mecanumDrive2.driveCartesian(forward, strafe, rotation, rotation2d);
     }
   }
 

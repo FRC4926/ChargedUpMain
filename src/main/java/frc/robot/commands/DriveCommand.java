@@ -35,17 +35,12 @@ public class DriveCommand extends CommandBase {
     double forward = RobotContainer.driver.getLeftY(); 
     double strafe = RobotContainer.driver.getLeftX();
     double rotate = RobotContainer.driver.getRightX();
-    SmartDashboard.putNumber("forward", forward);
-    SmartDashboard.putNumber("strafe", strafe);
-    SmartDashboard.putNumber("rotate", rotate);
-    SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
 
     MathUtil.applyDeadband(forward, 0.02);
     MathUtil.applyDeadband(strafe, 0.02);
     MathUtil.applyDeadband(rotate, 0.02);
-
     
-      Subsystems.driveSubsystem.drive(forward, -strafe, -rotate, true);
+    Subsystems.driveSubsystem.drive(forward, -strafe, -rotate, true);
     
   }
 

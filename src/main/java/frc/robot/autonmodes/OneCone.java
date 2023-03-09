@@ -6,12 +6,9 @@ package frc.robot.autonmodes;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer.Subsystems;
-import frc.robot.autoncommands.AutoBalanceCommand;
 import frc.robot.autoncommands.AutonArmCommand;
-import frc.robot.autoncommands.AutonStrafeCommand;
-import frc.robot.autoncommands.ForwardDistance;
+import frc.robot.autoncommands.AutonDriveCommand;
 import frc.robot.autoncommands.MoveForwardCommand;
-import frc.robot.autoncommands.TimedStrafe;
 
 /** Add your docs here. */
 public class OneCone {
@@ -23,10 +20,8 @@ public class OneCone {
         Subsystems.driveSubsystem.resetEncoders();
     }
     public static Command getCommand(){
-
-       Command m_autonomousCommand = (new MoveForwardCommand(1).andThen(new AutonArmCommand(true, 2, true)));
+       Command m_autonomousCommand = (new AutonArmCommand(true, 2, false)
+       .andThen(new AutonDriveCommand(10, 0.2)).andThen(new AutonArmCommand(true, 2, true)));
        return m_autonomousCommand;
     }
-   
-
 }

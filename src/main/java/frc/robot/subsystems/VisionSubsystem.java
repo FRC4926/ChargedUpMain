@@ -124,7 +124,6 @@ public class VisionSubsystem extends SubsystemBase {
             int cubeIndex = -1;
 
             Imgproc.findContours(dst, points, hier, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-            SmartDashboard.putNumber("test", points.size());
             if(!cone){
             for(int i =0; i< points.size(); i++){  
                 if((((double)Imgproc.boundingRect(points.get(i)).height/(double)Imgproc.boundingRect(points.get(i)).width)< 1.2 && ((double)Imgproc.boundingRect(points.get(i)).height/(double)Imgproc.boundingRect(points.get(i)).width )> 0.8) && Imgproc.boundingRect(points.get(i)).height>50 && Imgproc.boundingRect(points.get(i)).width>50){
@@ -164,7 +163,6 @@ public class VisionSubsystem extends SubsystemBase {
         //  else{
         //   Imgproc.drawContours(mat, points, cubeIndex, new Scalar(0,255,0), 4);
         //  }
-         SmartDashboard.putBoolean("Sees something", see);
            
 
          

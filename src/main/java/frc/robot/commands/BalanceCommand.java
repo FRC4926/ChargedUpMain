@@ -37,8 +37,8 @@ public class BalanceCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    turnController = new GalacPIDController2(pTurn, iTurn, dTurn, 0.005, () -> (Subsystems.driveSubsystem.getGyroAngle() % 360), angleSetpoint, 1);
-    balanceController = new GalacPIDController2(kP, kI, kD, 0.01, () -> Subsystems.driveSubsystem.getGyroPitch(), balanceSetpoint, 1);
+    turnController = new GalacPIDController2(pTurn, iTurn, dTurn, 0.005, () -> (Subsystems.driveSubsystem.getGyroAngle() % 360), angleSetpoint, 0);
+    balanceController = new GalacPIDController2(kP, kI, kD, 0.01, () -> Subsystems.driveSubsystem.getGyroPitch(), balanceSetpoint, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,17 +46,6 @@ public class BalanceCommand extends CommandBase {
   public void execute() {
 
     modGyroYaw = Subsystems.driveSubsystem.getGyroAngle() % 360;    
-
-    
-
-   
-    SmartDashboard.putNumber("modded gyro yaw", turnController.getMeasurementSupplier().get());
-    SmartDashboard.putNumber("gyro yaw", Subsystems.driveSubsystem.getGyroAngle());
-    SmartDashboard.putNumber("gyro roll", Subsystems.driveSubsystem.getGyroRoll());
-    SmartDashboard.putNumber("turning value", turningEffort);
-    SmartDashboard.putNumber("balance effort", balanceEffort);
-    SmartDashboard.putNumber("gyro pitch", Subsystems.driveSubsystem.getGyroPitch());
-
 
     // effort = (balanceSetpoint - Subsystems.driveSubsystem.getGyroRoll()) * kP;
     balanceEffort = balanceController.getEffort();

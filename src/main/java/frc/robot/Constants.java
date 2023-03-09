@@ -18,14 +18,20 @@ public final class Constants {
     public static final int kForwardAxis = 0;
     public static final int kStrafeAxis = 3;
     public static final int kRotateAxis = 1;
-
     public static final int kXboxPort = 1;
 
   }
 
-  public static class Controls {
+  public static class ArmSetpoints {
 
-
+    public static double highConeAngleShoulder = 23;
+    public static double highConeAngleForearm = -290;
+    public static double lowConeAngleShoulder = 58;
+    public static double lowConeAngleForearm = -210;
+    public static double highCubeAngleShoulder = 45;
+    public static double highCubeAngleForearm = -300;
+    public static double lowCubeAngleShoulder = 80;
+    public static double lowCubeAngleForearm = -240;
 
   }
 

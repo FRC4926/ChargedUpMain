@@ -24,8 +24,6 @@ public class IntakeCommand extends CommandBase {
   @Override
   public void execute() {
 
-    SmartDashboard.putNumber("right trigger effort", RobotContainer.driver.getRightTriggerAxis());
-    SmartDashboard.putNumber("left trigger effort", RobotContainer.driver.getLeftTriggerAxis());
 
     if(RobotContainer.driver.getRightTriggerAxis() > 0.02)
       Subsystems.intakeSubsystem.runIntake(RobotContainer.driver.getRightTriggerAxis());

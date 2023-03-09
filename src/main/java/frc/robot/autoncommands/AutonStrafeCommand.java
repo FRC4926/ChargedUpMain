@@ -46,17 +46,12 @@ public class AutonStrafeCommand extends CommandBase {
     ty = Subsystems.limelightSubsystem.getTY();
     turningValue = (angleSetpoint - Subsystems.driveSubsystem.getGyroAngle()) * kP;
     strafeLimelight = (-tx * strafeP);
-    SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
-    SmartDashboard.putNumber("turning value", turningValue);
-    SmartDashboard.putNumber("strafe value", strafeLimelight);
 
     if(!Subsystems.limelightSubsystem.getTV()){
-      SmartDashboard.putString("target", "cant see the target");
 
       Subsystems.driveSubsystem.drive(0, -strafe, -turningValue, true);
     }
     else if(Subsystems.limelightSubsystem.getTV()){
-      SmartDashboard.putString("target", "can see the target");
 
       Subsystems.driveSubsystem.drive(0, strafeLimelight, -turningValue, true);
     }
