@@ -36,7 +36,7 @@ public class AutonIntakeCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Subsystems.intakeSubsystem.stopIntake();
+    Subsystems.intakeSubsystem.runIntake(0);
   }
 
   // Returns true when the command should end.

@@ -25,7 +25,6 @@ public class AutoBalanceCommand extends CommandBase {
   /** Creates a new AutoBalanceCommand. */
   public AutoBalanceCommand(){
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Subsystems.driveSubsystem); 
   }
 
   // Called when the command is initially scheduled.
@@ -38,7 +37,7 @@ public class AutoBalanceCommand extends CommandBase {
 
     // Subsystems.armSubsystem2.holdSteady();
     
-    turningEffort = (angleSetpoint - (Subsystems.driveSubsystem.getGyroAngle()%360)) * kTurn;
+    turningEffort = (angleSetpoint - (Subsystems.driveSubsystem.getGyroAngle() % 360)) * kTurn;
     balanceEffort = (balanceSetpoint - Subsystems.driveSubsystem.getGyroPitch()) * kP;
 
     Subsystems.driveSubsystem.drive(balanceEffort, 0, -turningEffort, true);

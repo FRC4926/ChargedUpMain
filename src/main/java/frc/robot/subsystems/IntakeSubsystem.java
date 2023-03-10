@@ -25,11 +25,6 @@ public class IntakeSubsystem extends SubsystemBase {
     rightIntake.set(speed);
   }
 
-  public void stopIntake(){
-    leftIntake.set(0);
-    rightIntake.set(0);
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

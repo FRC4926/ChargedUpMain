@@ -52,11 +52,10 @@ public class RobotContainer {
     public final static DriveCommand driveCommand = new DriveCommand();
   }
 
-  SendableChooser<String> m_chooser = new SendableChooser<>();
-  String path;
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  public static XboxController driver = new XboxController(0);
-  public static XboxController operator = new XboxController(Constants.Joystick.kXboxPort);
+  public static XboxController driver = new XboxController(Constants.Joystick.kDriverPort);
+  public static XboxController operator = new XboxController(Constants.Joystick.kOperatorPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -64,17 +63,15 @@ public class RobotContainer {
     configureBindings();
     
 
-    m_chooser.setDefaultOption("LeftTwo", "LeftTwo");
-    m_chooser.addOption("LeftTwoBalance", "LeftTwoBalance");
-    m_chooser.addOption("MidBalance", "MidBalance");
-    m_chooser.addOption("MidBalanceTaxi", "MidBalanceTaxi");
-    m_chooser.addOption("OneCone", "OneCone");
-    m_chooser.addOption("OneCube", "OneCube");
-    m_chooser.addOption("RightTwo", "RightTwo");
-    m_chooser.addOption("RightTwoBalance", "RightTwoBalance");
+    m_chooser.setDefaultOption("LeftTwo", LeftTwo.getCommand());
+    m_chooser.addOption("LeftTwoBalance", LeftTwoBalance.getCommand());
+    m_chooser.addOption("MidBalance", MidBalance.getCommand());
+    m_chooser.addOption("MidBalanceTaxi", MidBalanceTaxi.getCommand());
+    m_chooser.addOption("OneCone", OneCone.getCommand());
+    m_chooser.addOption("OneCube", OneCube.getCommand());
+    m_chooser.addOption("RightTwo", RightTwo.getCommand());
+    m_chooser.addOption("RightTwoBalance", RightTwoBalance.getCommand());
     
-
-
     Shuffleboard.getTab("Autonomous").add(m_chooser);
 
   }
@@ -96,6 +93,8 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     //m_driverController.b().whileTrue(driveSubsystem.exampleMethodCommand());
+
+    
   }
 
   /**
@@ -105,32 +104,33 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    path = m_chooser.getSelected();
+    // path = m_chooser.getSelected();
 
-    if(path.equals("LeftTwo")){
-      return LeftTwo.getCommand();
-    }
-    else if(path.equals("LeftTwoBalance")){
-      return LeftTwoBalance.getCommand();
-    }
-    else if(path.equals("MidBalance")){
-      return MidBalance.getCommand();
-    }
-    else if(path.equals("MidBalanceTaxi")){
-      return MidBalanceTaxi.getCommand();
-    }
-    else if(path.equals("OneCone")){
-      return OneCone.getCommand();
-    }
-    else if(path.equals("OneCube")){
-      return OneCube.getCommand();
-    }
-    else if(path.equals("RightTwo")){
-      return RightTwo.getCommand();
-    }
-    else if(path.equals("RightTwoBalance")){
-      return RightTwoBalance.getCommand();
-    }
-    return null;
+    // if(path.equals("LeftTwo")){
+    //   return LeftTwo.getCommand();
+    // }
+    // else if(path.equals("LeftTwoBalance")){
+    //   return LeftTwoBalance.getCommand();
+    // }
+    // else if(path.equals("MidBalance")){
+    //   return MidBalance.getCommand();
+    // }
+    // else if(path.equals("MidBalanceTaxi")){
+    //   return MidBalanceTaxi.getCommand();
+    // }
+    // else if(path.equals("OneCone")){
+    //   return OneCone.getCommand();
+    // }
+    // else if(path.equals("OneCube")){
+    //   return OneCube.getCommand();
+    // }
+    // else if(path.equals("RightTwo")){
+    //   return RightTwo.getCommand();
+    // }
+    // else if(path.equals("RightTwoBalance")){
+    //   return RightTwoBalance.getCommand();
+    // }
+    // return null;
+    return m_chooser.getSelected();
   }
 }

@@ -35,19 +35,13 @@ public class ForwardDistance extends CommandBase {
   public void initialize() {
     Subsystems.driveSubsystem.resetEncoders();
     Subsystems.driveSubsystem.setCoast();
-    SmartDashboard.putNumber("encoder value initialize", Subsystems.driveSubsystem.getAverageEncoderDistance());
-    SmartDashboard.putNumber("set distance", m_distance);
    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("PID Effort", pidController.getEffort());
-    SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
-    SmartDashboard.putNumber("encoder distance execute", Subsystems.driveSubsystem.getAverageEncoderDistance());
     turningValue = (angleSetpoint - Subsystems.driveSubsystem.getGyroAngle()) * kP;
-    SmartDashboard.putNumber("turning value", turningValue);
     Subsystems.driveSubsystem.drive(-m_speed, 0, -turningValue, isFieldOriented);
   }
 

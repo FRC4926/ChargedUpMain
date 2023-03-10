@@ -73,7 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
     backRight = new MotorControllerGroup(backRight1, backRight2);
 
 
-    mecanumDrive = new MecanumDrive(frontLeft, backLeft2, frontRight, backLeft);
+    mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
 
     // mecanumDrive = new MecanumDrive(frontLeftLead, backLeftLead, frontRightLead, backRightLead);
     // mecanumDrive2 = new MecanumDrive(frontLeftFollower, backLeftFollower, frontRightFollower, backRightFollower);
@@ -99,7 +99,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getGyroPitch(){
-    return gyro.getPitch() + 7.86 + 1.53;
+    return gyro.getPitch() + 9.39; // this seemingly random number is the offset to the pitch of the gyro
   }
 
   /**
@@ -175,7 +175,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 
   public double getAverageEncoderDistance(){
-    double positionConversionFactor = Math.PI * Constants.Drive.wheelDiameter / Constants.ROBOT_CONSTANTS.GEAR_RATIO;
+    double positionConversionFactor = Math.PI * Constants.RobotConstants.WHEEL_DIAMETER / Constants.RobotConstants.GEAR_RATIO;
     return ((frontLeftEncoder.getPosition() * positionConversionFactor) + (frontRightEncoder.getPosition()* positionConversionFactor)) / 2;
   }
 

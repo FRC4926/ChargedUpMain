@@ -32,7 +32,7 @@ public class IntakeCommand extends CommandBase {
       Subsystems.intakeSubsystem.runIntake(-RobotContainer.driver.getLeftTriggerAxis());
     }
     else{
-      Subsystems.intakeSubsystem.stopIntake();
+      Subsystems.intakeSubsystem.runIntake(0);
     }
   }
 

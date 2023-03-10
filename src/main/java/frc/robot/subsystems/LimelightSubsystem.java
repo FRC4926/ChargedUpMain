@@ -52,13 +52,13 @@ private boolean limelightIsDisabled=false;
   }
   public double getUpperAprilTagZDistance(){
     //ty angle is given in degress 
-    return((Constants.ROBOT_CONSTANTS.LIMELIGHT_MOUNT_HEIGHT-Constants.GAME_ARENA_INFO.APRILTAG_HEIGHT))/Math.tan(Math.abs(Math.toRadians(ty-2)));
+    return((Constants.RobotConstants.LIMELIGHT_MOUNT_HEIGHT-Constants.FieldConstants.APRILTAG_HEIGHT))/Math.tan(Math.abs(Math.toRadians(ty-2)));
   }
   public double getTopNodeZDistance(){
-    return (Constants.GAME_ARENA_INFO.TOP_NODE_GOAL_HEIGHT - Constants.ROBOT_CONSTANTS.LIMELIGHT_MOUNT_HEIGHT)/Math.tan(Math.toRadians(ty-2));
+    return (Constants.FieldConstants.TOP_NODE_GOAL_HEIGHT - Constants.RobotConstants.LIMELIGHT_MOUNT_HEIGHT)/Math.tan(Math.toRadians(ty-2));
   }
   public double getMiddleNodeZDistance(){
-    return (Constants.GAME_ARENA_INFO.MIDDLE_NODE_GOAL_HEIGHT - Constants.ROBOT_CONSTANTS.LIMELIGHT_MOUNT_HEIGHT)/Math.tan(Math.abs(Math.toRadians(ty-2)));
+    return (Constants.FieldConstants.MIDDLE_NODE_GOAL_HEIGHT - Constants.RobotConstants.LIMELIGHT_MOUNT_HEIGHT)/Math.tan(Math.abs(Math.toRadians(ty-2)));
   }
   public void setPipeline(int pipeline) {
     pipelineNum = pipeline;
@@ -75,7 +75,7 @@ private boolean limelightIsDisabled=false;
       updateLimelightValues();
     }
  
-    angleToGoalRadiansVertical = Math.toRadians(Constants.ROBOT_CONSTANTS.LIMELIGHT_MOUNT_HEIGHT + ty);
+    angleToGoalRadiansVertical = Math.toRadians(Constants.RobotConstants.LIMELIGHT_MOUNT_HEIGHT + ty);
     // This method will be called once per scheduler run
   }
 }

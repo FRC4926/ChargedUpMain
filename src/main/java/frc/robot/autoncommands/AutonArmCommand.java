@@ -14,7 +14,7 @@ public class AutonArmCommand extends CommandBase {
   /** Creates a new AutonArmCommand. */
   boolean object;
   int level;
-  boolean released = false;
+  boolean released;
 
   // boolean {object} - true = cone, false = cube
   // int {level} - 0 = ground, 1 = middle, 2 = top

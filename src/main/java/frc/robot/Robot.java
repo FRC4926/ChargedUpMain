@@ -74,11 +74,11 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     Subsystems.driveSubsystem.setCurrentLimits(60);
     Subsystems.driveSubsystem.setBrake();
     Subsystems.driveSubsystem.resetGyro();
+
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
 
 
 
-
+    CommandScheduler.getInstance().setDefaultCommand(Subsystems.driveSubsystem, new DriveCommand());
     CommandScheduler.getInstance().schedule(new DriveCommand());
     CommandScheduler.getInstance().schedule(new BalanceCommand());
     // CommandScheduler.getInstance().schedule(new ArmCommand2());
