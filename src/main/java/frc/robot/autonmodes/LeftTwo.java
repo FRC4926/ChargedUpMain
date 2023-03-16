@@ -10,6 +10,7 @@ import frc.robot.RobotContainer.Subsystems;
 import frc.robot.autoncommands.AutoBalanceCommand;
 import frc.robot.autoncommands.AutonArmCommand;
 import frc.robot.autoncommands.AutonDriveCommand;
+import frc.robot.autoncommands.AutonLimelightCommand;
 import frc.robot.autoncommands.AutonStrafeCommand;
 import frc.robot.autoncommands.AutonTimedStrafeCommand;
 import frc.robot.autoncommands.MoveForwardCommand;
@@ -26,10 +27,11 @@ public class LeftTwo {
         Subsystems.driveSubsystem.resetEncoders();
     }
     public static Command getCommand(){
-       Command m_autonomousCommand = (new AutonArmCommand(false, pipelineNum, true).andThen(new AutonDriveCommand(100, -0.2))
-       .andThen(new AutonDriveCommand(100, 0.2))
-       .andThen(new AutonStrafeCommand(-0.2, pipelineNum)).andThen(new AutonDriveCommand(15, 0.2))
-       .andThen(new AutonDriveCommand(15, -0.1)));
+       Command m_autonomousCommand = (new AutonArmCommand(false, 2, false).andThen(new AutonDriveCommand(10, 0.2))
+       .andThen(new AutonArmCommand(false, 2, true)).andThen(new AutonDriveCommand(200, -0.4))
+       .deadlineWith(new AutonArmCommand(false, 3, false)).andThen(new AutonArmCommand(false, 4, false))
+       .andThen(new AutonDriveCommand(180, 0.4)).andThen(new AutonArmCommand(false, 2, false))
+       .andThen(new AutonLimelightCommand(true)).andThen(new AutonArmCommand(false, 2, true)));
        return m_autonomousCommand;
     }
 }

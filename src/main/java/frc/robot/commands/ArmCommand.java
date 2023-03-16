@@ -26,6 +26,7 @@ public class ArmCommand extends CommandBase {
   public void initialize() {
     Subsystems.armSubsystem.moveShoulder(0);
     Subsystems.armSubsystem.moveForearm(0);
+    Subsystems.armSubsystem.moveWrist(0);
     Subsystems.armSubsystem.resetEncoders();
     isAutomated = true;
   }
@@ -36,101 +37,88 @@ public class ArmCommand extends CommandBase {
 
     pipelineNum = Subsystems.limelightSubsystem.getPipelineNum();
 
-    if(RobotContainer.operator.getLeftStickButtonReleased()) 
+    if(RobotContainer.operator2.getLeftStickButtonReleased()) 
       isAutomated = !isAutomated;
 
     SmartDashboard.putBoolean("isAutomated", isAutomated);
+    SmartDashboard.putBoolean("button test", RobotContainer.operator.getRawButton(11));
+
     SmartDashboard.putNumber("Shoulder Angle", Subsystems.armSubsystem.getDegreesShoulder());
     SmartDashboard.putNumber("Forearm Angle", Subsystems.armSubsystem.getDegreesForearm());
 
 
-
-
-// move arm to upper, middle, or lower based on button click
-
     if(isAutomated)
     { 
-      if(RobotContainer.operator.getYButton()){
+      if(RobotContainer.operator.getRawButton(7)){
           if(pipelineNum == 0){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highCubeAngleForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highCubeAngleShoulder;
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highCubeForearm;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highCubeShoulder;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.highCubeWrist;
           }
           else if(pipelineNum == 1){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highConeAngleForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highConeAngleShoulder;
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highConeForearm;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highConeShoulder;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.highConeWrist;
           }
+      }
 
-          
+      else if(RobotContainer.operator.getRawButton(9)){
+        if(pipelineNum == 0){
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowCubeForearm;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowCubeShoulder;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.lowCubeWrist;
+        }
+        else if(pipelineNum == 1){
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowConeForearm;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowConeShoulder;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.lowConeWrist;
+        }
+      }
+
+      else if(RobotContainer.operator.getRawButton(11)){
+        if(pipelineNum == 0){
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorCubeForearm;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorCubeShoulder;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorCubeWrist;
+        }
+        else if(pipelineNum == 1){
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorConeForearm;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorConeShoulder;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorConeWrist;
+        }
+      }
+
+      else if(RobotContainer.operator.getRawButton(2)){
+        if(pipelineNum == 0){
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.substationCubeForearm;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.substationCubeShoulder;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.substationCubeWrist;
+        }
+        else if(pipelineNum == 1){
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.substationConeForearm;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.substationConeShoulder;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.substationConeWrist;
+        }
+      }
+
+      else if(RobotContainer.operator.getRawButton(1)){
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.resetForearm;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.resetShoulder;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.resetWrist;
         
       }
 
-      else if(RobotContainer.operator.getBButton()){
-        if(pipelineNum == 0){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowCubeAngleForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowCubeAngleShoulder;
-        }
-        else if(pipelineNum == 1){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowConeAngleForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowConeAngleShoulder;
-        }
-      }
-
-    //   else if(RobotContainer.operator.getAButton()){
-    //     if(pipelineNum == 0){
-    //       Subsystems.armSubsystem.moveToGround();
-    //     }
-    //     else if(pipelineNum == 1){
-    //       Subsystems.armSubsystem.moveToGround();
-    //     }
-    //   }
-
-    //   else if(RobotContainer.operator.getLeftBumper()){
-    //     Subsystems.armSubsystem.moveToReset();
-    //   }
-
-    //   else if(Math.abs(RobotContainer.operator.getPOV()) > 7.543)
-    //   {
-    //     SmartDashboard.putNumber("shoulder setpoint", Subsystems.armSubsystem.pidControllerShoulder.getSetpoint());
-    //     SmartDashboard.putNumber("forearm setpoint", Subsystems.armSubsystem.pidControllerForearm.getSetpoint());
-    //     Subsystems.armSubsystem.holdSteady();
-    //   }
 
         
     }
     else // control arm manually
     {
-        if(Math.abs(RobotContainer.operator.getLeftY()) > 0.1){
-          Subsystems.armSubsystem.moveShoulder(RobotContainer.operator.getLeftY());
-        } else {
-          Subsystems.armSubsystem.moveShoulder(0);
+        if(Math.abs(RobotContainer.operator.getRawAxis(0)) > 0.02){
+          Subsystems.armSubsystem.moveIntake(RobotContainer.operator.getRawAxis(0));
         }
-
-        if(Math.abs(RobotContainer.operator.getRightY()) > 0.1){
-          Subsystems.armSubsystem.moveForearm(RobotContainer.operator.getRightY());
-        } else {
-          Subsystems.armSubsystem.moveForearm(0);
+        else{
+          Subsystems.armSubsystem.moveIntake(0);
         }
-
-        if(RobotContainer.operator.getRightBumper()){
-          Subsystems.armSubsystem.moveGrip(0.3);
-        }
-        else if(RobotContainer.operator.getLeftBumper()){
-          Subsystems.armSubsystem.moveGrip(-0.3);
-        }
-        else
-        Subsystems.armSubsystem.moveGrip(0);
-
-
-
-        if(Math.abs(RobotContainer.operator.getRightX()) > 0.1){
-          if(RobotContainer.operator.getRightX() > 0.5){
-            Subsystems.armSubsystem.moveWrist(0.5);
-          }else
-            Subsystems.armSubsystem.moveWrist(RobotContainer.operator.getRightX() - 0.1);
-        } else {
-          Subsystems.armSubsystem.moveWrist(0);
-        }
-        
     }
   }
     

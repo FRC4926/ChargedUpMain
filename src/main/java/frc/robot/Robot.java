@@ -17,6 +17,7 @@ import frc.robot.RobotContainer.Subsystems;
 // import frc.robot.autoncommands.VisionCommand;
 import frc.robot.autonmodes.LeftTwoBalance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.commands.ArmCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.LimelightStrafeCommand2;
@@ -119,7 +120,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().schedule(new DriveCommand());
     CommandScheduler.getInstance().schedule(new BalanceCommand());
     // CommandScheduler.getInstance().schedule(new ArmCommand2());
-    // CommandScheduler.getInstance().schedule(new ArmCommand());
+    CommandScheduler.getInstance().schedule(new ArmCommand());
     CommandScheduler.getInstance().schedule(new LimelightStrafeCommand2());
     // CommandScheduler.getInstance().schedule(new IntakeCommand());
   }

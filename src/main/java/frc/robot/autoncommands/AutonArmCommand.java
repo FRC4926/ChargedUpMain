@@ -32,7 +32,7 @@ public class AutonArmCommand extends CommandBase {
   public void initialize() {
     Subsystems.armSubsystem.moveShoulder(0);
     Subsystems.armSubsystem.moveForearm(0);
-    Subsystems.armSubsystem.moveGrip(0);
+    Subsystems.armSubsystem.moveIntake(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,21 +52,21 @@ public class AutonArmCommand extends CommandBase {
 
       case 1:
         if (object) {
-          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowConeAngleForearm;
-          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowConeAngleShoulder;
+          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowConeForearm;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowConeShoulder;
         } else {
-          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowCubeAngleForearm;
-          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowCubeAngleShoulder;
+          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowCubeForearm;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowCubeShoulder;
         }
         break;
 
       case 2:
         if (object) {
-          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highConeAngleForearm;
-          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highConeAngleShoulder;
+          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highConeForearm;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highConeShoulder;
         } else {
-          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highCubeAngleForearm;
-          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highCubeAngleShoulder;
+          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highCubeForearm;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highCubeShoulder;
 
         }
         break;
@@ -86,7 +86,7 @@ public class AutonArmCommand extends CommandBase {
   public void end(boolean interrupted) {
     Subsystems.armSubsystem.moveShoulder(0);
     Subsystems.armSubsystem.moveForearm(0);
-    Subsystems.armSubsystem.moveGrip(0);
+    Subsystems.armSubsystem.moveIntake(0);
     Subsystems.armSubsystem.moveWrist(0);
   }
 

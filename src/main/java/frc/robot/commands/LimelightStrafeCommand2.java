@@ -43,7 +43,7 @@ public class LimelightStrafeCommand2 extends CommandBase {
   public void execute() {
     SmartDashboard.putNumber("gyro pitch", Subsystems.driveSubsystem.getGyroPitch());
     modGyroYaw = Subsystems.driveSubsystem.getGyroAngle() % 360;
-    if(RobotContainer.operator.getXButtonReleased()){
+    if(RobotContainer.operator2.getXButtonReleased()){
       isAprilTag = !isAprilTag;
       if(!isAprilTag){
         Subsystems.limelightSubsystem.setPipeline(0);

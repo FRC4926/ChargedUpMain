@@ -50,7 +50,9 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   public static XboxController driver = new XboxController(Constants.Joystick.kDriverPort);
-  public static XboxController operator = new XboxController(Constants.Joystick.kOperatorPort);
+  public static XboxController operator2 = new XboxController(Constants.Joystick.kOperatorPort);
+
+  public static Joystick operator = new Joystick(2);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

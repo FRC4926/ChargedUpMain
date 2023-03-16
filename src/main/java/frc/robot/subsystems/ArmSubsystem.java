@@ -4,10 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.Supplier;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -19,50 +15,32 @@ import frc.robot.utils.GalacPIDController;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  // public CANSparkMax shoulderMotor = new CANSparkMax(Constants.CAN_IDs.shoulderID, MotorType.kBrushless);
-  // public CANSparkMax forearmMotor = new CANSparkMax(Constants.CAN_IDs.elbowID, MotorType.kBrushless);
-  public WPI_TalonSRX wristMotor = new WPI_TalonSRX(13);
-  public WPI_TalonSRX gripMotor = new WPI_TalonSRX(14);
+  public CANSparkMax shoulderMotor = new CANSparkMax(Constants.CAN_IDs.shoulderID, MotorType.kBrushless);
+  public CANSparkMax forearmMotor = new CANSparkMax(Constants.CAN_IDs.forearmID, MotorType.kBrushless);
+  public CANSparkMax wristMotor = new CANSparkMax(Constants.CAN_IDs.wristID, MotorType.kBrushless);
+  public CANSparkMax intakeMotor = new CANSparkMax(Constants.CAN_IDs.intakeID, MotorType.kBrushless);
 
-
-  double pForearm = 0.01;
-  double iForearm = 0.00;
-  double dForearm = 0.00;
-
-  double pShoulder = 0.0055;
-  double iShoulder = 0.000;
-  double dShoulder = 0;
-
-  double minEffort = 0.005;
-  double forearmGearRatio = 0.008; // 1/125
+  double forearmGearRatio = 0.008;
   double shoulderGearRatio = 60;
+  double wristGearRatio = 192;
 
-  public double forearmState = -90;
-  public double shoulderState = 90;
+  public double forearmState = 0;
+  public double shoulderState = 0;
+  public double wristState = 0;
 
-
-  // creates lambdas for all 4 arm motors (allows them to update continuously)
-  public Supplier<Double> getShoulderAngle = () -> getDegreesShoulder();
-  public Supplier<Double> getForearmAngle = () -> getDegreesForearm();
-
-  // creates PID controllers for both arm motors (default set point is
-  // highConeAngle)
-  public GalacPIDController pidControllerShoulder = new GalacPIDController(pShoulder, iShoulder, dShoulder, minEffort, () -> getDegreesShoulder(),
+  public GalacPIDController pidControllerShoulder = new GalacPIDController(0, 0, 0, 0.005, () -> getDegreesShoulder(),
       0,
       0);
-  public GalacPIDController pidControllerForearm = new GalacPIDController(pForearm, iForearm, dForearm, minEffort, () -> getDegreesForearm(),
+  public GalacPIDController pidControllerForearm = new GalacPIDController(0, 0, 0, 0.005, () -> getDegreesForearm(),
+      0, 0);
+  
+  public GalacPIDController pidControllerWrist = new GalacPIDController(0, 0, 0, 0.005, () -> getDegreesWrist(),
       0, 0);
 
 
   /** Creates a new ArmSubsytem. */
   public ArmSubsystem() {
-    // shoulderMotor.setIdleMode(IdleMode.kBrake);
-    // forearmMotor.setIdleMode(IdleMode.kBrake);
-    wristMotor.setNeutralMode(NeutralMode.Brake);
-    gripMotor.setNeutralMode(NeutralMode.Brake);
-
-    // shoulderMotor.setSmartCurrentLimit(60);
-    // forearmMotor.setSmartCurrentLimit(60);
+    setBrakeArm();
   }
 
   @Override
@@ -70,44 +48,57 @@ public class ArmSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     pidControllerForearm.setSetpoint(forearmState);
     pidControllerShoulder.setSetpoint(shoulderState);
+    pidControllerWrist.setSetpoint(wristState);
 
     moveForearm(pidControllerForearm.getEffort());
     moveShoulder(pidControllerShoulder.getEffort());
+    moveWrist(pidControllerWrist.getEffort());
   }
 
-  // sets each arm motor to a given effort
   public void moveShoulder(double shoulderSpeed) {
-    // shoulderMotor.set(shoulderSpeed);
+    shoulderMotor.set(shoulderSpeed);
   }
 
   public void moveForearm(double forearmSpeed) {
-    // forearmMotor.set(forearmSpeed);
+    forearmMotor.set(forearmSpeed);
   }
 
   public void moveWrist(double wristSpeed) {
     wristMotor.set(wristSpeed);
   }
 
-  public void moveGrip(double gripSpeed) {
-    gripMotor.set(gripSpeed);
+  public void moveIntake(double intakeSpeed) {
+    intakeMotor.set(intakeSpeed);
   }
 
   public double getDegreesForearm() {
-    // return (-forearmMotor.getEncoder().getPosition() * 360 * forearmGearRatio) - 90 ;
-    return 0;
+    return (-forearmMotor.getEncoder().getPosition() * 360 * forearmGearRatio) - 90;
   }
 
   public double getDegreesShoulder() {
-    // return -shoulderMotor.getEncoder().getPosition()+90;
-    return 0;
+    return -shoulderMotor.getEncoder().getPosition()+90;
   }
 
-  public boolean hasReachedTarget() {
-    return (Math.abs(getDegreesForearm() - pidControllerForearm.getSetpoint()) < 9.5 && Math.abs(getDegreesShoulder() - pidControllerShoulder.getSetpoint()) < 5);
+  public double getDegreesWrist(){
+    return (-wristMotor.getEncoder().getPosition() * 360 * wristGearRatio) - 90;
   }
 
   public void resetEncoders() {
-    // shoulderMotor.getEncoder().setPosition(0);
-    // forearmMotor.getEncoder().setPosition(0);
+    shoulderMotor.getEncoder().setPosition(0);
+    forearmMotor.getEncoder().setPosition(0);
+    wristMotor.getEncoder().setPosition(0);
   }
+
+  public void setBrakeArm(){
+    shoulderMotor.setIdleMode(IdleMode.kBrake);
+    forearmMotor.setIdleMode(IdleMode.kBrake);
+    wristMotor.setIdleMode(IdleMode.kBrake);
+  }
+  
+  public void setCoastArm(){
+    shoulderMotor.setIdleMode(IdleMode.kCoast);
+    forearmMotor.setIdleMode(IdleMode.kCoast);
+    wristMotor.setIdleMode(IdleMode.kCoast);
+  }
+
 }

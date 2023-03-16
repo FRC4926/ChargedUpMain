@@ -32,11 +32,11 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("Y", RobotContainer.operator.getStartButton());
    
     double forward = RobotContainer.driver.getLeftY(); 
     double strafe = RobotContainer.driver.getLeftX();
     double rotate = RobotContainer.driver.getRightX();
+
 
     MathUtil.applyDeadband(forward, 0.02);
     MathUtil.applyDeadband(strafe, 0.02);

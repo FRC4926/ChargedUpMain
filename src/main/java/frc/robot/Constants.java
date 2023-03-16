@@ -24,15 +24,47 @@ public final class Constants {
 
   public static class ArmSetpoints {
 
-    public static final double highConeAngleShoulder = 23;
-    public static final double highConeAngleForearm = -290;
-    public static final double lowConeAngleShoulder = 58;
-    public static final double lowConeAngleForearm = -210;
-    public static final double highCubeAngleShoulder = 45;
-    public static final double highCubeAngleForearm = -300;
-    public static final double lowCubeAngleShoulder = 80;
-    public static final double lowCubeAngleForearm = -240;
 
+    // HIGH
+    public static final double highConeShoulder = 0;
+    public static final double highConeForearm = 0;
+    public static final double highConeWrist = 0;
+
+    public static final double highCubeShoulder = 0;
+    public static final double highCubeForearm = 0;
+    public static final double highCubeWrist = 0;
+
+    // LOW
+    public static final double lowConeShoulder = 0;
+    public static final double lowConeForearm = 0;
+    public static final double lowConeWrist = 0;
+
+    public static final double lowCubeShoulder = 0;
+    public static final double lowCubeForearm = 0;
+    public static final double lowCubeWrist = 0;
+
+    // FLOOR INTAKE
+    public static final double floorConeShoulder = 0;
+    public static final double floorConeForearm = 0;
+    public static final double floorConeWrist = 0;
+
+    public static final double floorCubeShoulder = 0;
+    public static final double floorCubeForearm = 0;
+    public static final double floorCubeWrist = 0;
+
+    // SUBSTATION
+    public static final double substationConeShoulder = 0;
+    public static final double substationConeForearm = 0;
+    public static final double substationConeWrist = 0;
+
+    public static final double substationCubeShoulder = 0;
+    public static final double substationCubeForearm = 0;
+    public static final double substationCubeWrist = 0;
+
+    // RESET
+    public static final double resetShoulder = 0;
+    public static final double resetForearm = 0;
+    public static final double resetWrist = 0;
   }
 
   public static final class RobotConstants {
@@ -72,10 +104,10 @@ public final class Constants {
     public static final int rightIntakeID = 10;
 
     // arm IDs
-    public static final int shoulderID = 11;
-    public static final int elbowID = 12;
-    public static final int gripID = 13;
-    public static final int wristID = 14;
+    public static final int shoulderID = 9;
+    public static final int forearmID = 10;
+    public static final int wristID = 13;
+    public static final int intakeID = 14;
   }
 
 }
