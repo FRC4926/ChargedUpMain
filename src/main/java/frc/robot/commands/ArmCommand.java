@@ -24,9 +24,9 @@ public class ArmCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Subsystems.armSubsystem2.moveShoulder(0);
-    Subsystems.armSubsystem2.moveForearm(0);
-    Subsystems.armSubsystem2.resetEncoders();
+    Subsystems.armSubsystem.moveShoulder(0);
+    Subsystems.armSubsystem.moveForearm(0);
+    Subsystems.armSubsystem.resetEncoders();
     isAutomated = true;
   }
 
@@ -40,8 +40,8 @@ public class ArmCommand extends CommandBase {
       isAutomated = !isAutomated;
 
     SmartDashboard.putBoolean("isAutomated", isAutomated);
-    SmartDashboard.putNumber("Shoulder Angle", Subsystems.armSubsystem2.getDegreesShoulder());
-    SmartDashboard.putNumber("Forearm Angle", Subsystems.armSubsystem2.getDegreesForearm());
+    SmartDashboard.putNumber("Shoulder Angle", Subsystems.armSubsystem.getDegreesShoulder());
+    SmartDashboard.putNumber("Forearm Angle", Subsystems.armSubsystem.getDegreesForearm());
 
 
 
@@ -77,22 +77,22 @@ public class ArmCommand extends CommandBase {
 
     //   else if(RobotContainer.operator.getAButton()){
     //     if(pipelineNum == 0){
-    //       Subsystems.armSubsystem2.moveToGround();
+    //       Subsystems.armSubsystem.moveToGround();
     //     }
     //     else if(pipelineNum == 1){
-    //       Subsystems.armSubsystem2.moveToGround();
+    //       Subsystems.armSubsystem.moveToGround();
     //     }
     //   }
 
     //   else if(RobotContainer.operator.getLeftBumper()){
-    //     Subsystems.armSubsystem2.moveToReset();
+    //     Subsystems.armSubsystem.moveToReset();
     //   }
 
     //   else if(Math.abs(RobotContainer.operator.getPOV()) > 7.543)
     //   {
-    //     SmartDashboard.putNumber("shoulder setpoint", Subsystems.armSubsystem2.pidControllerShoulder.getSetpoint());
-    //     SmartDashboard.putNumber("forearm setpoint", Subsystems.armSubsystem2.pidControllerForearm.getSetpoint());
-    //     Subsystems.armSubsystem2.holdSteady();
+    //     SmartDashboard.putNumber("shoulder setpoint", Subsystems.armSubsystem.pidControllerShoulder.getSetpoint());
+    //     SmartDashboard.putNumber("forearm setpoint", Subsystems.armSubsystem.pidControllerForearm.getSetpoint());
+    //     Subsystems.armSubsystem.holdSteady();
     //   }
 
         
@@ -100,35 +100,35 @@ public class ArmCommand extends CommandBase {
     else // control arm manually
     {
         if(Math.abs(RobotContainer.operator.getLeftY()) > 0.1){
-          Subsystems.armSubsystem2.moveShoulder(RobotContainer.operator.getLeftY());
+          Subsystems.armSubsystem.moveShoulder(RobotContainer.operator.getLeftY());
         } else {
-          Subsystems.armSubsystem2.moveShoulder(0);
+          Subsystems.armSubsystem.moveShoulder(0);
         }
 
         if(Math.abs(RobotContainer.operator.getRightY()) > 0.1){
-          Subsystems.armSubsystem2.moveForearm(RobotContainer.operator.getRightY());
+          Subsystems.armSubsystem.moveForearm(RobotContainer.operator.getRightY());
         } else {
-          Subsystems.armSubsystem2.moveForearm(0);
+          Subsystems.armSubsystem.moveForearm(0);
         }
 
         if(RobotContainer.operator.getRightBumper()){
-          Subsystems.armSubsystem2.moveGrip(0.3);
+          Subsystems.armSubsystem.moveGrip(0.3);
         }
         else if(RobotContainer.operator.getLeftBumper()){
-          Subsystems.armSubsystem2.moveGrip(-0.3);
+          Subsystems.armSubsystem.moveGrip(-0.3);
         }
         else
-        Subsystems.armSubsystem2.moveGrip(0);
+        Subsystems.armSubsystem.moveGrip(0);
 
 
 
         if(Math.abs(RobotContainer.operator.getRightX()) > 0.1){
           if(RobotContainer.operator.getRightX() > 0.5){
-            Subsystems.armSubsystem2.moveWrist(0.5);
+            Subsystems.armSubsystem.moveWrist(0.5);
           }else
-            Subsystems.armSubsystem2.moveWrist(RobotContainer.operator.getRightX() - 0.1);
+            Subsystems.armSubsystem.moveWrist(RobotContainer.operator.getRightX() - 0.1);
         } else {
-          Subsystems.armSubsystem2.moveWrist(0);
+          Subsystems.armSubsystem.moveWrist(0);
         }
         
     }

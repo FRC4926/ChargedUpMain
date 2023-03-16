@@ -15,12 +15,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.utils.GalacPIDController2;
+import frc.robot.utils.GalacPIDController;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  public CANSparkMax shoulderMotor = new CANSparkMax(Constants.CAN_IDs.shoulderID, MotorType.kBrushless);
-  public CANSparkMax forearmMotor = new CANSparkMax(Constants.CAN_IDs.elbowID, MotorType.kBrushless);
+  // public CANSparkMax shoulderMotor = new CANSparkMax(Constants.CAN_IDs.shoulderID, MotorType.kBrushless);
+  // public CANSparkMax forearmMotor = new CANSparkMax(Constants.CAN_IDs.elbowID, MotorType.kBrushless);
   public WPI_TalonSRX wristMotor = new WPI_TalonSRX(13);
   public WPI_TalonSRX gripMotor = new WPI_TalonSRX(14);
 
@@ -47,22 +47,22 @@ public class ArmSubsystem extends SubsystemBase {
 
   // creates PID controllers for both arm motors (default set point is
   // highConeAngle)
-  public GalacPIDController2 pidControllerShoulder = new GalacPIDController2(pShoulder, iShoulder, dShoulder, minEffort, () -> getDegreesShoulder(),
+  public GalacPIDController pidControllerShoulder = new GalacPIDController(pShoulder, iShoulder, dShoulder, minEffort, () -> getDegreesShoulder(),
       0,
       0);
-  public GalacPIDController2 pidControllerForearm = new GalacPIDController2(pForearm, iForearm, dForearm, minEffort, () -> getDegreesForearm(),
+  public GalacPIDController pidControllerForearm = new GalacPIDController(pForearm, iForearm, dForearm, minEffort, () -> getDegreesForearm(),
       0, 0);
 
 
   /** Creates a new ArmSubsytem. */
   public ArmSubsystem() {
-    shoulderMotor.setIdleMode(IdleMode.kBrake);
-    forearmMotor.setIdleMode(IdleMode.kBrake);
+    // shoulderMotor.setIdleMode(IdleMode.kBrake);
+    // forearmMotor.setIdleMode(IdleMode.kBrake);
     wristMotor.setNeutralMode(NeutralMode.Brake);
     gripMotor.setNeutralMode(NeutralMode.Brake);
 
-    shoulderMotor.setSmartCurrentLimit(60);
-    forearmMotor.setSmartCurrentLimit(60);
+    // shoulderMotor.setSmartCurrentLimit(60);
+    // forearmMotor.setSmartCurrentLimit(60);
   }
 
   @Override
@@ -77,11 +77,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   // sets each arm motor to a given effort
   public void moveShoulder(double shoulderSpeed) {
-    shoulderMotor.set(shoulderSpeed);
+    // shoulderMotor.set(shoulderSpeed);
   }
 
   public void moveForearm(double forearmSpeed) {
-    forearmMotor.set(forearmSpeed);
+    // forearmMotor.set(forearmSpeed);
   }
 
   public void moveWrist(double wristSpeed) {
@@ -93,11 +93,13 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getDegreesForearm() {
-    return (-forearmMotor.getEncoder().getPosition() * 360 * forearmGearRatio) - 90 ;
+    // return (-forearmMotor.getEncoder().getPosition() * 360 * forearmGearRatio) - 90 ;
+    return 0;
   }
 
   public double getDegreesShoulder() {
-    return -shoulderMotor.getEncoder().getPosition()+90;
+    // return -shoulderMotor.getEncoder().getPosition()+90;
+    return 0;
   }
 
   public boolean hasReachedTarget() {
@@ -105,7 +107,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void resetEncoders() {
-    shoulderMotor.getEncoder().setPosition(0);
-    forearmMotor.getEncoder().setPosition(0);
+    // shoulderMotor.getEncoder().setPosition(0);
+    // forearmMotor.getEncoder().setPosition(0);
   }
 }

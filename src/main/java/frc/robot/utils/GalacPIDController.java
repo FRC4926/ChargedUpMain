@@ -4,14 +4,24 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
 
-public class GalacPIDController2 {
+public class GalacPIDController {
 
-    public PIDController innerController;
+    private PIDController innerController;
     private double setpoint;
     private Supplier<Double> measurementSupplier;
     private double minEffort;
 
+    public PIDController getInnerController() {
+        return this.innerController;
+    }
 
+    public void setInnerController(PIDController innerController) {
+        this.innerController = innerController;
+    }
+
+    public void setPositionTolerance(double tolerance) {
+        innerController.setTolerance(tolerance);
+    }
     public void setTolerance(double tolerancePos, double toleranceVel) {
         innerController.setTolerance(tolerancePos, toleranceVel);
     }
@@ -24,12 +34,13 @@ public class GalacPIDController2 {
         this.setpoint = setpoint;
     }
 
-   
-
     public Supplier<Double> getMeasurementSupplier() {
         return this.measurementSupplier;
     }
 
+    public void setMeasurementSupplier(Supplier<Double> measurementSupplier) {
+        this.measurementSupplier = measurementSupplier;
+    }
 
     public double getMinEffort() {
         return this.minEffort;
@@ -49,7 +60,7 @@ public class GalacPIDController2 {
      * @param initialSetpoint Goal measurement reading, the controller aims to make current measurement reach this value
      * @param positionTolerance Absolute acceptable positional error (velocity tolerance may also be set)
      */
-    public GalacPIDController2(double p, double i, double d, double minEffort, Supplier<Double> measurement,
+    public GalacPIDController(double p, double i, double d, double minEffort, Supplier<Double> measurement,
             double initialSetpoint, double positionTolerance) {
         innerController = new PIDController(p,i,d);
         this.setpoint = initialSetpoint;
@@ -57,7 +68,6 @@ public class GalacPIDController2 {
         this.minEffort = minEffort;
         innerController.setTolerance(positionTolerance);
     }
-
 
     public double getEffort() {
 
@@ -76,7 +86,4 @@ public class GalacPIDController2 {
     public boolean isFinished() {
         return innerController.atSetpoint();
     }
-
-
-
 }

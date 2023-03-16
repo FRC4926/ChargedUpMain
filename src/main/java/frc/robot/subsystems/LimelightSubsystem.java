@@ -5,18 +5,18 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.utils.GalacPIDController2;
+import frc.robot.utils.GalacPIDController;
 
 public class LimelightSubsystem extends SubsystemBase {
 
-int pipelineNum = 0;
+public int pipelineNum = 0;
 public NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 boolean tv;
 double tid;
 double tx;
 double ty;
 double angleToGoalRadiansVertical;
-public GalacPIDController2 pidController;
+public GalacPIDController pidController;
 private boolean limelightIsDisabled=false;
 
   /** Creates a new LimelightSubsystem. */

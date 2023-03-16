@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.autonmodes.MidBalance;
 import frc.robot.autonmodes.MidBalanceTaxi;
+// import frc.robot.autoncommands.VisionCommand;
+import frc.robot.autonmodes.AutonTest;
 import frc.robot.autonmodes.LeftTwo;
 import frc.robot.autonmodes.LeftTwoBalance;
 import frc.robot.autonmodes.OneCone;
@@ -13,13 +15,10 @@ import frc.robot.autonmodes.OneCube;
 import frc.robot.autonmodes.RightTwo;
 import frc.robot.autonmodes.RightTwoBalance;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.LimelightStrafeCommand;
-import frc.robot.subsystems.ArmSubsystem2;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -40,17 +39,13 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static class Subsystems{
     public final static DriveSubsystem driveSubsystem = new DriveSubsystem();
-    public final static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-    public final static ArmSubsystem2 armSubsystem2 = new ArmSubsystem2();
     public final static ArmSubsystem armSubsystem = new ArmSubsystem();
 
     public final static LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
-    public final static VisionSubsystem visionSubsystem = new VisionSubsystem();
+    // public final static VisionSubsystem visionSubsystem = new VisionSubsystem();
   }
 
-  public static class Commands{
-    public final static DriveCommand driveCommand = new DriveCommand();
-  }
+
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -64,6 +59,7 @@ public class RobotContainer {
     
 
     m_chooser.setDefaultOption("LeftTwo", LeftTwo.getCommand());
+    m_chooser.addOption("AutonTest", AutonTest.getCommand());
     m_chooser.addOption("LeftTwoBalance", LeftTwoBalance.getCommand());
     m_chooser.addOption("MidBalance", MidBalance.getCommand());
     m_chooser.addOption("MidBalanceTaxi", MidBalanceTaxi.getCommand());
@@ -71,7 +67,7 @@ public class RobotContainer {
     m_chooser.addOption("OneCube", OneCube.getCommand());
     m_chooser.addOption("RightTwo", RightTwo.getCommand());
     m_chooser.addOption("RightTwoBalance", RightTwoBalance.getCommand());
-    
+    // m_chooser.addOption("VisionCommand", VisionCommand.getCommand());
     Shuffleboard.getTab("Autonomous").add(m_chooser);
 
   }

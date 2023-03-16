@@ -16,7 +16,7 @@ public class MidBalanceTaxi {
     }
 
     public static Command getCommand(){
-        Command m_autonomousCommand = (new AutonDriveCommand(200, 0.5).andThen(new AutonDriveCommand(60, -0.6)).andThen(new AutoBalanceCommand()));
+        Command m_autonomousCommand = (new AutonDriveCommand(250, 0.5).andThen(new AutonDriveCommand(85, -0.6)).andThen(new AutoBalanceCommand()));
         return m_autonomousCommand;
     }
 }

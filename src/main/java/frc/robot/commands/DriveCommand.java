@@ -26,12 +26,14 @@ public class DriveCommand extends CommandBase {
   @Override
   public void initialize() {
     Subsystems.driveSubsystem.setBrake();
+     
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    SmartDashboard.putBoolean("Y", RobotContainer.operator.getStartButton());
+   
     double forward = RobotContainer.driver.getLeftY(); 
     double strafe = RobotContainer.driver.getLeftX();
     double rotate = RobotContainer.driver.getRightX();

@@ -8,20 +8,18 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer.Subsystems;
-import frc.robot.autoncommands.VisionCommand;
+// import frc.robot.autoncommands.VisionCommand;
 import frc.robot.autonmodes.LeftTwoBalance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.commands.ArmCommand;
-import frc.robot.commands.ArmCommand2;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.LimelightStrafeCommand;
+import frc.robot.commands.LimelightStrafeCommand2;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -42,8 +40,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    // Get the UsbCamera from CameraServer
+    UsbCamera camera = CameraServer.startAutomaticCapture();
+         
+    // Set the resolution
+    camera.setResolution(640, 480);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    // Subsystems.visionSubsystem.imageRunner();
+    // UsbCamera camera = CameraServer.startAutomaticCapture();
+    // camera.setBrightness(16);
     // Subsystems.visionSubsystem.imageRunner();
     m_robotContainer = new RobotContainer();
   }
@@ -99,22 +105,23 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    Subsystems.driveSubsystem.resetGyro();
     Subsystems.driveSubsystem.setBrake();
-    Subsystems.armSubsystem.shoulderMotor.setIdleMode(IdleMode.kBrake);
-    Subsystems.armSubsystem.forearmMotor.setIdleMode(IdleMode.kBrake);
-    Subsystems.armSubsystem.wristMotor.setNeutralMode(NeutralMode.Brake);
-    Subsystems.armSubsystem.gripMotor.setNeutralMode(NeutralMode.Brake);
+    // Subsystems.armSubsystem.shoulderMotor.setIdleMode(IdleMode.kBrake);
+    // Subsystems.armSubsystem.forearmMotor.setIdleMode(IdleMode.kBrake);
+    // Subsystems.armSubsystem.wristMotor.setNeutralMode(NeutralMode.Brake);
+    // Subsystems.armSubsystem.gripMotor.setNeutralMode(NeutralMode.Brake);
     Subsystems.driveSubsystem.setCurrentLimits(35);
 
 
 
-    CommandScheduler.getInstance().setDefaultCommand(Subsystems.driveSubsystem, new DriveCommand());
+    // CommandScheduler.getInstance().setDefaultCommand(Subsystems.driveSubsystem, new DriveCommand());
     CommandScheduler.getInstance().schedule(new DriveCommand());
     CommandScheduler.getInstance().schedule(new BalanceCommand());
     // CommandScheduler.getInstance().schedule(new ArmCommand2());
-    CommandScheduler.getInstance().schedule(new ArmCommand());
-    CommandScheduler.getInstance().schedule(new LimelightStrafeCommand());
-    CommandScheduler.getInstance().schedule(new IntakeCommand());
+    // CommandScheduler.getInstance().schedule(new ArmCommand());
+    CommandScheduler.getInstance().schedule(new LimelightStrafeCommand2());
+    // CommandScheduler.getInstance().schedule(new IntakeCommand());
   }
 
   /** This function is called periodically during operator control. */
@@ -128,8 +135,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
 
     Subsystems.driveSubsystem.setCoast();
-    Subsystems.armSubsystem.forearmMotor.setIdleMode(IdleMode.kCoast);
-    Subsystems.armSubsystem.shoulderMotor.setIdleMode(IdleMode.kCoast);
+    // Subsystems.armSubsystem.forearmMotor.setIdleMode(IdleMode.kCoast);
+    // Subsystems.armSubsystem.shoulderMotor.setIdleMode(IdleMode.kCoast);
 
   }
 

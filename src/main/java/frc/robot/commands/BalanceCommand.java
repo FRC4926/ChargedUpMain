@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.Subsystems;
-import frc.robot.utils.GalacPIDController2;
+import frc.robot.utils.GalacPIDController;
 
 public class BalanceCommand extends CommandBase {
-  GalacPIDController2 balanceController;
-  GalacPIDController2 turnController;
+  GalacPIDController balanceController;
+  GalacPIDController turnController;
 
   double balanceSetpoint = 0;
   double kP = 0.0065;
@@ -37,8 +37,8 @@ public class BalanceCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    turnController = new GalacPIDController2(pTurn, iTurn, dTurn, 0.005, () -> (Subsystems.driveSubsystem.getGyroAngle() % 360), angleSetpoint, 0);
-    balanceController = new GalacPIDController2(kP, kI, kD, 0.01, () -> Subsystems.driveSubsystem.getGyroPitch(), balanceSetpoint, 0);
+    turnController = new GalacPIDController(pTurn, iTurn, dTurn, 0.005, () -> (Subsystems.driveSubsystem.getGyroAngle() % 360), angleSetpoint, 0);
+    balanceController = new GalacPIDController(kP, kI, kD, 0.01, () -> Subsystems.driveSubsystem.getGyroPitch(), balanceSetpoint, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

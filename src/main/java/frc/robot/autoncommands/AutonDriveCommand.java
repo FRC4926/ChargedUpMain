@@ -7,7 +7,7 @@ package frc.robot.autoncommands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer.Subsystems;
-import frc.robot.utils.GalacPIDController2;
+import frc.robot.utils.GalacPIDController;
 
 public class AutonDriveCommand extends CommandBase {
 
@@ -19,15 +19,14 @@ public class AutonDriveCommand extends CommandBase {
   boolean isFieldOriented = false;
   
   
- GalacPIDController2  pidController;
+ GalacPIDController  pidController;
   /** Creates a new AutonDriveCommand. */
   public AutonDriveCommand(double distance, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Subsystems.driveSubsystem);
   
     m_distance = distance;
     m_speed = speed;
-    pidController = new GalacPIDController2(0.00201,0,0,0.005, () -> Subsystems.driveSubsystem.getAverageEncoderDistance(), m_distance, 1.0);
+    pidController = new GalacPIDController(0.00201,0,0,0.005, () -> Subsystems.driveSubsystem.getAverageEncoderDistance(), m_distance, 1.0);
   }
 
   // Called when the command is initially scheduled.

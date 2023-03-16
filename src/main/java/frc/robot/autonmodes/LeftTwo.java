@@ -10,13 +10,11 @@ import frc.robot.RobotContainer.Subsystems;
 import frc.robot.autoncommands.AutoBalanceCommand;
 import frc.robot.autoncommands.AutonArmCommand;
 import frc.robot.autoncommands.AutonDriveCommand;
-import frc.robot.autoncommands.AutonIntakeCommand;
 import frc.robot.autoncommands.AutonStrafeCommand;
 import frc.robot.autoncommands.AutonTimedStrafeCommand;
-import frc.robot.autoncommands.ForwardDistance;
 import frc.robot.autoncommands.MoveForwardCommand;
 import frc.robot.autoncommands.TimedStrafe;
-import frc.robot.autoncommands.VisionCommand;
+// import frc.robot.autoncommands.VisionCommand;
 
 /** Add your docs here. */
 public class LeftTwo {
@@ -28,7 +26,7 @@ public class LeftTwo {
         Subsystems.driveSubsystem.resetEncoders();
     }
     public static Command getCommand(){
-       Command m_autonomousCommand = (new AutonArmCommand(false, pipelineNum, true).andThen(new AutonDriveCommand(100, -0.2)).andThen(new AutonIntakeCommand(4))
+       Command m_autonomousCommand = (new AutonArmCommand(false, pipelineNum, true).andThen(new AutonDriveCommand(100, -0.2))
        .andThen(new AutonDriveCommand(100, 0.2))
        .andThen(new AutonStrafeCommand(-0.2, pipelineNum)).andThen(new AutonDriveCommand(15, 0.2))
        .andThen(new AutonDriveCommand(15, -0.1)));

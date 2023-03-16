@@ -23,14 +23,16 @@ import frc.robot.Constants;
 import frc.robot.commands.DriveCommand;
 
 public class DriveSubsystem extends SubsystemBase {
-  public CANSparkMax frontLeft1;
-  public CANSparkMax backLeft1;
-  public CANSparkMax frontRight1;
-  public CANSparkMax backRight1;
-  public CANSparkMax frontLeft2;
-  public CANSparkMax backLeft2;
-  public CANSparkMax frontRight2;
-  public CANSparkMax backRight2;
+
+  public CANSparkMax frontLeft1 = new CANSparkMax(Constants.CAN_IDs.frontLeftLeadID, MotorType.kBrushless);
+  public CANSparkMax backLeft1 = new CANSparkMax(Constants.CAN_IDs.backLeftLeadID, MotorType.kBrushless);
+  public CANSparkMax frontRight1 = new CANSparkMax(Constants.CAN_IDs.frontRightLeadID, MotorType.kBrushless);
+  public CANSparkMax backRight1 = new CANSparkMax(Constants.CAN_IDs.backRightLeadID, MotorType.kBrushless);
+  public CANSparkMax frontLeft2 = new CANSparkMax(Constants.CAN_IDs.frontLeftFollowerID, MotorType.kBrushless);
+  public CANSparkMax backLeft2 = new CANSparkMax(Constants.CAN_IDs.backLeftFollowerID, MotorType.kBrushless);
+  public CANSparkMax frontRight2 = new CANSparkMax(Constants.CAN_IDs.frontRightFollowerID, MotorType.kBrushless);
+  public CANSparkMax backRight2 = new CANSparkMax(Constants.CAN_IDs.backRightFollowerID, MotorType.kBrushless);
+
 
   public MotorControllerGroup frontLeft;
   public MotorControllerGroup backLeft;
@@ -46,17 +48,11 @@ public class DriveSubsystem extends SubsystemBase {
   public RelativeEncoder frontRightEncoder;
   public RelativeEncoder backLeftEncoder;
   public RelativeEncoder backRightEncoder;
+
+  
  
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    frontLeft1 = new CANSparkMax(Constants.CAN_IDs.frontLeftLeadID, MotorType.kBrushless);
-    backLeft1 = new CANSparkMax(Constants.CAN_IDs.backLeftLeadID, MotorType.kBrushless);
-    frontRight1 = new CANSparkMax(Constants.CAN_IDs.frontRightLeadID, MotorType.kBrushless);
-    backRight1 = new CANSparkMax(Constants.CAN_IDs.backRightLeadID, MotorType.kBrushless);
-    frontLeft2 = new CANSparkMax(Constants.CAN_IDs.frontLeftFollowerID, MotorType.kBrushless);
-    backLeft2 = new CANSparkMax(Constants.CAN_IDs.backLeftFollowerID, MotorType.kBrushless);
-    frontRight2 = new CANSparkMax(Constants.CAN_IDs.frontRightFollowerID, MotorType.kBrushless);
-    backRight2 = new CANSparkMax(Constants.CAN_IDs.backRightFollowerID, MotorType.kBrushless);
 
     frontLeftEncoder = frontLeft1.getEncoder();
     frontRightEncoder = frontRight1.getEncoder();
@@ -99,7 +95,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getGyroPitch(){
-    return gyro.getPitch() + 9.39; // this seemingly random number is the offset to the pitch of the gyro
+    return gyro.getPitch() + 9.39 - 0.47; // this seemingly random number is the offset to the pitch of the gyro
   }
 
   /**
