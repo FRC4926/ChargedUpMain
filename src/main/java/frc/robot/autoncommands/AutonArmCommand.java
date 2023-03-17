@@ -14,17 +14,15 @@ public class AutonArmCommand extends CommandBase {
   /** Creates a new AutonArmCommand. */
   boolean object;
   int level;
-  boolean released;
 
   // boolean {object} - true = cone, false = cube
   // int {level} - 0 = ground, 1 = middle, 2 = top
   // boolean {relase} - true if want to release object otherwise false
-  public AutonArmCommand(boolean object, int level, boolean release) {
+  public AutonArmCommand(boolean object, int level) {
     // Use addRequirements() here to declare subsystem dependencies.
     // addRequirements(Subsystems.armSubsystem);
     this.object = object;
     this.level = level;
-    this.released = release;
   }
 
   // Called when the command is initially scheduled.
@@ -41,39 +39,28 @@ public class AutonArmCommand extends CommandBase {
     SmartDashboard.putNumber("auton forearm angle", Subsystems.armSubsystem.getDegreesForearm());
     SmartDashboard.putNumber("auton shoulder angle", Subsystems.armSubsystem.getDegreesShoulder());
 
-    // if(released){
-    //   Subsystems.armSubsystem.release();
-    // }
+
     
     switch (level) {
       case 0:
-      // set forearm and shoulder setpoints to ground level
-        break;
+        Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorForearm;
+        Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorWrist;
+    break;
 
       case 1:
-        if (object) {
-          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowConeForearm;
-          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowConeShoulder;
-        } else {
-          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowCubeForearm;
-          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowCubeShoulder;
-        }
+          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowForearm;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowWrist;
         break;
 
       case 2:
-        if (object) {
-          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highConeForearm;
-          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highConeShoulder;
-        } else {
-          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highCubeForearm;
-          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highCubeShoulder;
-
-        }
+          Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highForearm;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highWrist;
         break;
       
       case 3:
-      // set forearm and shoulder setpoints to reset level
-      break;
+      Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.resetForearm;
+      Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.resetWrist;
+  break;
 
       default:
         break;

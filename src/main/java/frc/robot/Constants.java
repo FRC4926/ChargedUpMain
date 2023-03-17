@@ -26,40 +26,25 @@ public final class Constants {
 
 
     // HIGH
-    public static final double highConeShoulder = 0;
-    public static final double highConeForearm = 0;
-    public static final double highConeWrist = 0;
+    public static final double highShoulder = 0;
+    public static final double highForearm = 0;
+    public static final double highWrist = 0;
 
-    public static final double highCubeShoulder = 0;
-    public static final double highCubeForearm = 0;
-    public static final double highCubeWrist = 0;
 
     // LOW
-    public static final double lowConeShoulder = 0;
-    public static final double lowConeForearm = 0;
-    public static final double lowConeWrist = 0;
-
-    public static final double lowCubeShoulder = 0;
-    public static final double lowCubeForearm = 0;
-    public static final double lowCubeWrist = 0;
+    public static final double lowShoulder = 0;
+    public static final double lowForearm = 0;
+    public static final double lowWrist = 0;
 
     // FLOOR INTAKE
-    public static final double floorConeShoulder = 0;
-    public static final double floorConeForearm = 0;
-    public static final double floorConeWrist = 0;
-
-    public static final double floorCubeShoulder = 0;
-    public static final double floorCubeForearm = 0;
-    public static final double floorCubeWrist = 0;
+    public static final double floorShoulder = 0;
+    public static final double floorForearm = 0;
+    public static final double floorWrist = 0;
 
     // SUBSTATION
-    public static final double substationConeShoulder = 0;
-    public static final double substationConeForearm = 0;
-    public static final double substationConeWrist = 0;
-
-    public static final double substationCubeShoulder = 0;
-    public static final double substationCubeForearm = 0;
-    public static final double substationCubeWrist = 0;
+    public static final double substationShoulder = 0;
+    public static final double substationForearm = 0;
+    public static final double substationWrist = 0;
 
     // RESET
     public static final double resetShoulder = 0;
@@ -67,6 +52,8 @@ public final class Constants {
     public static final double resetWrist = 0;
   }
 
+
+  
   public static final class RobotConstants {
     public static final double CAMERA_PITCH_RADIANS = 0;
     public static final double LIMELIGHT_MOUNT_HEIGHT = 35;

@@ -14,9 +14,8 @@ import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.Subsystems;
 
 public class ArmCommand extends CommandBase {
-  /** Creates a new ArmCommand. */
   boolean isAutomated;
-  int pipelineNum;
+  /** Creates a new ArmCommand. */
   public ArmCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -35,90 +34,61 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
 
-    pipelineNum = Subsystems.limelightSubsystem.getPipelineNum();
-
-    if(RobotContainer.operator2.getLeftStickButtonReleased()) 
-      isAutomated = !isAutomated;
-
-    SmartDashboard.putBoolean("isAutomated", isAutomated);
-    SmartDashboard.putBoolean("button test", RobotContainer.operator.getRawButton(11));
-
-    SmartDashboard.putNumber("Shoulder Angle", Subsystems.armSubsystem.getDegreesShoulder());
-    SmartDashboard.putNumber("Forearm Angle", Subsystems.armSubsystem.getDegreesForearm());
-
-
-    if(isAutomated)
-    { 
+    if(isAutomated){
+    
       if(RobotContainer.operator.getRawButton(7)){
-          if(pipelineNum == 0){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highCubeForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highCubeShoulder;
-            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.highCubeWrist;
-          }
-          else if(pipelineNum == 1){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highConeForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highConeShoulder;
-            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.highConeWrist;
-          }
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highForearm;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.highWrist;
       }
 
       else if(RobotContainer.operator.getRawButton(9)){
-        if(pipelineNum == 0){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowCubeForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowCubeShoulder;
-            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.lowCubeWrist;
-        }
-        else if(pipelineNum == 1){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowConeForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowConeShoulder;
-            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.lowConeWrist;
-        }
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowForearm;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.lowWrist;
       }
 
       else if(RobotContainer.operator.getRawButton(11)){
-        if(pipelineNum == 0){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorCubeForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorCubeShoulder;
-            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorCubeWrist;
-        }
-        else if(pipelineNum == 1){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorConeForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorConeShoulder;
-            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorConeWrist;
-        }
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorForearm;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorWrist;
       }
 
       else if(RobotContainer.operator.getRawButton(2)){
-        if(pipelineNum == 0){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.substationCubeForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.substationCubeShoulder;
-            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.substationCubeWrist;
-        }
-        else if(pipelineNum == 1){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.substationConeForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.substationConeShoulder;
-            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.substationConeWrist;
-        }
+            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.substationForearm;
+            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.substationWrist;
       }
 
       else if(RobotContainer.operator.getRawButton(1)){
             Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.resetForearm;
-            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.resetShoulder;
             Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.resetWrist;
-        
       }
 
-
-        
+      if(Math.abs(RobotContainer.operator.getRawAxis(1)) > 0.1){
+        Subsystems.armSubsystem.moveIntake(RobotContainer.operator.getRawAxis(0));
+      }
+      else{
+        Subsystems.armSubsystem.moveIntake(0);
+      }
     }
-    else // control arm manually
-    {
-        if(Math.abs(RobotContainer.operator.getRawAxis(0)) > 0.02){
-          Subsystems.armSubsystem.moveIntake(RobotContainer.operator.getRawAxis(0));
-        }
-        else{
-          Subsystems.armSubsystem.moveIntake(0);
-        }
+    else{
+      if(Math.abs(RobotContainer.operator.getRawAxis(1)) > 0.1){
+        Subsystems.armSubsystem.moveIntake(RobotContainer.operator.getRawAxis(0));
+      }
+      else{
+        Subsystems.armSubsystem.moveIntake(0);
+      }
+
+      if(Math.abs(RobotContainer.operator.getRawAxis(0)) > 0.1){
+        Subsystems.armSubsystem.moveForearm(RobotContainer.operator.getRawAxis(1));
+      }
+      else{
+        Subsystems.armSubsystem.moveForearm(0);
+      }
+
+      if(Math.abs(RobotContainer.operator.getRawAxis(2)) > 0.1){
+        Subsystems.armSubsystem.moveWrist(RobotContainer.operator.getRawAxis(2));
+      }
+      else{
+        Subsystems.armSubsystem.moveWrist(0);
+      }
     }
   }
     

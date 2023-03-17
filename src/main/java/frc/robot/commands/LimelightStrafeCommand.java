@@ -10,7 +10,7 @@ import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.Subsystems;
 import frc.robot.utils.GalacPIDController;
 
-public class LimelightStrafeCommand2 extends CommandBase {
+public class LimelightStrafeCommand extends CommandBase {
 
   double modGyroYaw;
   
@@ -25,7 +25,7 @@ public class LimelightStrafeCommand2 extends CommandBase {
 
 
   /** Creates a new LimelightStrafeCommand2. */
-  public LimelightStrafeCommand2() {
+  public LimelightStrafeCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

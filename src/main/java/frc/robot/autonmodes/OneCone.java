@@ -19,8 +19,8 @@ public class OneCone {
         Subsystems.driveSubsystem.resetEncoders();
     }
     public static Command getCommand(){
-       Command m_autonomousCommand = (new AutonArmCommand(true, 2, false)
-       .andThen(new AutonDriveCommand(10, 0.2)).andThen(new AutonArmCommand(true, 2, true))
+       Command m_autonomousCommand = (new AutonArmCommand(true, 2)
+       .andThen(new AutonDriveCommand(10, 0.2)).andThen(new AutonArmCommand(true, 2))
        .andThen(new AutonDriveCommand(200, -0.4)));
        return m_autonomousCommand;
     }

@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.LimelightStrafeCommand2;
+import frc.robot.commands.LimelightStrafeCommand;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -116,13 +116,10 @@ public class Robot extends TimedRobot {
 
 
 
-    // CommandScheduler.getInstance().setDefaultCommand(Subsystems.driveSubsystem, new DriveCommand());
     CommandScheduler.getInstance().schedule(new DriveCommand());
     CommandScheduler.getInstance().schedule(new BalanceCommand());
-    // CommandScheduler.getInstance().schedule(new ArmCommand2());
     CommandScheduler.getInstance().schedule(new ArmCommand());
-    CommandScheduler.getInstance().schedule(new LimelightStrafeCommand2());
-    // CommandScheduler.getInstance().schedule(new IntakeCommand());
+    CommandScheduler.getInstance().schedule(new LimelightStrafeCommand());
   }
 
   /** This function is called periodically during operator control. */

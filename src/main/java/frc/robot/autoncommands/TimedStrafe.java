@@ -42,10 +42,7 @@ public class TimedStrafe extends CommandBase {
   @Override
   public void execute() {
     turningValue = (angleSetpoint - Subsystems.driveSubsystem.getGyroAngle()) * kP;
-
     Subsystems.driveSubsystem.drive(0, effort, -turningValue, true);
-
-
   }
 
   // Called once the command ends or is interrupted.

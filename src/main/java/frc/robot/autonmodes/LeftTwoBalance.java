@@ -10,9 +10,6 @@ import frc.robot.RobotContainer.Subsystems;
 import frc.robot.autoncommands.AutoBalanceCommand;
 import frc.robot.autoncommands.AutonArmCommand;
 import frc.robot.autoncommands.AutonDriveCommand;
-import frc.robot.autoncommands.AutonStrafeCommand;
-import frc.robot.autoncommands.AutonTimedStrafeCommand;
-import frc.robot.autoncommands.MoveForwardCommand;
 import frc.robot.autoncommands.TimedStrafe;
 // import frc.robot.autoncommands.VisionCommand;
 
@@ -33,8 +30,8 @@ public class LeftTwoBalance {
         // .andThen(new AutonDriveCommand(35.45, -0.1)));
 
        Command m_autonomousCommand = (new AutonDriveCommand(100, -0.2).andThen(new AutonDriveCommand(100, 0.2))
-       .andThen(new AutonStrafeCommand(-0.2, pipelineNum)).andThen(new AutonDriveCommand(15, 0.2))
-       .andThen(new AutonDriveCommand(15, -0.1)).andThen(new AutonTimedStrafeCommand(0.2, 1.7))
+       .andThen(new TimedStrafe(-0.2, pipelineNum)).andThen(new AutonDriveCommand(15, 0.2))
+       .andThen(new AutonDriveCommand(15, -0.1)).andThen(new TimedStrafe(0.2, 1.7))
        .andThen(new AutonDriveCommand(65, -0.5)).andThen(new AutoBalanceCommand()));
        return m_autonomousCommand;
     }

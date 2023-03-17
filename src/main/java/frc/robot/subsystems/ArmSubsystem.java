@@ -83,6 +83,13 @@ public class ArmSubsystem extends SubsystemBase {
     return (-wristMotor.getEncoder().getPosition() * 360 * wristGearRatio) - 90;
   }
 
+  public boolean hasReachedTarget() {
+    return 
+      (Math.abs(getDegreesForearm() - pidControllerForearm.getSetpoint()) < 9.5 
+    && Math.abs(getDegreesShoulder() - pidControllerShoulder.getSetpoint()) < 5 
+    && Math.abs(getDegreesWrist() - pidControllerWrist.getSetpoint()) < 5);
+  }
+
   public void resetEncoders() {
     shoulderMotor.getEncoder().setPosition(0);
     forearmMotor.getEncoder().setPosition(0);

@@ -4,54 +4,43 @@
 
 package frc.robot.autoncommands;
 
-import org.ejml.dense.row.decompose.TriangularSolver_CDRM;
+
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer.Subsystems;
 
-public class AutonTimedStrafeCommand extends CommandBase {
-  /** Creates a new AutonTimedStrafeCommand. */
-  Timer timer = new Timer();
-  double effort;
+public class AutonIntakeCommand extends CommandBase {
+
+  Timer timer;
   double time;
+  double speed;
 
-  double turningValue;
-  double angleSetpoint = 0;
-  double kP = 0.01;
-
-    public AutonTimedStrafeCommand(double m_effort, double m_time) {
+  /** Creates a new AutonIntakeCommand. */
+  public AutonIntakeCommand(double time, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Subsystems.driveSubsystem);
-    effort = m_effort;
-    time = m_time;
+    time = this.time;
+    speed = this.speed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
     timer.reset();
     timer.start();
-
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    turningValue = (angleSetpoint - Subsystems.driveSubsystem.getGyroAngle()) * kP;
-
-    Subsystems.driveSubsystem.drive(0, effort, -turningValue, true);
-
-
+    Subsystems.armSubsystem.moveIntake(speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Subsystems.driveSubsystem.drive(0, 0, 0, true);
+    Subsystems.armSubsystem.moveIntake(0);
+
   }
 
   // Returns true when the command should end.
