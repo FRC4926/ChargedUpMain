@@ -17,6 +17,7 @@ import frc.robot.RobotContainer.Subsystems;
 // import frc.robot.autoncommands.VisionCommand;
 import frc.robot.autonmodes.LeftTwoBalance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.DriveCommand;
@@ -73,10 +74,16 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    Subsystems.armSubsystem.setBrakeArm();
+    Subsystems.armSubsystem.resetEncoders();
+    Subsystems.armSubsystem.resetSetpoints();
+    CommandScheduler.getInstance().cancelAll();
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -107,11 +114,10 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     Subsystems.driveSubsystem.resetGyro();
+    Subsystems.armSubsystem.setBrakeArm();
+    Subsystems.armSubsystem.resetEncoders();
+    Subsystems.armSubsystem.resetSetpoints();
     Subsystems.driveSubsystem.setBrake();
-    // Subsystems.armSubsystem.shoulderMotor.setIdleMode(IdleMode.kBrake);
-    // Subsystems.armSubsystem.forearmMotor.setIdleMode(IdleMode.kBrake);
-    // Subsystems.armSubsystem.wristMotor.setNeutralMode(NeutralMode.Brake);
-    // Subsystems.armSubsystem.gripMotor.setNeutralMode(NeutralMode.Brake);
     Subsystems.driveSubsystem.setCurrentLimits(35);
 
 
@@ -125,22 +131,40 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    SmartDashboard.putNumber("shoulder effort", Subsystems.armSubsystem.shoulderMotor.get());
+    SmartDashboard.putNumber("forearm effort", Subsystems.armSubsystem.forearmMotor.get());
+    SmartDashboard.putNumber("wrist effort", Subsystems.armSubsystem.wristMotor.get());
+
+    SmartDashboard.putNumber("shoulder pid effort", Subsystems.armSubsystem.pidControllerShoulder.getEffort());
+    SmartDashboard.putNumber("forearm pid effort", Subsystems.armSubsystem.pidControllerForearm.getEffort());
+    SmartDashboard.putNumber("wrist pid effort", Subsystems.armSubsystem.pidControllerWrist.getEffort());
+
+
+    SmartDashboard.putNumber("shoulder state", Subsystems.armSubsystem.shoulderState);
+    SmartDashboard.putNumber("forearm state", Subsystems.armSubsystem.forearmState);
+    SmartDashboard.putNumber("wrist state", Subsystems.armSubsystem.wristState);
+
+    SmartDashboard.putNumber("shoulder pid setpoint", Subsystems.armSubsystem.pidControllerShoulder.getSetpoint());
+    SmartDashboard.putNumber("forearm pid setpoint", Subsystems.armSubsystem.pidControllerForearm.getSetpoint());
+    SmartDashboard.putNumber("wrist pid setpoint", Subsystems.armSubsystem.pidControllerWrist.getSetpoint());
+
+    SmartDashboard.putNumber("shoulder angle", Subsystems.armSubsystem.getDegreesShoulder());
+    SmartDashboard.putNumber("forearm angle", Subsystems.armSubsystem.getDegreesForearm());
+    SmartDashboard.putNumber("wrist angle", Subsystems.armSubsystem.getDegreesWrist());
   }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-
-    Subsystems.driveSubsystem.setCoast();
-    // Subsystems.armSubsystem.forearmMotor.setIdleMode(IdleMode.kCoast);
-    // Subsystems.armSubsystem.shoulderMotor.setIdleMode(IdleMode.kCoast);
-
+    Subsystems.armSubsystem.resetEncoders();
+    Subsystems.armSubsystem.resetSetpoints();
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override

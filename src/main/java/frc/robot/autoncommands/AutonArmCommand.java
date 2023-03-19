@@ -6,7 +6,6 @@ package frc.robot.autoncommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.RobotContainer.Subsystems;
 
@@ -31,35 +30,40 @@ public class AutonArmCommand extends CommandBase {
     Subsystems.armSubsystem.moveShoulder(0);
     Subsystems.armSubsystem.moveForearm(0);
     Subsystems.armSubsystem.moveIntake(0);
+    Subsystems.armSubsystem.moveWrist(0);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("auton forearm angle", Subsystems.armSubsystem.getDegreesForearm());
-    SmartDashboard.putNumber("auton shoulder angle", Subsystems.armSubsystem.getDegreesShoulder());
-
-
-    
+ 
     switch (level) {
       case 0:
         Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorForearm;
-        Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorWrist;
+        Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorWrist;
+        Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorShoulder;
+
     break;
 
       case 1:
           Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowForearm;
-          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowWrist;
+          Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.lowWrist;
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowShoulder;
+
         break;
 
       case 2:
+          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highShoulder;
           Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highForearm;
-          Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highWrist;
+          Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.highWrist;
         break;
       
       case 3:
-      Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.resetForearm;
-      Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.resetWrist;
+        Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.resetForearm;
+        Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.resetWrist;
+        Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.resetShoulder;
+
   break;
 
       default:

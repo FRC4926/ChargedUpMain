@@ -4,28 +4,31 @@
 
 package frc.robot.autoncommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer.Subsystems;
 import frc.robot.utils.GalacPIDController;
 
-public class AutonDriveCommand extends CommandBase {
+public class AutonDriveCommand2 extends CommandBase {
 
-  double angleSetpoint = 0;
-  double kP = 0.008;
-  double turningValue;
+  double angleSetpoint;
   double m_distance;
   double m_speed;
-  boolean isFieldOriented = false;
+  double turningEffort;
+
+  double modGyroYaw;
   
   
- GalacPIDController  pidController;
+ GalacPIDController forwardController;
+ GalacPIDController turnController;
+
+
   /** Creates a new AutonDriveCommand. */
-  public AutonDriveCommand(double distance, double speed) {
+  public AutonDriveCommand2(double distance, double speed, double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
-  
+    angleSetpoint = angle;
     m_distance = distance;
     m_speed = speed;
-    pidController = new GalacPIDController(0.00201,0,0,0.005, () -> Subsystems.driveSubsystem.getAverageEncoderDistance(), m_distance, 1.0);
   }
 
   // Called when the command is initially scheduled.
@@ -33,15 +36,19 @@ public class AutonDriveCommand extends CommandBase {
   public void initialize() {
     Subsystems.driveSubsystem.resetEncoders();
     Subsystems.driveSubsystem.setCoast();
-   
+    turnController = new GalacPIDController(0.002, 0, 0, 0.005, () -> (Subsystems.driveSubsystem.getGyroAngle() % 360), angleSetpoint, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Subsystems.armSubsystem2.holdSteady();
-    turningValue = (angleSetpoint - Subsystems.driveSubsystem.getGyroAngle()) * kP;
-    Subsystems.driveSubsystem.drive(-m_speed, 0, -turningValue, isFieldOriented);
+    modGyroYaw = Subsystems.driveSubsystem.getGyroAngle() % 360;    
+    if((modGyroYaw > 0 && modGyroYaw < 180) || (modGyroYaw < -180 && modGyroYaw > -360)){
+      turningEffort = Math.abs(turnController.getEffort());
+    }else{
+      turningEffort = -Math.abs(turnController.getEffort());
+    }
+    Subsystems.driveSubsystem.drive(-m_speed, 0, turningEffort, true);
   }
 
 
@@ -49,13 +56,13 @@ public class AutonDriveCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     Subsystems.driveSubsystem.setBrake();
-    Subsystems.driveSubsystem.drive(0, 0, 0, isFieldOriented);
+    Subsystems.driveSubsystem.drive(0, 0, 0, true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(Subsystems.driveSubsystem.getAverageEncoderDistance()) >= Math.abs(m_distance);
+    return Math.abs(Subsystems.driveSubsystem.getAverageEncoderDistance()) >= Math.abs(m_distance) && Math.abs(modGyroYaw) < Math.abs(angleSetpoint);
   }
 }
 

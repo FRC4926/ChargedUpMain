@@ -47,7 +47,6 @@ public class BalanceCommand extends CommandBase {
 
     modGyroYaw = Subsystems.driveSubsystem.getGyroAngle() % 360;    
 
-    // effort = (balanceSetpoint - Subsystems.driveSubsystem.getGyroRoll()) * kP;
     balanceEffort = balanceController.getEffort();
     if((modGyroYaw > 0 && modGyroYaw < 180) || (modGyroYaw < -180 && modGyroYaw > -360)){
       turningEffort = Math.abs(turnController.getEffort());

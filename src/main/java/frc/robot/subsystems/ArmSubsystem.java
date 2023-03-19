@@ -22,19 +22,18 @@ public class ArmSubsystem extends SubsystemBase {
 
   double forearmGearRatio = 0.008;
   double shoulderGearRatio = 60;
-  double wristGearRatio = 192;
+  double wristGearRatio = 0.0052;
 
   public double forearmState = 0;
   public double shoulderState = 0;
   public double wristState = 0;
 
-  public GalacPIDController pidControllerShoulder = new GalacPIDController(0, 0, 0, 0.005, () -> getDegreesShoulder(),
+  public GalacPIDController pidControllerShoulder = new GalacPIDController(0.015, 0, 0, 0.01, () -> getDegreesShoulder(),
       0,
       0);
-  public GalacPIDController pidControllerForearm = new GalacPIDController(0, 0, 0, 0.005, () -> getDegreesForearm(),
+  public GalacPIDController pidControllerForearm = new GalacPIDController(0.013, 0.00, 0, 0.01, () -> getDegreesForearm(),
       0, 0);
-  
-  public GalacPIDController pidControllerWrist = new GalacPIDController(0, 0, 0, 0.005, () -> getDegreesWrist(),
+  public GalacPIDController pidControllerWrist = new GalacPIDController(0.005, 0, 0, 0.007, () -> getDegreesWrist(),
       0, 0);
 
 
@@ -50,9 +49,24 @@ public class ArmSubsystem extends SubsystemBase {
     pidControllerShoulder.setSetpoint(shoulderState);
     pidControllerWrist.setSetpoint(wristState);
 
-    moveForearm(pidControllerForearm.getEffort());
-    moveShoulder(pidControllerShoulder.getEffort());
-    moveWrist(pidControllerWrist.getEffort());
+    if(forearmState == Constants.ArmSetpoints.resetForearm && wristState == Constants.ArmSetpoints.resetWrist){
+      pidControllerForearm.innerController.setP(0.003);
+      pidControllerWrist.innerController.setP(0.007);
+    }
+    else if(forearmState != Constants.ArmSetpoints.resetForearm && wristState != Constants.ArmSetpoints.resetWrist){
+      pidControllerForearm.innerController.setP(0.015);
+      pidControllerWrist.innerController.setP(0.007);
+    }
+
+    forearmMotor.set(pidControllerForearm.getEffort());
+    shoulderMotor.set(pidControllerShoulder.getEffort());
+    wristMotor.set(pidControllerWrist.getEffort());
+  }
+
+
+  public void changePID(double p){
+    pidControllerForearm.innerController.setP(p);
+
   }
 
   public void moveShoulder(double shoulderSpeed) {
@@ -72,15 +86,21 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getDegreesForearm() {
-    return (-forearmMotor.getEncoder().getPosition() * 360 * forearmGearRatio) - 90;
+    return (forearmMotor.getEncoder().getPosition() * 360 * forearmGearRatio);
   }
 
   public double getDegreesShoulder() {
-    return -shoulderMotor.getEncoder().getPosition()+90;
+    return shoulderMotor.getEncoder().getPosition();
   }
 
   public double getDegreesWrist(){
-    return (-wristMotor.getEncoder().getPosition() * 360 * wristGearRatio) - 90;
+    return (wristMotor.getEncoder().getPosition() * 360 * wristGearRatio);
+  }
+
+  public void resetSetpoints(){
+    shoulderState = 0;
+    forearmState = 0;
+    wristState = 0;
   }
 
   public boolean hasReachedTarget() {

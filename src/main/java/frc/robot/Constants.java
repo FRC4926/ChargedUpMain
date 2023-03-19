@@ -26,25 +26,25 @@ public final class Constants {
 
 
     // HIGH
-    public static final double highShoulder = 0;
-    public static final double highForearm = 0;
-    public static final double highWrist = 0;
+    public static final double highShoulder = 1;
+    public static final double highForearm = 135;
+    public static final double highWrist = 117.15;
 
 
     // LOW
-    public static final double lowShoulder = 0;
-    public static final double lowForearm = 0;
-    public static final double lowWrist = 0;
+    public static final double lowShoulder = 3.38;
+    public static final double lowForearm = 77.96;
+    public static final double lowWrist = 107.10;
 
     // FLOOR INTAKE
-    public static final double floorShoulder = 0;
-    public static final double floorForearm = 0;
-    public static final double floorWrist = 0;
+    public static final double floorShoulder = 16.31;
+    public static final double floorForearm = 34.83;
+    public static final double floorWrist = 42.38;
 
     // SUBSTATION
-    public static final double substationShoulder = 0;
-    public static final double substationForearm = 0;
-    public static final double substationWrist = 0;
+    public static final double substationShoulder = 5.14;
+    public static final double substationForearm = 120;
+    public static final double substationWrist = 108;
 
     // RESET
     public static final double resetShoulder = 0;
@@ -93,8 +93,8 @@ public final class Constants {
     // arm IDs
     public static final int shoulderID = 9;
     public static final int forearmID = 10;
-    public static final int wristID = 13;
-    public static final int intakeID = 14;
+    public static final int wristID = 11;
+    public static final int intakeID = 12;
   }
 
 }

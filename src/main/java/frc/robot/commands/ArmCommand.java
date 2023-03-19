@@ -34,11 +34,17 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
 
+    if(RobotContainer.driver.getLeftStickButtonReleased()){
+      isAutomated = !isAutomated;
+    }
+
+
     if(isAutomated){
-    
+      
       if(RobotContainer.operator.getRawButton(7)){
             Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.highForearm;
             Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.highWrist;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.highShoulder;
       }
 
       else if(RobotContainer.operator.getRawButton(9)){
@@ -56,43 +62,53 @@ public class ArmCommand extends CommandBase {
             Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.substationWrist;
       }
 
-      else if(RobotContainer.operator.getRawButton(1)){
-            Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.resetForearm;
-            Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.resetWrist;
+      else{
+        Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.resetForearm;
+        Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.resetWrist;
+        Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.resetShoulder;
       }
+    
 
-      if(Math.abs(RobotContainer.operator.getRawAxis(1)) > 0.1){
-        Subsystems.armSubsystem.moveIntake(RobotContainer.operator.getRawAxis(0));
+      if(Math.abs(RobotContainer.operator.getRawAxis(1)) > 0.3){
+        Subsystems.armSubsystem.moveIntake(RobotContainer.operator.getRawAxis(1));
       }
       else{
         Subsystems.armSubsystem.moveIntake(0);
+
       }
-    }
+      
+    } // end isAutomated
+
     else{
-      if(Math.abs(RobotContainer.operator.getRawAxis(1)) > 0.1){
-        Subsystems.armSubsystem.moveIntake(RobotContainer.operator.getRawAxis(0));
+      if(Math.abs(RobotContainer.operator.getRawAxis(3)) > 0.6){
+        Subsystems.armSubsystem.moveIntake(RobotContainer.operator.getRawAxis(3));
       }
       else{
         Subsystems.armSubsystem.moveIntake(0);
       }
 
-      if(Math.abs(RobotContainer.operator.getRawAxis(0)) > 0.1){
-        Subsystems.armSubsystem.moveForearm(RobotContainer.operator.getRawAxis(1));
+      if(Math.abs(RobotContainer.operator.getRawAxis(0)) > 0.6){
+        Subsystems.armSubsystem.moveForearm(RobotContainer.operator.getRawAxis(0));
       }
       else{
         Subsystems.armSubsystem.moveForearm(0);
       }
 
-      if(Math.abs(RobotContainer.operator.getRawAxis(2)) > 0.1){
+      if(Math.abs(RobotContainer.operator.getRawAxis(2)) > 0.6){
         Subsystems.armSubsystem.moveWrist(RobotContainer.operator.getRawAxis(2));
       }
       else{
         Subsystems.armSubsystem.moveWrist(0);
       }
+
+      if(Math.abs(RobotContainer.operator.getRawAxis(1)) > 0.3){
+        Subsystems.armSubsystem.moveShoulder(RobotContainer.operator.getRawAxis(1));
+      }
+      else{
+        Subsystems.armSubsystem.moveShoulder(0);
+      }
     }
   }
-    
-  
 
   // Called once the command ends or is interrupted.
   @Override

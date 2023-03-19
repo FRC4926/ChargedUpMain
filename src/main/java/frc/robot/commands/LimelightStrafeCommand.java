@@ -33,7 +33,7 @@ public class LimelightStrafeCommand extends CommandBase {
   @Override
   public void initialize() {
       forwardController = new GalacPIDController(0.02, 0, 0, 0.01, () -> (Subsystems.limelightSubsystem.getTY()), 1.13, 0.1);
-      strafeController = new GalacPIDController(0.014, 0, 0, 0.01, () -> (Subsystems.limelightSubsystem.getTX()), 11.5, 0.5);
+      strafeController = new GalacPIDController(0.016, 0, 0, 0.01, () -> (Subsystems.limelightSubsystem.getTX()), 12, 0.5);
       turnController = new GalacPIDController(0.005, 0, 0, 0.01, () -> (Subsystems.driveSubsystem.getGyroAngle() % 360), 0, 0.5);
 
     }
@@ -43,7 +43,8 @@ public class LimelightStrafeCommand extends CommandBase {
   public void execute() {
     SmartDashboard.putNumber("gyro pitch", Subsystems.driveSubsystem.getGyroPitch());
     modGyroYaw = Subsystems.driveSubsystem.getGyroAngle() % 360;
-    if(RobotContainer.operator2.getXButtonReleased()){
+    if(RobotContainer.driver.getLeftBumperReleased
+    ()){
       isAprilTag = !isAprilTag;
       if(!isAprilTag){
         Subsystems.limelightSubsystem.setPipeline(0);
@@ -63,7 +64,7 @@ public class LimelightStrafeCommand extends CommandBase {
     }
 
     if(RobotContainer.driver.getAButton() && Subsystems.limelightSubsystem.getTV()){
-      Subsystems.driveSubsystem.drive(forwardController.getEffort(), -strafeController.getEffort(), 0, true);
+      Subsystems.driveSubsystem.drive(0, -strafeController.getEffort(), turningEffort, true);
     }
   }
 

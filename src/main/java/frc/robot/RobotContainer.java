@@ -50,9 +50,9 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   public static XboxController driver = new XboxController(Constants.Joystick.kDriverPort);
-  public static XboxController operator2 = new XboxController(Constants.Joystick.kOperatorPort);
+  // public static XboxController operator2 = new XboxController(Constants.Joystick.kOperatorPort);
 
-  public static Joystick operator = new Joystick(2);
+  public static Joystick operator = new Joystick(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -69,9 +69,7 @@ public class RobotContainer {
     m_chooser.addOption("OneCube", OneCube.getCommand());
     m_chooser.addOption("RightTwo", RightTwo.getCommand());
     m_chooser.addOption("RightTwoBalance", RightTwoBalance.getCommand());
-    // m_chooser.addOption("VisionCommand", VisionCommand.getCommand());
     Shuffleboard.getTab("Autonomous").add(m_chooser);
-
   }
 
   /**

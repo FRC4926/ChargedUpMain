@@ -6,7 +6,7 @@ import edu.wpi.first.math.controller.PIDController;
 
 public class GalacPIDController {
 
-    private PIDController innerController;
+    public PIDController innerController;
     private double setpoint;
     private Supplier<Double> measurementSupplier;
     private double minEffort;
