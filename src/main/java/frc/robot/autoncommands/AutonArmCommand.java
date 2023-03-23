@@ -4,7 +4,7 @@
 
 package frc.robot.autoncommands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer.Subsystems;
@@ -13,6 +13,7 @@ public class AutonArmCommand extends CommandBase {
   /** Creates a new AutonArmCommand. */
   boolean object;
   int level;
+  Timer timer;
 
   // boolean {object} - true = cone, false = cube
   // int {level} - 0 = ground, 1 = middle, 2 = top
@@ -22,16 +23,14 @@ public class AutonArmCommand extends CommandBase {
     // addRequirements(Subsystems.armSubsystem);
     this.object = object;
     this.level = level;
+    timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Subsystems.armSubsystem.moveShoulder(0);
-    Subsystems.armSubsystem.moveForearm(0);
-    Subsystems.armSubsystem.moveIntake(0);
-    Subsystems.armSubsystem.moveWrist(0);
-
+    timer.reset();
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,9 +39,9 @@ public class AutonArmCommand extends CommandBase {
  
     switch (level) {
       case 0:
-        Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorForearm;
-        Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorWrist;
-        Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorShoulder;
+        Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorForearm + 3;
+        Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorWrist - 7.5;
+        Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorShoulder + 2.75;
 
     break;
 
@@ -75,15 +74,11 @@ public class AutonArmCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Subsystems.armSubsystem.moveShoulder(0);
-    Subsystems.armSubsystem.moveForearm(0);
-    Subsystems.armSubsystem.moveIntake(0);
-    Subsystems.armSubsystem.moveWrist(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Subsystems.armSubsystem.hasReachedTarget();
+    return timer.get() > 2;
   }
 }

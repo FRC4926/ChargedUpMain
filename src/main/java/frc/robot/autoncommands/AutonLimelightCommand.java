@@ -6,6 +6,7 @@ package frc.robot.autoncommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer.Subsystems;
 import frc.robot.utils.GalacPIDController;
 
@@ -29,7 +30,7 @@ public class AutonLimelightCommand extends CommandBase {
   @Override
   public void initialize() {
     forwardController = new GalacPIDController(0.013, 0, 0, 0.008, () -> (Subsystems.limelightSubsystem.getTY()), 1.13, 0.1);
-    strafeController = new GalacPIDController(0.012, 0, 0, 0.008, () -> (Subsystems.limelightSubsystem.getTX()), 11.5, 0.5);
+    strafeController = new GalacPIDController(0.0145, 0, 0, 0.03, () -> (Subsystems.limelightSubsystem.getTX()), 11.5, 0.5);
     turnController = new GalacPIDController(0, 0, 0, 0.005, () -> (Subsystems.driveSubsystem.getGyroAngle() % 360), 0, 0.5);
     if(isAprilTag){
       Subsystems.limelightSubsystem.setPipeline(1);
@@ -44,10 +45,7 @@ public class AutonLimelightCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("forward controller", forwardController.isFinished());
-    SmartDashboard.putBoolean("strafe controller", strafeController.isFinished());
-
-    Subsystems.driveSubsystem.drive(forwardController.getEffort(), -strafeController.getEffort(), 0, true);
+    Subsystems.driveSubsystem.drive(0, -strafeController.getEffort(), 0, true);
   }
 
   // Called once the command ends or is interrupted.
@@ -58,6 +56,6 @@ public class AutonLimelightCommand extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    return forwardController.isFinished() && strafeController.isFinished();
+    return Math.abs(Subsystems.limelightSubsystem.getTX()) < 0.5;
   }
 }

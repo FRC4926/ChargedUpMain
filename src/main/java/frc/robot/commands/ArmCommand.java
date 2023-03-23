@@ -26,7 +26,6 @@ public class ArmCommand extends CommandBase {
     Subsystems.armSubsystem.moveShoulder(0);
     Subsystems.armSubsystem.moveForearm(0);
     Subsystems.armSubsystem.moveWrist(0);
-    Subsystems.armSubsystem.resetEncoders();
     isAutomated = true;
   }
 
@@ -37,7 +36,6 @@ public class ArmCommand extends CommandBase {
     if(RobotContainer.driver.getLeftStickButtonReleased()){
       isAutomated = !isAutomated;
     }
-
 
     if(isAutomated){
       
@@ -50,16 +48,21 @@ public class ArmCommand extends CommandBase {
       else if(RobotContainer.operator.getRawButton(9)){
             Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.lowForearm;
             Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.lowWrist;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.lowShoulder;
+
       }
 
       else if(RobotContainer.operator.getRawButton(11)){
             Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorForearm;
             Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorWrist;
+            Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorShoulder;
+
       }
 
       else if(RobotContainer.operator.getRawButton(2)){
             Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.substationForearm;
             Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.substationWrist;
+
       }
 
       else{
@@ -69,7 +72,7 @@ public class ArmCommand extends CommandBase {
       }
     
 
-      if(Math.abs(RobotContainer.operator.getRawAxis(1)) > 0.3){
+      if(Math.abs(RobotContainer.operator.getRawAxis(1)) > 0.2){
         Subsystems.armSubsystem.moveIntake(RobotContainer.operator.getRawAxis(1));
       }
       else{
@@ -87,26 +90,26 @@ public class ArmCommand extends CommandBase {
         Subsystems.armSubsystem.moveIntake(0);
       }
 
-      if(Math.abs(RobotContainer.operator.getRawAxis(0)) > 0.6){
+      if(Math.abs(RobotContainer.operator.getRawAxis(0)) >= 0.3){
         Subsystems.armSubsystem.moveForearm(RobotContainer.operator.getRawAxis(0));
       }
-      else{
-        Subsystems.armSubsystem.moveForearm(0);
-      }
+      // else{
+      //   Subsystems.armSubsystem.moveForearm(0);
+      // }
 
-      if(Math.abs(RobotContainer.operator.getRawAxis(2)) > 0.6){
+      if(Math.abs(RobotContainer.operator.getRawAxis(2)) > 0.3){
         Subsystems.armSubsystem.moveWrist(RobotContainer.operator.getRawAxis(2));
       }
-      else{
-        Subsystems.armSubsystem.moveWrist(0);
-      }
+      // else{
+      //   Subsystems.armSubsystem.moveWrist(0);
+      // }
 
       if(Math.abs(RobotContainer.operator.getRawAxis(1)) > 0.3){
         Subsystems.armSubsystem.moveShoulder(RobotContainer.operator.getRawAxis(1));
       }
-      else{
-        Subsystems.armSubsystem.moveShoulder(0);
-      }
+      // else{
+      //   Subsystems.armSubsystem.moveShoulder(0);
+      // }
     }
   }
 

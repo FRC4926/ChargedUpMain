@@ -8,21 +8,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer.Subsystems;
 import frc.robot.autoncommands.AutonArmCommand;
 import frc.robot.autoncommands.AutonDriveCommand;
+import frc.robot.autoncommands.AutonIntakeCommand;
 
 /** Add your docs here. */
-public class OneCube {
+public class OneCubeTaxi {
     public static int pipelineNum;
 
-    public OneCube() {
+    public OneCubeTaxi() {
 
         pipelineNum = 1;
         Subsystems.driveSubsystem.resetEncoders();
     }
     public static Command getCommand(){
 
-       Command m_autonomousCommand = (new AutonArmCommand(true, 2)
-       .andThen(new AutonDriveCommand(10, 0.2)).andThen(new AutonArmCommand(true, 2))
-       .andThen(new AutonDriveCommand(200, -0.4)));
+       Command m_autonomousCommand = new AutonArmCommand(false, 2)
+       .andThen(new AutonIntakeCommand(1.25, -0.5).deadlineWith(new AutonDriveCommand(5, -0.2))
+       .andThen(new AutonDriveCommand(50, 0.5)).andThen(new AutonDriveCommand(150, 0.5).deadlineWith(new AutonArmCommand(false, 3))));
        return m_autonomousCommand;
     }
    

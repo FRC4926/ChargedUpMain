@@ -59,7 +59,6 @@ public class LimelightStrafeCommand extends CommandBase {
     if((modGyroYaw > 0 && modGyroYaw < 180) || (modGyroYaw < -180 && modGyroYaw > -360)){
       turningEffort = Math.abs(turnController.getEffort());
     }else{
-
       turningEffort = -Math.abs(turnController.getEffort());
     }
 

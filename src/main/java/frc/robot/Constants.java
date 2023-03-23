@@ -26,20 +26,20 @@ public final class Constants {
 
 
     // HIGH
-    public static final double highShoulder = 1;
+    public static final double highShoulder = 3.5;
     public static final double highForearm = 135;
     public static final double highWrist = 117.15;
 
 
     // LOW
-    public static final double lowShoulder = 3.38;
-    public static final double lowForearm = 77.96;
+    public static final double lowShoulder = -10;
+    public static final double lowForearm = 90;
     public static final double lowWrist = 107.10;
 
     // FLOOR INTAKE
-    public static final double floorShoulder = 16.31;
+    public static final double floorShoulder = 13;
     public static final double floorForearm = 34.83;
-    public static final double floorWrist = 42.38;
+    public static final double floorWrist = 45;
 
     // SUBSTATION
     public static final double substationShoulder = 5.14;

@@ -90,6 +90,42 @@ public class DriveSubsystem extends SubsystemBase {
     backLeft2.setSmartCurrentLimit(currentLimit);
   }
 
+  public void enableDriveVoltage(){
+    frontRight1.enableVoltageCompensation(11);
+    frontLeft1.enableVoltageCompensation(11);
+    backRight1.enableVoltageCompensation(11);
+    backLeft1.enableVoltageCompensation(11);
+
+    frontRight2.enableVoltageCompensation(11);
+    frontLeft2.enableVoltageCompensation(11);
+    backRight2.enableVoltageCompensation(11);
+    backLeft2.enableVoltageCompensation(11);
+  }
+
+  public void disableDriveVoltage(){
+    frontRight1.disableVoltageCompensation();
+    frontLeft1.disableVoltageCompensation();
+    backRight1.disableVoltageCompensation();
+    backLeft1.disableVoltageCompensation();
+
+    frontRight2.disableVoltageCompensation();
+    frontLeft2.disableVoltageCompensation();
+    backRight2.disableVoltageCompensation();
+    backLeft2.disableVoltageCompensation();
+  }
+
+  public void setRampRate(double rate){
+    frontRight1.setOpenLoopRampRate(rate);
+    frontLeft1.setOpenLoopRampRate(rate);
+    backRight1.setOpenLoopRampRate(rate);
+    backLeft1.setOpenLoopRampRate(rate);
+
+    frontRight2.setOpenLoopRampRate(rate);
+    frontLeft2.setOpenLoopRampRate(rate);
+    backRight2.setOpenLoopRampRate(rate);
+    backLeft2.setOpenLoopRampRate(rate);
+  }
+
   public double getGyroAngle(){
     return gyro.getAngle();
   }

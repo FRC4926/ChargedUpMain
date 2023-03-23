@@ -9,12 +9,15 @@ import frc.robot.RobotContainer.Subsystems;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /** An example command that uses an example subsystem. */
 public class DriveCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   //private final DriveSubsystem m_subsystem;
-
+  double forward;
+  double strafe;
+  double turn;
   
   public DriveCommand(){
    // m_subsystem = subsystem;                                                                                                                                                                                                        
@@ -33,16 +36,15 @@ public class DriveCommand extends CommandBase {
   @Override
   public void execute() {
    
-    double forward = RobotContainer.driver.getLeftY(); 
-    double strafe = RobotContainer.driver.getLeftX();
-    double rotate = RobotContainer.driver.getRightX();
-
+     forward = RobotContainer.driver.getLeftY(); 
+     strafe = RobotContainer.driver.getLeftX();
+     turn = RobotContainer.driver.getRightX();
 
     MathUtil.applyDeadband(forward, 0.02);
     MathUtil.applyDeadband(strafe, 0.02);
-    MathUtil.applyDeadband(rotate, 0.02);
+    MathUtil.applyDeadband(turn, 0.02);
     
-    Subsystems.driveSubsystem.drive(forward, -strafe, -rotate, true);
+    Subsystems.driveSubsystem.drive(forward, -strafe, -turn, true);
     
   }
 

@@ -4,10 +4,11 @@
 
 package frc.robot.autoncommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer.Subsystems;
 
-public class AutoBalanceCommand extends CommandBase {
+public class AutonRotatewPID extends CommandBase {
   //Robot is balanced at 0 degrees at charge station
   double balanceSetpoint = 0;
   //Proportion value for PID
@@ -17,12 +18,14 @@ public class AutoBalanceCommand extends CommandBase {
   // Robot aligns to 0 degrees 
   double angleSetpoint = 0;
   //Proportion constant for turning
-  double kTurn = 0.009;
+  double kTurn;
   // turning effort
   double turningEffort;
   /** Creates a new AutoBalanceCommand. */
-  public AutoBalanceCommand(){
+  public AutonRotatewPID(double angle, double p){
     // Use addRequirements() here to declare subsystem dependencies.
+    angleSetpoint = angle;
+    kTurn = p;
   }
 
   // Called when the command is initially scheduled.
@@ -34,11 +37,12 @@ public class AutoBalanceCommand extends CommandBase {
   public void execute() {
 
     // Subsystems.armSubsystem2.holdSteady();
-    
-    turningEffort = (angleSetpoint - (Subsystems.driveSubsystem.getGyroAngle() % 360)) * kTurn;
-    balanceEffort = (balanceSetpoint - Subsystems.driveSubsystem.getGyroPitch()) * kP;
+    SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
 
-    Subsystems.driveSubsystem.drive(balanceEffort, 0, -turningEffort, true);
+    
+    turningEffort = 0.024 + (angleSetpoint - (Subsystems.driveSubsystem.getGyroAngle())) * kTurn;
+
+    Subsystems.driveSubsystem.drive(0, 0, -turningEffort, true);
     
 
   }
@@ -53,7 +57,6 @@ public class AutoBalanceCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return Math.abs(Subsystems.driveSubsystem.getGyroPitch()) < 2;
-    return false;
+    return Math.abs((Subsystems.driveSubsystem.getGyroAngle()) - angleSetpoint) < 2;
   }
 }

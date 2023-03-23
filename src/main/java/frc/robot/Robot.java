@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer.Subsystems;
 // import frc.robot.autoncommands.VisionCommand;
-import frc.robot.autonmodes.LeftTwoBalance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ArmCommand;
@@ -43,10 +42,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     // Get the UsbCamera from CameraServer
-    UsbCamera camera = CameraServer.startAutomaticCapture();
+    // UsbCamera camera = CameraServer.startAutomaticCapture();
          
-    // Set the resolution
-    camera.setResolution(640, 480);
+    // // Set the resolution
+    // camera.setResolution(640, 480);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     // Subsystems.visionSubsystem.imageRunner();
@@ -70,14 +69,15 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
     Subsystems.armSubsystem.setBrakeArm();
-    Subsystems.armSubsystem.resetEncoders();
-    Subsystems.armSubsystem.resetSetpoints();
+    // Subsystems.armSubsystem.resetEncoders();
+    // Subsystems.armSubsystem.resetSetpoints();
     CommandScheduler.getInstance().cancelAll();
   }
 
@@ -88,9 +88,13 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    // Subsystems.driveSubsystem.enableDriveVoltage();
     Subsystems.driveSubsystem.setCurrentLimits(60);
     Subsystems.driveSubsystem.setBrake();
     Subsystems.driveSubsystem.resetGyro();
+    Subsystems.armSubsystem.resetEncoders();
+    Subsystems.armSubsystem.resetSetpoints();
+
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -102,7 +106,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
   public void teleopInit() {
@@ -113,12 +118,15 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    Subsystems.driveSubsystem.resetGyro();
+    Subsystems.driveSubsystem.disableDriveVoltage();
     Subsystems.armSubsystem.setBrakeArm();
-    Subsystems.armSubsystem.resetEncoders();
-    Subsystems.armSubsystem.resetSetpoints();
+    // Subsystems.driveSubsystem.resetGyro();
+    // Subsystems.armSubsystem.resetEncoders(); // COMMENT THESE DURING COMPETITION
+    // Subsystems.armSubsystem.resetSetpoints();
+    Subsystems.driveSubsystem.setRampRate(0.16667);
     Subsystems.driveSubsystem.setBrake();
     Subsystems.driveSubsystem.setCurrentLimits(35);
+    Subsystems.driveSubsystem.resetEncoders();
 
 
 
@@ -131,26 +139,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("shoulder effort", Subsystems.armSubsystem.shoulderMotor.get());
-    SmartDashboard.putNumber("forearm effort", Subsystems.armSubsystem.forearmMotor.get());
-    SmartDashboard.putNumber("wrist effort", Subsystems.armSubsystem.wristMotor.get());
-
-    SmartDashboard.putNumber("shoulder pid effort", Subsystems.armSubsystem.pidControllerShoulder.getEffort());
-    SmartDashboard.putNumber("forearm pid effort", Subsystems.armSubsystem.pidControllerForearm.getEffort());
-    SmartDashboard.putNumber("wrist pid effort", Subsystems.armSubsystem.pidControllerWrist.getEffort());
-
-
-    SmartDashboard.putNumber("shoulder state", Subsystems.armSubsystem.shoulderState);
-    SmartDashboard.putNumber("forearm state", Subsystems.armSubsystem.forearmState);
-    SmartDashboard.putNumber("wrist state", Subsystems.armSubsystem.wristState);
-
-    SmartDashboard.putNumber("shoulder pid setpoint", Subsystems.armSubsystem.pidControllerShoulder.getSetpoint());
-    SmartDashboard.putNumber("forearm pid setpoint", Subsystems.armSubsystem.pidControllerForearm.getSetpoint());
-    SmartDashboard.putNumber("wrist pid setpoint", Subsystems.armSubsystem.pidControllerWrist.getSetpoint());
-
     SmartDashboard.putNumber("shoulder angle", Subsystems.armSubsystem.getDegreesShoulder());
     SmartDashboard.putNumber("forearm angle", Subsystems.armSubsystem.getDegreesForearm());
     SmartDashboard.putNumber("wrist angle", Subsystems.armSubsystem.getDegreesWrist());
+
+    SmartDashboard.putNumber("drive encoder value", Subsystems.driveSubsystem.getAverageEncoderDistance());
+
   }
 
   @Override

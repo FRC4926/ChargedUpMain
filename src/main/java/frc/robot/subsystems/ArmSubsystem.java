@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.utils.GalacPIDController;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -28,10 +29,10 @@ public class ArmSubsystem extends SubsystemBase {
   public double shoulderState = 0;
   public double wristState = 0;
 
-  public GalacPIDController pidControllerShoulder = new GalacPIDController(0.015, 0, 0, 0.01, () -> getDegreesShoulder(),
+  public GalacPIDController pidControllerShoulder = new GalacPIDController(0.017, 0, 0, 0.01, () -> getDegreesShoulder(),
       0,
       0);
-  public GalacPIDController pidControllerForearm = new GalacPIDController(0.013, 0.00, 0, 0.01, () -> getDegreesForearm(),
+  public GalacPIDController pidControllerForearm = new GalacPIDController(0.02, 0.00, 0, 0.01, () -> getDegreesForearm(),
       0, 0);
   public GalacPIDController pidControllerWrist = new GalacPIDController(0.005, 0, 0, 0.007, () -> getDegreesWrist(),
       0, 0);
@@ -54,13 +55,15 @@ public class ArmSubsystem extends SubsystemBase {
       pidControllerWrist.innerController.setP(0.007);
     }
     else if(forearmState != Constants.ArmSetpoints.resetForearm && wristState != Constants.ArmSetpoints.resetWrist){
-      pidControllerForearm.innerController.setP(0.015);
-      pidControllerWrist.innerController.setP(0.007);
+      pidControllerForearm.innerController.setP(0.012);
+      pidControllerWrist.innerController.setP(0.008);
     }
-
-    forearmMotor.set(pidControllerForearm.getEffort());
-    shoulderMotor.set(pidControllerShoulder.getEffort());
-    wristMotor.set(pidControllerWrist.getEffort());
+    // if(Math.abs(RobotContainer.operator.getRawAxis(0)) < 0.3 && Math.abs(RobotContainer.operator.getRawAxis(1)) < 0.3 &&
+    // Math.abs(RobotContainer.operator.getRawAxis(2)) < 0.3){
+      forearmMotor.set(pidControllerForearm.getEffort());
+      shoulderMotor.set(pidControllerShoulder.getEffort());
+      wristMotor.set(pidControllerWrist.getEffort());
+    // }
   }
 
 
@@ -105,7 +108,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean hasReachedTarget() {
     return 
-      (Math.abs(getDegreesForearm() - pidControllerForearm.getSetpoint()) < 9.5 
+      (Math.abs(getDegreesForearm() - pidControllerForearm.getSetpoint()) < 12 
     && Math.abs(getDegreesShoulder() - pidControllerShoulder.getSetpoint()) < 5 
     && Math.abs(getDegreesWrist() - pidControllerWrist.getSetpoint()) < 5);
   }

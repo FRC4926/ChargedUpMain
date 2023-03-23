@@ -7,7 +7,9 @@ package frc.robot.autonmodes;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer.Subsystems;
 import frc.robot.autoncommands.AutoBalanceCommand;
+import frc.robot.autoncommands.AutonArmCommand;
 import frc.robot.autoncommands.AutonDriveCommand;
+import frc.robot.autoncommands.AutonIntakeCommand;
 
 /** Add your docs here. */
 public class MidBalance {
@@ -16,7 +18,10 @@ public class MidBalance {
     }
 
     public static Command getCommand(){
-        Command m_autonomousCommand = (new AutonDriveCommand(65, 0.5).andThen(new AutoBalanceCommand()));
+        Command m_autonomousCommand =  new AutonArmCommand(false, 2)
+        .andThen(new AutonIntakeCommand(1.25, -0.5).deadlineWith(new AutonDriveCommand(5, -0.2))
+        .andThen(new AutonDriveCommand(25, 0.5).deadlineWith(new AutonArmCommand(false, 3)))
+        .andThen(new AutonDriveCommand(40, 0.5)).andThen(new AutoBalanceCommand()));
         return m_autonomousCommand;
     }
 }
