@@ -23,16 +23,14 @@ public class AutonTest {
  }   
 
  public static Command getCommand() {
-    return new AutonArmCommand(false, 2)
-    .andThen(new AutonIntakeCommand(1, -0.7)).alongWith(new AutonDriveCommand(10, -0.23))
-    .andThen(new AutonDriveCommand(20, 0.3))
-    .andThen(new TimedStrafe(-0.3, 0.35))
-    .andThen(new AutonDriveCommand(120, 0.4).deadlineWith(new AutonArmCommand(false, 3)))
-    .andThen(new AutonRotatewPID(183, 0.0027).deadlineWith(new AutonArmCommand(false, 0)))
-    .andThen(new AutonIntakeCommand(1.1, 1).deadlineWith(new AutonTimedDrive(1.1, 0.18)))
-    .andThen(new AutonRotatewPID(0, 0.004))
-    .andThen(new AutonDriveCommand(210, -0.4).alongWith(
-      new AutonArmCommand(false, 3).andThen(new WaitCommand(0.01)).andThen(new AutonArmCommand(false, 1))))
-    .andThen(new AutonIntakeCommand(1, -0.5)).andThen(new AutonDriveCommand(25, 0.28).alongWith(new AutonArmCommand(false, 3)));
+  return new AutonArmCommand(false, 2).andThen(new AutonIntakeCommand(0.7, 1))
+  .andThen(new AutonArmCommand(false, 3).deadlineWith(new AutonDriveCommand(5, 0.1)))
+  .andThen(new TimedStrafe(0.3, 0.45))
+  .andThen(new AutonDriveCommand(130, 0.3))
+  .andThen(new TimedStrafe(0.3, 0.25))
+  .andThen(new AutonRotatewPID(180, 0.0027))
+  .andThen(new AutonArmCommand(false, 0))
+  .andThen(new AutonIntakeCommand(3, 1).deadlineWith(new AutonTimedDrive(0.75, 0.2)))
+  .andThen(new AutonArmCommand(false, 3));
  }
 }

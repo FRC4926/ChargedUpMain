@@ -9,12 +9,13 @@ import frc.robot.RobotContainer.Subsystems;
 import frc.robot.autoncommands.AutonArmCommand;
 import frc.robot.autoncommands.AutonDriveCommand;
 import frc.robot.autoncommands.AutonIntakeCommand;
+import frc.robot.autoncommands.TimedStrafe;
 
 /** Add your docs here. */
-public class OneCubeTaxi {
+public class OneObjectTaxi {
     public static int pipelineNum;
 
-    public OneCubeTaxi() {
+    public OneObjectTaxi() {
 
         pipelineNum = 1;
         Subsystems.driveSubsystem.resetEncoders();
@@ -22,8 +23,8 @@ public class OneCubeTaxi {
     public static Command getCommand(){
 
        Command m_autonomousCommand = new AutonArmCommand(false, 2)
-       .andThen(new AutonIntakeCommand(1.25, -0.5).deadlineWith(new AutonDriveCommand(5, -0.2))
-       .andThen(new AutonDriveCommand(50, 0.5)).andThen(new AutonDriveCommand(150, 0.5).deadlineWith(new AutonArmCommand(false, 3))));
+       .andThen(new AutonIntakeCommand(0.35, -0.2)).andThen(new AutonArmCommand(false, 3))
+       .andThen(new AutonDriveCommand(150, 0.5));
        return m_autonomousCommand;
     }
    

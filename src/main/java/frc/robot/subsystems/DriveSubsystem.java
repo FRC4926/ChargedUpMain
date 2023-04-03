@@ -24,14 +24,14 @@ import frc.robot.commands.DriveCommand;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  public CANSparkMax frontLeft1 = new CANSparkMax(Constants.CAN_IDs.frontLeftLeadID, MotorType.kBrushless);
-  public CANSparkMax backLeft1 = new CANSparkMax(Constants.CAN_IDs.backLeftLeadID, MotorType.kBrushless);
-  public CANSparkMax frontRight1 = new CANSparkMax(Constants.CAN_IDs.frontRightLeadID, MotorType.kBrushless);
-  public CANSparkMax backRight1 = new CANSparkMax(Constants.CAN_IDs.backRightLeadID, MotorType.kBrushless);
-  public CANSparkMax frontLeft2 = new CANSparkMax(Constants.CAN_IDs.frontLeftFollowerID, MotorType.kBrushless);
-  public CANSparkMax backLeft2 = new CANSparkMax(Constants.CAN_IDs.backLeftFollowerID, MotorType.kBrushless);
-  public CANSparkMax frontRight2 = new CANSparkMax(Constants.CAN_IDs.frontRightFollowerID, MotorType.kBrushless);
-  public CANSparkMax backRight2 = new CANSparkMax(Constants.CAN_IDs.backRightFollowerID, MotorType.kBrushless);
+  public CANSparkMax frontLeft1 = new CANSparkMax(Constants.CanIDs.frontLeft1ID, MotorType.kBrushless);
+  public CANSparkMax backLeft1 = new CANSparkMax(Constants.CanIDs.backLeft1ID, MotorType.kBrushless);
+  public CANSparkMax frontRight1 = new CANSparkMax(Constants.CanIDs.frontRight1ID, MotorType.kBrushless);
+  public CANSparkMax backRight1 = new CANSparkMax(Constants.CanIDs.backRight1ID, MotorType.kBrushless);
+  public CANSparkMax frontLeft2 = new CANSparkMax(Constants.CanIDs.frontLeft2ID, MotorType.kBrushless);
+  public CANSparkMax backLeft2 = new CANSparkMax(Constants.CanIDs.backLeft2ID, MotorType.kBrushless);
+  public CANSparkMax frontRight2 = new CANSparkMax(Constants.CanIDs.frontRight2ID, MotorType.kBrushless);
+  public CANSparkMax backRight2 = new CANSparkMax(Constants.CanIDs.backRight2ID, MotorType.kBrushless);
 
 
   public MotorControllerGroup frontLeft;
@@ -131,7 +131,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getGyroPitch(){
-    return gyro.getPitch() + 9.39 - 0.47; // this seemingly random number is the offset to the pitch of the gyro
+    return gyro.getPitch() + 9.39 - 0.47 - 9.23; // this seemingly random number is the offset to the pitch of the gyro
   }
 
   /**

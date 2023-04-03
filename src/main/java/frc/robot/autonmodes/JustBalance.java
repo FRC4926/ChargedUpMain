@@ -6,26 +6,19 @@ package frc.robot.autonmodes;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer.Subsystems;
+import frc.robot.autoncommands.AutoBalanceCommand;
 import frc.robot.autoncommands.AutonArmCommand;
 import frc.robot.autoncommands.AutonDriveCommand;
 import frc.robot.autoncommands.AutonIntakeCommand;
 
 /** Add your docs here. */
-public class OneObject {
-    public static int pipelineNum;
-
-    public OneObject() {
-
-        pipelineNum = 1;
+public class JustBalance {
+    public JustBalance(){
         Subsystems.driveSubsystem.resetEncoders();
     }
+
     public static Command getCommand(){
-
-       Command m_autonomousCommand = 
-       new AutonArmCommand(false, 2).andThen(new AutonIntakeCommand(0.35, -0.2))
-       .andThen(new AutonArmCommand(false, 3));
-       return m_autonomousCommand;
+        Command m_autonomousCommand =  new AutonDriveCommand(65, 0.4).andThen(new AutoBalanceCommand());
+        return m_autonomousCommand;
     }
-   
-
 }

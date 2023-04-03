@@ -8,6 +8,7 @@ import frc.robot.autonmodes.MidBalance;
 import frc.robot.autonmodes.MidBalanceTaxi;
 // import frc.robot.autoncommands.VisionCommand;
 import frc.robot.autonmodes.AutonTest;
+import frc.robot.autonmodes.JustBalance;
 import frc.robot.autonmodes.LeftTwo;
 
 import frc.robot.autonmodes.OneObject;
@@ -39,30 +40,28 @@ public class RobotContainer {
   public static class Subsystems{
     public final static DriveSubsystem driveSubsystem = new DriveSubsystem();
     public final static ArmSubsystem armSubsystem = new ArmSubsystem();
-
     public final static LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
-    // public final static VisionSubsystem visionSubsystem = new VisionSubsystem();
   }
 
 
+  public static boolean isAutomated = true;
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   public static XboxController driver = new XboxController(Constants.Joystick.kDriverPort);
-  // public static XboxController operator2 = new XboxController(Constants.Joystick.kOperatorPort);
-
   public static Joystick operator = new Joystick(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    
+
 
     m_chooser.setDefaultOption("AutonTest", AutonTest.getCommand());
     m_chooser.addOption("LeftTwo", LeftTwo.getCommand());
     m_chooser.addOption("MidBalance", MidBalance.getCommand());
     m_chooser.addOption("MidBalanceTaxi", MidBalanceTaxi.getCommand());
+    m_chooser.addOption("JustBalance", JustBalance.getCommand());
     m_chooser.addOption("OneObjectTaxi", OneObjectTaxi.getCommand());
     m_chooser.addOption("OneObject", OneObject.getCommand());
     m_chooser.addOption("RightTwo", RightTwo.getCommand());
@@ -86,8 +85,6 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     //m_driverController.b().whileTrue(driveSubsystem.exampleMethodCommand());
-
-    
   }
 
   /**
@@ -97,33 +94,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // path = m_chooser.getSelected();
-
-    // if(path.equals("LeftTwo")){
-    //   return LeftTwo.getCommand();
-    // }
-    // else if(path.equals("LeftTwoBalance")){
-    //   return LeftTwoBalance.getCommand();
-    // }
-    // else if(path.equals("MidBalance")){
-    //   return MidBalance.getCommand();
-    // }
-    // else if(path.equals("MidBalanceTaxi")){
-    //   return MidBalanceTaxi.getCommand();
-    // }
-    // else if(path.equals("OneCone")){
-    //   return OneCone.getCommand();
-    // }
-    // else if(path.equals("OneCube")){
-    //   return OneCube.getCommand();
-    // }
-    // else if(path.equals("RightTwo")){
-    //   return RightTwo.getCommand();
-    // }
-    // else if(path.equals("RightTwoBalance")){
-    //   return RightTwoBalance.getCommand();
-    // }
-    // return null;
     return m_chooser.getSelected();
   }
 }

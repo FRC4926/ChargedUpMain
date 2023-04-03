@@ -31,6 +31,7 @@ public class AutonArmCommand extends CommandBase {
   public void initialize() {
     timer.reset();
     timer.start();
+    Subsystems.armSubsystem.setBrakeArm();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,9 +40,9 @@ public class AutonArmCommand extends CommandBase {
  
     switch (level) {
       case 0:
-        Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorForearm + 3;
-        Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorWrist - 7.5;
-        Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorShoulder + 2.75;
+        Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorForearmCube;
+        Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorWristCube;
+        Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorShoulderCube;
 
     break;
 

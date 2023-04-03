@@ -32,7 +32,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
-  public String path;
 
 
   /**
@@ -41,20 +40,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Get the UsbCamera from CameraServer
-    // UsbCamera camera = CameraServer.startAutomaticCapture();
-         
-    // // Set the resolution
-    // camera.setResolution(640, 480);
+    UsbCamera camera = CameraServer.startAutomaticCapture();
+    camera.setFPS(30);
+    camera.setResolution(320, 240);
+    
+    
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    // Subsystems.visionSubsystem.imageRunner();
-    // UsbCamera camera = CameraServer.startAutomaticCapture();
-    // camera.setBrightness(16);
-    // Subsystems.visionSubsystem.imageRunner();
+
     m_robotContainer = new RobotContainer();
   }
 
+  
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
@@ -70,14 +67,25 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
+    if(RobotContainer.driver.getAButton()){
+      Subsystems.armSubsystem.resetEncoders();
+      Subsystems.armSubsystem.resetSetpoints();
+    }
+
+    SmartDashboard.putNumber("shoulder angle", Subsystems.armSubsystem.getDegreesShoulder());
+    SmartDashboard.putNumber("forearm angle", Subsystems.armSubsystem.getDegreesForearm());
+    SmartDashboard.putNumber("wrist angle", Subsystems.armSubsystem.getDegreesWrist());
+
+    SmartDashboard.putNumber("distance to setpoint", Subsystems.armSubsystem.shoulderState - Subsystems.armSubsystem.getDegreesShoulder());
+    SmartDashboard.putNumber("forearm effort", Subsystems.armSubsystem.forearmMotor.getOutputCurrent());
+    SmartDashboard.putNumber("shoulder effort", Subsystems.armSubsystem.shoulderMotor.getOutputCurrent());
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
     Subsystems.armSubsystem.setBrakeArm();
-    // Subsystems.armSubsystem.resetEncoders();
-    // Subsystems.armSubsystem.resetSetpoints();
     CommandScheduler.getInstance().cancelAll();
   }
 
@@ -92,6 +100,7 @@ public class Robot extends TimedRobot {
     Subsystems.driveSubsystem.setCurrentLimits(60);
     Subsystems.driveSubsystem.setBrake();
     Subsystems.driveSubsystem.resetGyro();
+    Subsystems.armSubsystem.setBrakeArm();
     Subsystems.armSubsystem.resetEncoders();
     Subsystems.armSubsystem.resetSetpoints();
 
@@ -120,15 +129,15 @@ public class Robot extends TimedRobot {
     }
     Subsystems.driveSubsystem.disableDriveVoltage();
     Subsystems.armSubsystem.setBrakeArm();
-    // Subsystems.driveSubsystem.resetGyro();
-    // Subsystems.armSubsystem.resetEncoders(); // COMMENT THESE DURING COMPETITION
-    // Subsystems.armSubsystem.resetSetpoints();
     Subsystems.driveSubsystem.setRampRate(0.16667);
     Subsystems.driveSubsystem.setBrake();
     Subsystems.driveSubsystem.setCurrentLimits(35);
     Subsystems.driveSubsystem.resetEncoders();
-
-
+    //--------------------------------------
+    // Subsystems.armSubsystem.resetEncoders();
+    // Subsystems.armSubsystem.resetSetpoints(); // REMOVE THESE THREE LINES BEFORE COMP MATCH
+    // Subsystems.driveSubsystem.resetGyro();
+    //--------------------------------------
 
     CommandScheduler.getInstance().schedule(new DriveCommand());
     CommandScheduler.getInstance().schedule(new BalanceCommand());
@@ -139,11 +148,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("shoulder angle", Subsystems.armSubsystem.getDegreesShoulder());
-    SmartDashboard.putNumber("forearm angle", Subsystems.armSubsystem.getDegreesForearm());
-    SmartDashboard.putNumber("wrist angle", Subsystems.armSubsystem.getDegreesWrist());
-
-    SmartDashboard.putNumber("drive encoder value", Subsystems.driveSubsystem.getAverageEncoderDistance());
 
   }
 
@@ -151,8 +155,6 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    Subsystems.armSubsystem.resetEncoders();
-    Subsystems.armSubsystem.resetSetpoints();
   }
 
   /** This function is called periodically during test mode. */

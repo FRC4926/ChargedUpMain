@@ -26,11 +26,10 @@ public class LeftTwo {
     }
     public static Command getCommand(){
         return new AutonArmCommand(false, 2)
-        .andThen(new AutonIntakeCommand(1, -0.7)).alongWith(new AutonDriveCommand(10, -0.23))
-        .andThen(new AutonDriveCommand(20, 0.3))
-        .andThen(new TimedStrafe(0.3, 0.35))
-        .andThen(new AutonDriveCommand(120, 0.4).deadlineWith(new AutonArmCommand(false, 3)))
-        .andThen(new AutonRotatewPID(183, 0.0027).deadlineWith(new AutonArmCommand(false, 0)))
+        .andThen(new AutonIntakeCommand(1, -0.7))
+        .andThen(new TimedStrafe(0.3, 0.35).alongWith(new AutonArmCommand(false, 3)))
+        .andThen(new AutonDriveCommand(120, 0.4))
+        .andThen(new AutonRotatewPID(-183, 0.0027)).andThen(new AutonArmCommand(false, 0))
         .andThen(new AutonIntakeCommand(1.1, 1).deadlineWith(new AutonTimedDrive(1.1, 0.18)))
         .andThen(new AutonRotatewPID(0, 0.004))
         .andThen(new AutonDriveCommand(210, -0.4).alongWith(

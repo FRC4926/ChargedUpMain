@@ -18,10 +18,9 @@ public class MidBalance {
     }
 
     public static Command getCommand(){
-        Command m_autonomousCommand =  new AutonArmCommand(false, 2)
-        .andThen(new AutonIntakeCommand(1.25, -0.5).deadlineWith(new AutonDriveCommand(5, -0.2))
-        .andThen(new AutonDriveCommand(25, 0.5).deadlineWith(new AutonArmCommand(false, 3)))
-        .andThen(new AutonDriveCommand(40, 0.5)).andThen(new AutoBalanceCommand()));
-        return m_autonomousCommand;
+        Command m_autonomousCommand = new AutonArmCommand(false, 2)
+       .andThen(new AutonIntakeCommand(0.35, -0.2)).andThen(new AutonArmCommand(false, 3))
+       .andThen(new AutonDriveCommand(65, 0.4)).andThen(new AutoBalanceCommand());
+       return m_autonomousCommand;
     }
 }

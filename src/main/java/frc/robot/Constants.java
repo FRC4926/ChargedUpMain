@@ -23,33 +23,41 @@ public final class Constants {
   }
 
   public static class ArmSetpoints {
-
-
     // HIGH
-    public static final double highShoulder = 3.5;
-    public static final double highForearm = 135;
-    public static final double highWrist = 117.15;
-
+    public static final double highShoulder = 15;
+    public static final double highForearm = 115;
+    public static final double highWrist = 140;
 
     // LOW
-    public static final double lowShoulder = -10;
-    public static final double lowForearm = 90;
+    public static final double lowShoulder = -20;
+    public static final double lowForearm = 60;
     public static final double lowWrist = 107.10;
 
-    // FLOOR INTAKE
-    public static final double floorShoulder = 13;
-    public static final double floorForearm = 34.83;
-    public static final double floorWrist = 45;
+    // FLOOR CONE INTAKE
+    public static final double floorShoulderCone = 20;
+    public static final double floorForearmCone = 20;
+    public static final double floorWristCone = 70;
+
+    // FLOOR CUBE INTAKE
+    public static final double floorShoulderCube = 25;
+    public static final double floorForearmCube = 20;
+    public static final double floorWristCube = 66;
 
     // SUBSTATION
-    public static final double substationShoulder = 5.14;
-    public static final double substationForearm = 120;
-    public static final double substationWrist = 108;
+    public static final double substationShoulder = -25;
+    public static final double substationForearm = 85;
+    public static final double substationWrist = 155;
 
     // RESET
     public static final double resetShoulder = 0;
     public static final double resetForearm = 0;
     public static final double resetWrist = 0;
+
+    // SINGLE SUB
+    public static final double singleSubShoulder = 17;
+    public static final double singleSubForearm = -60;
+    public static final double singleSubWrist = 160;
+
   }
 
 
@@ -74,17 +82,17 @@ public final class Constants {
   }
 
   // follow CAN IDs in ascending order
-  public static class CAN_IDs {
+  public static class CanIDs {
     // drive IDs
-    public static final int frontLeftLeadID = 1;
-    public static final int backLeftLeadID = 2;
-    public static final int frontRightLeadID = 3;
-    public static final int backRightLeadID = 4;
+    public static final int frontLeft1ID = 1;
+    public static final int backLeft1ID = 2;
+    public static final int frontRight1ID = 3;
+    public static final int backRight1ID = 4;
 
-    public static final int frontLeftFollowerID = 5;
-    public static final int backLeftFollowerID = 6;
-    public static final int frontRightFollowerID = 7;
-    public static final int backRightFollowerID = 8;
+    public static final int frontLeft2ID = 5;
+    public static final int backLeft2ID = 6;
+    public static final int frontRight2ID = 7;
+    public static final int backRight2ID = 8;
 
     // intake IDs
     public static final int leftIntakeID = 9;
