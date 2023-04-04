@@ -76,9 +76,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("forearm angle", Subsystems.armSubsystem.getDegreesForearm());
     SmartDashboard.putNumber("wrist angle", Subsystems.armSubsystem.getDegreesWrist());
 
-    SmartDashboard.putNumber("distance to setpoint", Subsystems.armSubsystem.shoulderState - Subsystems.armSubsystem.getDegreesShoulder());
-    SmartDashboard.putNumber("forearm effort", Subsystems.armSubsystem.forearmMotor.getOutputCurrent());
-    SmartDashboard.putNumber("shoulder effort", Subsystems.armSubsystem.shoulderMotor.getOutputCurrent());
+    SmartDashboard.putNumber("gyro angle", Subsystems.driveSubsystem.getGyroAngle());
+
 
   }
 

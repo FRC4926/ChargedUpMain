@@ -26,11 +26,15 @@ public class AutonTest {
   return new AutonArmCommand(false, 2).andThen(new AutonIntakeCommand(0.7, 1))
   .andThen(new AutonArmCommand(false, 3).deadlineWith(new AutonDriveCommand(5, 0.1)))
   .andThen(new TimedStrafe(0.3, 0.45))
-  .andThen(new AutonDriveCommand(130, 0.3))
+  .andThen(new AutonDriveCommand(132, 0.3))
   .andThen(new TimedStrafe(0.3, 0.25))
   .andThen(new AutonRotatewPID(180, 0.0027))
   .andThen(new AutonArmCommand(false, 0))
   .andThen(new AutonIntakeCommand(3, 1).deadlineWith(new AutonTimedDrive(0.75, 0.2)))
-  .andThen(new AutonArmCommand(false, 3));
+  .andThen(new AutonArmCommand(false, 3))
+  .andThen(new AutonRotatewPID(-10, 0.0062))
+  .andThen(new AutonDriveCommand(160, -0.3)).andThen(new AutonArmCommand(false, 2))
+  .andThen(new AutonIntakeCommand(0.7, -0.3))
+  .andThen(new AutonArmCommand(false, 3).alongWith(new AutonDriveCommand(20, 0.3)));
  }
 }

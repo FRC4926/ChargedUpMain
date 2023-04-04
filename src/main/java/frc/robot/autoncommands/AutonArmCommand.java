@@ -41,7 +41,7 @@ public class AutonArmCommand extends CommandBase {
     switch (level) {
       case 0:
         Subsystems.armSubsystem.forearmState = Constants.ArmSetpoints.floorForearmCube;
-        Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorWristCube;
+        Subsystems.armSubsystem.wristState = Constants.ArmSetpoints.floorWristCube + 1.5;
         Subsystems.armSubsystem.shoulderState = Constants.ArmSetpoints.floorShoulderCube;
 
     break;
