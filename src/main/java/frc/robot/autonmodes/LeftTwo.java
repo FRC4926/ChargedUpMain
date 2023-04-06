@@ -25,15 +25,16 @@ public class LeftTwo {
         Subsystems.driveSubsystem.resetEncoders();
     }
     public static Command getCommand(){
-        return new AutonArmCommand(false, 2)
-        .andThen(new AutonIntakeCommand(1, -0.7))
-        .andThen(new TimedStrafe(0.3, 0.35).alongWith(new AutonArmCommand(false, 3)))
-        .andThen(new AutonDriveCommand(120, 0.4))
-        .andThen(new AutonRotatewPID(-183, 0.0027)).andThen(new AutonArmCommand(false, 0))
-        .andThen(new AutonIntakeCommand(1.1, 1).deadlineWith(new AutonTimedDrive(1.1, 0.18)))
-        .andThen(new AutonRotatewPID(0, 0.004))
-        .andThen(new AutonDriveCommand(210, -0.4).alongWith(
-          new AutonArmCommand(false, 3).andThen(new WaitCommand(0.01)).andThen(new AutonArmCommand(false, 1))))
-        .andThen(new AutonIntakeCommand(1, -0.5)).andThen(new AutonDriveCommand(25, 0.28).alongWith(new AutonArmCommand(false, 3)));
+        return new AutonArmCommand(false, 2).andThen(new AutonIntakeCommand(0.45, 1))
+  .andThen(new AutonDriveCommand(5, 0.1))
+  .andThen(new AutonArmCommand(false, 3).alongWith(new TimedStrafe(-0.3, 0.35).andThen(new AutonDriveCommand(132, 0.4))))
+  .andThen(new AutonRotatewPID(-180, 0.004).deadlineWith(new WaitCommand(0.25).andThen(new AutonArmCommand(false, 0))))
+  .andThen(new AutonIntakeCommand(1.5, 1).deadlineWith(new AutonTimedDrive(0.75, 0.2)))
+  .andThen(new AutonRotatewPID(12, 0.003).deadlineWith(new AutonArmCommand(false, 3)))
+  .andThen(new AutonDriveCommand(170, -0.28).alongWith(new WaitCommand(1.7).andThen(new AutonArmCommand(false, 2))))
+  .andThen(new AutonIntakeCommand(0.7, -0.6))
+  .andThen(new TimedStrafe(0.3, 0.2))
+  .andThen(new AutonArmCommand(false, 3).alongWith(new AutonDriveCommand(175, 0.4)))
+  .andThen(new AutonRotatewPID(-130, 0.003));
     }
 }

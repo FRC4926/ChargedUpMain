@@ -11,6 +11,7 @@ import frc.robot.autoncommands.AutonArmCommand;
 import frc.robot.autoncommands.AutonDriveCommand;
 import frc.robot.autoncommands.AutonIntakeCommand;
 import frc.robot.autoncommands.AutonRotatewPID;
+import frc.robot.autoncommands.TimedStrafe;
 
 
 /** Add your docs here. */
@@ -24,8 +25,11 @@ public class MidBalanceTaxi {
      */
     public static Command getCommand(){
         Command m_autonomousCommand = new AutonArmCommand(false, 2)
-       .andThen(new AutonIntakeCommand(0.35, -0.2)).andThen(new AutonArmCommand(false, 3))
-       .andThen(new AutonDriveCommand(175, 0.3)).andThen(new AutonDriveCommand(65, -0.4))
+       .andThen(new AutonIntakeCommand(0.35, -0.6)).andThen(new AutonArmCommand(false, 3))
+       .andThen(new AutonDriveCommand(135, 0.5))
+       .andThen(new AutonDriveCommand(75, 0.2))
+       .andThen(new TimedStrafe(-0.3, 0.6))
+       .andThen(new AutonDriveCommand(65, -0.5))
        .andThen(new AutoBalanceCommand());
        return m_autonomousCommand;
     }

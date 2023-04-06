@@ -80,6 +80,6 @@ public class AutonArmCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 2;
+    return timer.get() >= 1.8;
   }
 }
