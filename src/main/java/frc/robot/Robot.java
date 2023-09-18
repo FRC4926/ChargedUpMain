@@ -40,13 +40,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    UsbCamera camera = CameraServer.startAutomaticCapture();
-    camera.setFPS(15);
-    camera.setResolution(320, 240);
+    // UsbCamera camera = CameraServer.startAutomaticCapture();
+    // camera.setFPS(15);
+    // camera.setResolution(160, 120);
     
     
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
+    RobotContainer.isAutomated = true;
 
     m_robotContainer = new RobotContainer();
   }
@@ -99,9 +101,9 @@ public class Robot extends TimedRobot {
     Subsystems.driveSubsystem.setCurrentLimits(60);
     Subsystems.driveSubsystem.setBrake();
     Subsystems.driveSubsystem.resetGyro();
-    Subsystems.armSubsystem.setBrakeArm();
     Subsystems.armSubsystem.resetEncoders();
     Subsystems.armSubsystem.resetSetpoints();
+    Subsystems.armSubsystem.setBrakeArm();
 
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();

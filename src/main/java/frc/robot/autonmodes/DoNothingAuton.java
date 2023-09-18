@@ -5,31 +5,20 @@
 package frc.robot.autonmodes;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer.Subsystems;
 import frc.robot.autoncommands.AutoBalanceCommand;
 import frc.robot.autoncommands.AutonArmCommand;
 import frc.robot.autoncommands.AutonDriveCommand;
 import frc.robot.autoncommands.AutonIntakeCommand;
-import frc.robot.autoncommands.AutonRotatewPID;
-import frc.robot.autoncommands.TimedStrafe;
-
 
 /** Add your docs here. */
-public class MidBalanceTaxi {
-    public MidBalanceTaxi(){
+public class DoNothingAuton {
+    public DoNothingAuton(){
         Subsystems.driveSubsystem.resetEncoders();
     }
 
-    /**
-     * @return
-     */
     public static Command getCommand(){
-        Command m_autonomousCommand = new AutonArmCommand(false, 2)
-       .andThen(new AutonIntakeCommand(0.35, -0.6)).andThen(new AutonArmCommand(false, 3))
-       .andThen(new AutonDriveCommand(175, 0.3))
-    //    .andThen(new TimedStrafe(-0.3, 0.6))
-       .andThen(new AutonDriveCommand(65, -0.5))
-       .andThen(new AutoBalanceCommand());
-       return m_autonomousCommand;
+        return new WaitCommand(1);
     }
 }

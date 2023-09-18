@@ -6,13 +6,15 @@ package frc.robot;
 
 import frc.robot.autonmodes.MidBalance;
 import frc.robot.autonmodes.MidBalanceTaxi;
+import frc.robot.autonmodes.OneConeLeftTaxi;
+import frc.robot.autonmodes.OneConeRightTaxi;
 // import frc.robot.autoncommands.VisionCommand;
 import frc.robot.autonmodes.AutonTest;
-import frc.robot.autonmodes.JustBalance;
+import frc.robot.autonmodes.DoNothingAuton;
 import frc.robot.autonmodes.LeftTwo;
 
 import frc.robot.autonmodes.OneObject;
-import frc.robot.autonmodes.OneObjectTaxi;
+import frc.robot.autonmodes.OneCubeTaxi;
 import frc.robot.autonmodes.RightTwo;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -58,13 +60,17 @@ public class RobotContainer {
 
 
     m_chooser.setDefaultOption("AutonTest", AutonTest.getCommand());
+    m_chooser.addOption("DoNothingAuton", DoNothingAuton.getCommand());
     m_chooser.addOption("LeftTwo", LeftTwo.getCommand());
     m_chooser.addOption("MidBalance", MidBalance.getCommand());
     m_chooser.addOption("MidBalanceTaxi", MidBalanceTaxi.getCommand());
-    m_chooser.addOption("JustBalance", JustBalance.getCommand());
-    m_chooser.addOption("OneObjectTaxi", OneObjectTaxi.getCommand());
-    m_chooser.addOption("OneObject", OneObject.getCommand());
+    m_chooser.addOption("JustBalance", DoNothingAuton.getCommand());
+    m_chooser.addOption("OneCubeTaxi", OneCubeTaxi.getCommand());
     m_chooser.addOption("RightTwo", RightTwo.getCommand());
+    m_chooser.addOption("OneConeRightTaxi", OneConeRightTaxi.getCommand());
+    m_chooser.addOption("OneConeLeftTaxi", OneConeLeftTaxi.getCommand());
+
+
     Shuffleboard.getTab("Autonomous").add(m_chooser);
   }
 

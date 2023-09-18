@@ -32,7 +32,7 @@ public class RightTwo {
   .andThen(new AutonRotatewPID(180, 0.0027).deadlineWith(new WaitCommand(0.25).andThen(new AutonArmCommand(false, 0))))
   .andThen(new AutonIntakeCommand(1.5, 1).deadlineWith(new AutonTimedDrive(0.75, 0.2)))
   .andThen(new AutonRotatewPID(-12, 0.0062).deadlineWith(new AutonArmCommand(false, 3)))
-  .andThen(new AutonDriveCommand(170, -0.28).alongWith(new WaitCommand(1.7).andThen(new AutonArmCommand(false, 2))))
+  .andThen(new AutonDriveCommand(175, -0.28).alongWith(new WaitCommand(1.7).andThen(new AutonArmCommand(false, 2))))
   .andThen(new AutonIntakeCommand(0.7, -0.6))
   .andThen(new TimedStrafe(-0.3, 0.2))
   .andThen(new AutonArmCommand(false, 3).alongWith(new AutonDriveCommand(175, 0.4)))

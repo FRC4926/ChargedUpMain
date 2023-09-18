@@ -1,7 +1,6 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import frc.robot.RobotContainer;
@@ -43,7 +42,13 @@ public class DriveCommand extends CommandBase {
     MathUtil.applyDeadband(forward, 0.02);
     MathUtil.applyDeadband(strafe, 0.02);
     MathUtil.applyDeadband(turn, 0.02);
-    
+
+    if(RobotContainer.driver.getRightBumper()){
+      forward /= 2;
+      strafe /= 2;
+      turn /= 2;
+    }
+  
     Subsystems.driveSubsystem.drive(forward, -strafe, -turn, true);
     
   }
