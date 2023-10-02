@@ -25,7 +25,7 @@ public final class Constants {
   public static class ArmSetpoints {
     // HIGH
     public static final double highShoulder = 15;
-    public static final double highForearm = 115;
+    public static final double highForearm = 120;
     public static final double highWrist = 140;
 
     // LOW
