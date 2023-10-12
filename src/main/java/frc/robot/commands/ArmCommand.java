@@ -88,7 +88,15 @@ public class ArmCommand extends CommandBase {
         // Subsystems.armSubsystem.forearmState -= 5;
         Subsystems.armSubsystem.wristState -= 15;
       }      
+      if(RobotContainer.operator.getRawButton(5)){
+        // Subsystems.armSubsystem.forearmState += 5;
+        Subsystems.armSubsystem.forearmState += 5;
+      }
 
+      if(RobotContainer.operator.getRawButton(3)){
+        // Subsystems.armSubsystem.forearmState -= 5;
+        Subsystems.armSubsystem.forearmState -= 5;
+      }
     
 
       if(Math.abs(RobotContainer.operator.getRawAxis(1)) > 0.2){

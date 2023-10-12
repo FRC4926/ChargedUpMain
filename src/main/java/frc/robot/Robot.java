@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
       Subsystems.armSubsystem.resetEncoders();
       Subsystems.armSubsystem.resetSetpoints();
     }
-
+    SmartDashboard.putNumber("shoulder motor encoder", Subsystems.armSubsystem.shoulderMotor.getEncoder().getPosition());
     SmartDashboard.putNumber("shoulder angle", Subsystems.armSubsystem.getDegreesShoulder());
     SmartDashboard.putNumber("forearm angle", Subsystems.armSubsystem.getDegreesForearm());
     SmartDashboard.putNumber("wrist angle", Subsystems.armSubsystem.getDegreesWrist());

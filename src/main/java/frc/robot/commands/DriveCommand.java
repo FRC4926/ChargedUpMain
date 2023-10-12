@@ -17,7 +17,7 @@ public class DriveCommand extends CommandBase {
   double forward;
   double strafe;
   double turn;
-  
+  boolean slowMode;
   public DriveCommand(){
    // m_subsystem = subsystem;                                                                                                                                                                                                        
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,26 +28,26 @@ public class DriveCommand extends CommandBase {
   @Override
   public void initialize() {
     Subsystems.driveSubsystem.setBrake();
-     
+     slowMode = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
    
-     forward = RobotContainer.driver.getLeftY(); 
+     forward = RobotContainer.driver.getLeftY()*(slowMode?.3:1); 
      strafe = RobotContainer.driver.getLeftX();
-     turn = RobotContainer.driver.getRightX();
+     turn = RobotContainer.driver.getRightX()*(slowMode?.3:1);
 
     MathUtil.applyDeadband(forward, 0.02);
     MathUtil.applyDeadband(strafe, 0.02);
     MathUtil.applyDeadband(turn, 0.02);
 
-    if(RobotContainer.driver.getRightBumper()){
-      forward /= 2;
-      strafe /= 2;
-      turn /= 2;
-    }
+    // if(RobotContainer.driver.getRightBumper()){
+    //     slowMode = true;
+    // }else{
+    //   slowMode = false;
+    // }
   
     Subsystems.driveSubsystem.drive(forward, -strafe, -turn, true);
     

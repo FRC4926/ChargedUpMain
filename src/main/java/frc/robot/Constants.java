@@ -25,12 +25,12 @@ public final class Constants {
   public static class ArmSetpoints {
     // HIGH
     public static final double highShoulder = 15;
-    public static final double highForearm = 120;
+    public static final double highForearm = 115;
     public static final double highWrist = 140;
 
     // LOW
     public static final double lowShoulder = -20;
-    public static final double lowForearm = 60;
+    public static final double lowForearm = 66;
     public static final double lowWrist = 107.10;
 
     // FLOOR CONE INTAKE
