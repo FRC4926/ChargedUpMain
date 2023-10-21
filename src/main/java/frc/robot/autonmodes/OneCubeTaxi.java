@@ -13,20 +13,17 @@ import frc.robot.autoncommands.TimedStrafe;
 
 /** Add your docs here. */
 public class OneCubeTaxi {
-    public static int pipelineNum;
+    //public static int pipelineNum;
 
     public OneCubeTaxi() {
 
-        pipelineNum = 1;
+        //pipelineNum = 1;
         Subsystems.driveSubsystem.resetEncoders();
     }
     public static Command getCommand(){
-
        Command m_autonomousCommand = new AutonArmCommand(false, 2)
-       .andThen(new AutonIntakeCommand(0.35, -0.3)).andThen(new AutonArmCommand(false, 3))
-       .andThen(new AutonDriveCommand(150, 0.5));
+       .andThen(new AutonIntakeCommand(0.35, -0.2)).andThen(new AutonArmCommand(false, 3))
+       .andThen(new AutonDriveCommand(150, 0.4));
        return m_autonomousCommand;
     }
-   
-
 }

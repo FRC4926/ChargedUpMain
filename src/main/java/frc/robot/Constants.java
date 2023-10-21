@@ -66,7 +66,9 @@ public final class Constants {
     public static final double CAMERA_PITCH_RADIANS = 0;
     public static final double LIMELIGHT_MOUNT_HEIGHT = 35;
     public static final double WHEEL_DIAMETER = 8;
-    public static final double GEAR_RATIO = 8.4; /*
+    public static final double GEAR_RATIO = 8.4; 
+    public static final double LIMELIGHT_OFFSET = 10; 
+    /*
                                                   * gear ratio for competition chassis: 8.4* & practice
                                                   * chassis: 9/
                                                   */

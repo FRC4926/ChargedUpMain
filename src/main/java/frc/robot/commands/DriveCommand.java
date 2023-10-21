@@ -35,9 +35,27 @@ public class DriveCommand extends CommandBase {
   @Override
   public void execute() {
    
-     forward = RobotContainer.driver.getLeftY()*(slowMode?.3:1); 
+     forward = RobotContainer.driver.getLeftY(); 
      strafe = RobotContainer.driver.getLeftX();
-     turn = RobotContainer.driver.getRightX()*(slowMode?.3:1);
+     turn = RobotContainer.driver.getRightX();
+
+    if (forward < 0) {
+      forward = -(forward * forward);
+    } else {
+      forward *= forward;
+    }
+
+    if (strafe < 0) {
+      strafe = -(strafe * strafe);
+    } else {
+      strafe *= strafe;
+    }
+
+     if (turn < 0) {
+      turn = -(turn * turn);  
+     } else {
+      turn *= turn;
+     }
 
     MathUtil.applyDeadband(forward, 0.02);
     MathUtil.applyDeadband(strafe, 0.02);

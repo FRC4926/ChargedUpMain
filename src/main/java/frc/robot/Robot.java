@@ -135,7 +135,7 @@ public class Robot extends TimedRobot {
     Subsystems.driveSubsystem.setCurrentLimits(35);
     Subsystems.driveSubsystem.resetEncoders();
     //--------------------------------------
-    Subsystems.armSubsystem.resetEncoders();
+    // Subsystems.armSubsystem.resetEncoders();
     Subsystems.armSubsystem.resetSetpoints(); // REMOVE THESE THREE LINES BEFORE COMP MATCH
     Subsystems.driveSubsystem.resetGyro();
     //--------------------------------------
